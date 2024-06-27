@@ -1,0 +1,15 @@
+# ~/.config/lf/lfrc
+
+cmd togglehidden %{{
+    if [ $(lf -remote "send $id get hidden") = "true" ]; then
+        lf -remote "send $id set hidden false"
+    else
+        lf -remote "send $id set hidden true"
+    fi
+}}
+
+
+# Toggle hidden files visibility with `zh`
+map zh togglehidden
+
+

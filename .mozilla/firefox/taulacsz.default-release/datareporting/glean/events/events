@@ -1,0 +1,13 @@
+{"timestamp":73790291,"category":"webcompatreporting","name":"reason_dropdown","extra":{"setting":"required","glean_timestamp":"1718051591120"}}
+{"timestamp":73790957,"category":"search.engine.default","name":"changed","extra":{"change_source":"engine-update","new_display_name":"DuckDuckGo","new_load_path":"[app]ddg@search.mozilla.org","glean_timestamp":"1718051591786","new_engine_id":"ddg-addon","new_submission_url":"https://duckduckgo.com/?q=&t=newext","previous_engine_id":"ddg-addon"}}
+{"timestamp":73792001,"category":"nimbus_events","name":"enroll_failed","extra":{"glean_timestamp":"1718051592830","reason":"feature-conflict","experiment":"relay-integration-into-firefox-release-for-all-fxa-users"}}
+{"timestamp":73793171,"category":"nimbus_events","name":"is_ready","extra":{"glean_timestamp":"1718051594000"}}
+{"timestamp":73796097,"category":"extensions.data","name":"storage_local_error","extra":{"error_name":"OtherError","method":"set","glean_timestamp":"1718051596949","addon_id":"jid1-NIfFY2CA8fy1tg@jetpack"}}
+{"timestamp":73796098,"category":"extensions.data","name":"storage_local_error","extra":{"method":"set","addon_id":"jid1-NIfFY2CA8fy1tg@jetpack","error_name":"OtherError","glean_timestamp":"1718051596949"}}
+{"timestamp":73796098,"category":"extensions.data","name":"storage_local_error","extra":{"method":"set","glean_timestamp":"1718051596949","error_name":"OtherError","addon_id":"jid1-NIfFY2CA8fy1tg@jetpack"}}
+{"timestamp":73796098,"category":"extensions.data","name":"storage_local_error","extra":{"glean_timestamp":"1718051596949","method":"set","error_name":"OtherError","addon_id":"jid1-NIfFY2CA8fy1tg@jetpack"}}
+{"timestamp":73796099,"category":"extensions.data","name":"storage_local_error","extra":{"error_name":"OtherError","glean_timestamp":"1718051596949","method":"set","addon_id":"jid1-NIfFY2CA8fy1tg@jetpack"}}
+{"timestamp":73796099,"category":"extensions.data","name":"storage_local_error","extra":{"method":"set","error_name":"OtherError","glean_timestamp":"1718051596949","addon_id":"jid1-NIfFY2CA8fy1tg@jetpack"}}
+{"timestamp":73796099,"category":"extensions.data","name":"storage_local_error","extra":{"method":"set","error_name":"OtherError","glean_timestamp":"1718051596949","addon_id":"jid1-NIfFY2CA8fy1tg@jetpack"}}
+{"timestamp":73796101,"category":"extensions.data","name":"storage_local_error","extra":{"glean_timestamp":"1718051596949","error_name":"OtherError","method":"set","addon_id":"jid1-NIfFY2CA8fy1tg@jetpack"}}
+{"timestamp":73796101,"category":"extensions.data","name":"storage_local_error","extra":{"error_name":"OtherError","method":"set","glean_timestamp":"1718051596949","addon_id":"jid1-NIfFY2CA8fy1tg@jetpack"}}

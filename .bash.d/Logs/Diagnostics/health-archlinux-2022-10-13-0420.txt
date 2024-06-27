@@ -1,0 +1,108 @@
+
+#####################################################################
+    Health Check Report (CPU,Process,Disk Usage, Memory)
+#####################################################################
+
+
+Hostname         : archlinux
+Kernel Version   : 5.19.13-arch1-1
+Uptime           : 49 min
+Last Reboot Time : 2022-10-13 03:31
+
+
+
+*********************************************************************
+CPU Load - > Threshold < 1 Normal > 1 Caution , > 2 Unhealthy 
+*********************************************************************
+
+
+CPU0 : 4.59
+CPU1 : 4.85
+CPU2 : 4.96
+CPU3 : 4.92
+
+Load Average   :  0.39
+
+Heath Status : Normal
+
+
+*********************************************************************
+                             Process
+*********************************************************************
+
+=> Top memory using processs/application
+
+PID %MEM RSS COMMAND
+1149 6.0 487580 /usr/lib/firefox/firefox
+1345 3.2 261944 /usr/lib/firefox/firefox
+768 3.1 251496 /usr/bin/plasmashell
+747 1.8 146468 /usr/bin/kwin_x11
+3304 1.7 138224 /usr/lib/firefox/firefox
+1259 1.6 136076 /usr/lib/firefox/firefox
+847 1.4 120028 /usr/bin/megasync
+953 1.2 104464 /usr/bin/yakuake
+3338 1.0 87680 /usr/lib/firefox/firefox
+3477 1.0 87460 /usr/lib/firefox/firefox
+
+=> Top CPU using process/application
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+   1149 rubberm+  20   0 3633540 487580 187980 S  82.4   6.1   4:45.49 firefox
+    687 nm-open+  20   0   21928  10996   9412 S   5.9   0.1   0:02.46 openvpn
+      1 root      20   0  165764  11568   8700 S   0.0   0.1   0:01.52 systemd
+      2 root      20   0       0      0      0 S   0.0   0.0   0:00.00 kthreadd
+      3 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_gp
+      4 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_par+
+      5 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 slub_fl+
+      6 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 netns
+      8 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker+
+     10 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 mm_perc+
+
+*********************************************************************
+Disk Usage - > Threshold < 90 Normal > 90% Caution > 95 Unhealthy
+*********************************************************************
+
+dev /dev 0% used 3.9G free space
+
+run /run 1% used 3.9G free space
+
+/dev/sda2 / 91% used 2.8G free space
+
+tmpfs /dev/shm 0% used 3.9G free space
+
+tmpfs /tmp 1% used 3.9G free space
+
+/dev/sda3 /home 10% used 549G free space
+
+tmpfs /run/user/1000 1% used 787M free space
+
+/dev/sdb1 /run/media/rubbermetal/3231-6639 10% used 333G free space
+
+
+
+Heath Status
+
+dev /dev 		 Normal
+run /run 		 Normal
+/dev/sda2 / 		 Caution
+tmpfs /dev/shm 		 Normal
+tmpfs /tmp 		 Normal
+/dev/sda3 /home 		 Normal
+tmpfs /run/user/1000 		 Normal
+/dev/sdb1 /run/media/rubbermetal/3231-6639 		 Normal
+
+*********************************************************************
+		     Memory 
+*********************************************************************
+
+=> Physical Memory
+
+Total	Used	Free	%Free
+
+7.67GB	1.33GB 	5.01GB	65%
+
+=> Swap Memory
+
+Total	Used	Free	%Free
+
+1.99GB	0GB	1.99GB	100%
+

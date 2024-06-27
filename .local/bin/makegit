@@ -1,0 +1,27 @@
+#!/bin/bash
+# Creates and makes initial commit
+# Usage: ./create_repo.sh your-repo-name
+
+# Check if a repository name is provided
+if [ -z "$1" ]; then
+  echo "Usage: $0 <repository-name>"
+  exit 1
+fi
+
+REPO_NAME=$1
+GITHUB_USERNAME="rubbermetal"  
+
+# Initialize the repository
+git init
+
+# Add all files
+git add .
+
+# Commit the changes
+git commit -m "Initial commit"
+
+# Set the remote URL
+git remote add origin git@github.com:$GITHUB_USERNAME/$REPO_NAME.git
+
+# Push to the remote repository
+git push -u origin main

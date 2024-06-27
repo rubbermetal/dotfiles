@@ -1,0 +1,1491 @@
+python payday-calculator.py
+pip install tkinter
+pip3 install tkinter
+sudo pacman -S python3 pip3
+sudo pacman -S python pip
+chmod +x wifi.sh
+la
+ls
+cd ..
+sudo pacman -S firefox
+sudo pacman -S tmux
+tmux
+xfce4-panel -r
+sudo pacman -S bytop
+sudo pacman -S btop
+ls
+cd 'Shell Scripts'
+nano snapshot.sh
+chmod +x snapshot.sh
+ls
+sudo btrfs subvolume list /
+nano snapshot.sh
+nano snapshot.sh
+nano snapshot.sh
+sudo btrfs subvolume list /
+findmnt -t btrfs
+nano snapshot.sh
+./snapshot.sh
+nano snapshot.sh
+nano snapshot.sh
+source ~.bashrc
+ls
+cd ../
+ls
+ls -a
+source ~.bashrc
+chmod 755 /home/madhatter/.bash.d/fun_facts.sh
+source .bashrc
+ls /usr/share/nano/
+nano ~/.nanorc
+nano /home/madhatter/.bash.d/fun_facts.sh
+btop
+python payday-calculator.py
+pip install tkinter
+pip3 install tkinter
+sudo pacman -S python3 pip3
+sudo pacman -S python pip
+sudo pacman -S iw
+./wireless-essid
+./wireless-essid wlp5s6
+./wireless-essid /dev/wlp5s6
+nano wireless-essid.c
+sudo pacman -S gcc
+gcc -o wireless-essid.c wireless-essid
+cd Source
+ls -a
+gcc -o wireless-essid wireless-essid.c
+chmod +x wireless-essid
+./wireless-essid 
+wan
+./wan
+lan
+./lan
+killall conky
+./interfaceupspeed.py
+sudo pacman -S psutil
+pip install psutil
+sudo pacman -S lua
+./check_updates
+pip install subprocess
+sudo pacman -S python-subprocess
+sudo pacman -S pacman-contrib
+./check_updates.py
+sudo pacman -S hdwmon
+sudo pacman -S python-psutils
+sudo pacman -S python-psutil
+cd C
+./core_temps
+./core_temps 1
+./core_temps.py
+./core_temps.py 1
+./core_temps.py 2
+./core_temps.py 3
+sudo pacman -S lmsensors
+sudo pacman -S lm-sensors
+sudo pacman -S lm_sensors
+python3 ~/.Conky/conkyx/scripts/list_updates.py
+2
+python3 ~/.Conky/conkyx/scripts/list_updates.py 2
+lsblk
+sudo pacman -S gnupg
+gpg --full-generate-key
+sudo pacman -S ssh-keygen
+sudo pacman -S openssh
+ssh-keygen -t ed25519 -C "claygrace@icloud.com"
+cat ~/.ssh/id_ed25519.pub
+LC_ALL=C pacman -V|sed -r 's#[0-9]+#e15#g'|md5sum|cut -c1-6
+mkdir Git
+cd Git
+sudo pacman -S git
+git clone ssh://aur@aur.archlinux.org/python-behave.git
+cd python-behave
+git clone https://aur.archlinux.org/python-cucumber-tag-expressions.git
+cd python-cucumber-tag-expressions/
+cd ../\
+git clone ssh://aur@aur.archlinux.org/python-pptx.git
+sudo pacman -S --needed git base-devel
+git clone https://aur.archlinux.org/yay.git
+cd yay
+cd python-pptx
+git config --global init.defaultBranch main
+yay -S --needed --noconfirm -a python-pptx
+makepkg -si
+updpkgsums
+[200~git config --global user.email "your.email@example.com"
+git config --global user.name "Your Name"
+git config --global user.email "rubbermetal@yahoo.com"
+git config --global user.name "C.Grace"
+git config user.email rubbermetal@yahoo.com
+git config user.name "C.Grace"
+git config user.email "rubbermetal@yahoo.com"
+git add PKGBUILD
+git commit -m "Update package description and source URL"
+makepkg --printsrcinfo > .SRCINFO
+git add .SRCINFO
+git commit -m "Update .SRCINFO to match PKGBUILD changes"
+git push
+source /~.bashrc
+cd ~
+source .bashrc
+echo $PATH
+update_aur.sh
+cd git
+git clone ssh://aur@aur.archlinux.org/ark-git.git
+cd ark-git
+nano PKGBUILD
+cd python-pptx/
+update_aur.sh .
+update_aur.sh python-pptx
+nano "~/Shell Scripts/update_aur.sh"
+neovim
+sudo pacman -S neovim
+vim "~/Shell Scripts/update_aur.sh"
+neovim "~/Shell Scripts/update_aur.sh"
+nvim "~/Shell Scripts/update_aur.sh"
+cd ../
+cd "Shell Scripts"
+nvim "update_aur.sh"
+sudo pacman -S powerline
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+cd .tmux
+cd ../
+nano .tmux.conf
+git push
+source /~.bashrc
+cd ~
+source .bashrc
+echo $PATH
+update_aur.sh
+git clone ssh://aur@aur.archlinux.org/ark-git.git
+cd ark-git
+nano PKGBUILD
+cd python-pptx/
+update_aur.sh .
+update_aur.sh python-pptx
+nano "~/Shell Scripts/update_aur.sh"
+neovim
+sudo pacman -S neovim
+vim "~/Shell Scripts/update_aur.sh"
+neovim "~/Shell Scripts/update_aur.sh"
+nvim "~/Shell Scripts/update_aur.sh"
+sudo pacman -S powerline
+cd python-pptx
+cd "Shell Scripts"cd ../
+df -h
+uname -sr
+lspci
+sudo pacman -S lsusb
+sudo pacman -S usbutils
+lsusb
+sudo pacman -S vim-plug
+Plug 'scrooloose/nerdtree'
+git clone https://github.com/junegunn/vim-plug.git
+cd vim-plug
+nvim README.md
+mkdir .nvim
+cd .nvim
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+rm .nvim
+rm -d .nvim
+cd .vim
+cd autoload
+cd ../../
+cd "Shell Scripts"
+sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+rm -rd .vim
+sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+nvim "update_aur.sh"
+cd git
+cd "Shell Script"
+cd ../
+nano test
+rm test
+tmux
+python payday-calculator.py
+pip install tkinter
+pip3 install tkinter
+sudo pacman -S python3 pip3
+sudo pacman -S python pip
+./wan.py
+sudo pacman -S conky
+cd ../bin
+nano conkyx-start.sh
+chmod +x conkyx-start.sh
+sudo pacman -S python3-pip
+sudo pacman -S python-pip
+./conkyx-start.sh &&
+killall conky
+top
+sudo killall conky
+btop
+./conkyx-start.sh
+z /etc
+nvim pacman.conf
+sudo nvim pacman.conf
+sudo pacman -S chromium
+chromium
+fastfetch
+fg
+sudo pacman -Syyu
+tmux
+-s
+show -s
+sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+sudo pacman-key --lsign-key 3056513887B78AEB
+sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
+sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+sudo nvim /etc/pacman.conf
+sudo nano /etc/pacman.conf
+sudo pacman -Syyu
+./conkyx-start.sh
+z /etc
+nvim pacman.conf
+sudo nvim pacman.conf
+sudo pacman -S chromium
+chromium
+fg
+sudo pacman -Syyu
+tmux
+-s
+show -s
+sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+sudo pacman-key --lsign-key 3056513887B78AEB
+sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
+sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+sudo nvim /etc/pacman.conf
+sudo nano /etc/pacman.conf
+sudo pacman -Syyu
+sudo pacman -S lsof
+lsof
+lsof | head
+cls
+reset
+fastfetch
+cd .bash.d
+nano .aliases
+cd git
+git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1
+cd ../
+cd .config
+cd .config/nvim
+cd ~
+pip install neovim
+sudo pacman install python-neovim
+sudo pacman -S python-neovim
+cd nvim
+sudo pacman -S ruby
+nvim
+vim
+gem install neovim
+nano .bashrc
+source .bashrc
+gem environment
+gem environmentexiut
+gem environmentexiut
+z .config
+z nvim
+nano init.lua
+z lua
+nano nvconfig.lua
+chmod 755 nvconfig.lua
+./nvconfig.lua
+sudo pacman-key --lsign-key 3056513887B78AEB
+sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
+sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+sudo nvim /etc/pacman.conf
+sudo nano /etc/pacman.conf
+sudo pacman -Syyu
+cls
+fastfetch
+tmux
+gem enviroment
+source .bashrc
+gem environment
+cd .config
+cd nvim
+mkdir nvchad
+z nvchad
+curl https://github.com/NvChad/base46/tree/v2.5/lua/base46
+git clone https://github.com/NvChad/base46.git
+rm defaults
+cd base64
+touch defaults
+nvim
+vim LICENSE
+vim
+uname
+nano .bashrc
+source .bashrc
+sudo pacman -Syu
+cls
+nano .nanorc
+killall conky
+cd .bash.d
+nano .aliases
+nano .commands
+nano .functions
+nano .aliases
+source ~/.bashrc
+cls
+which perl
+pacman -S cpan
+cpan
+pacman -S neovim
+nvim
+cd ../
+cd .config
+cd nvim
+pacman -Rs neovim
+pacman -S neovim
+nvim
+cd ..
+trash nvim
+pacman -Rs neovim
+nvim
+pacman -S neovim
+nvim
+pacman -S neovim-qt
+pacman -Rs neovim-qt
+nvim
+mkdir -p ~/.config/nvim
+cd nvim
+nvim init.lua
+nvim
+computer hi
+cd 
+cd 'Python
+cd 'Python Scripts'
+cd
+l
+exit
+cd 'Python Scripts'
+nvim
+computer hi
+nvim ~/.bash.d/.aliases
+computer hi
+source ~/.bashrc
+computer hi
+which python
+nvim ~/.bash.d/.aliases
+computer hi
+./davinci.py hi
+chmod +x davinci.py
+./davinci.py hi
+pacman -S python-openai
+./davinci.py hi
+pacman -S python-gtts
+./davinci.py hi
+pacman -S python-playsound
+./davinci.py hi
+pacman -S python-pyaudio
+./davinci.py hi
+pacman -S python-speech_recognition
+pip install speech_recognition
+pacman -S python-speech_recognition
+pacman -S python-SpeechRecognition
+pip install SpeechRecognition
+nvim davinci.py
+yay install python-speechrecognition
+yay --help
+sudo yay install python-speechrecognition
+yay python-speechrecognition
+./davinci.py hi
+openai migrate
+./davinci.py
+pip install openai==0.28
+pacman -S python-openai==0.28
+./davinci.py
+cls
+top
+pacman -S htop
+htop
+pacman -Rs htop
+watch -n.5 cat /proc/interrupts
+nmcli wifi disconnect
+nmcli  disconnect
+nmcli --help
+cd "~/Shell Scripts"
+cd "~"exit
+cd ..
+cd 'Shell Scripts'
+./wifi.sh disconnect
+./wifi.sh
+./wifi.sh status
+./wifi.sh list
+sudo pacman -S less
+tmux
+btop
+./wifi.sh list
+cd 'Shell Scripts'
+neovim
+nvim
+sudo pacman -Syyu
+tmux
+btop
+./wifi.sh list
+cd 'Shell Scripts'
+./wifi.sh list
+cls
+./wifi.sh list
+cls
+./wifi.sh list
+cd ~
+cd Git
+git clone https://git.suckless.org.dwm
+git clone https://git.suckless.org/dwm
+git clone https://git.suckless.org/dmenu
+git clone https://git.suckless.org/st
+mkdir suckless
+mv dmenu st dwm suckless/
+cd suckless
+cd dwm
+sudo make clean install
+cd ..
+cd dmenu
+sudo make clean install
+cd ..
+cd st
+sudo make clean install
+tmux
+nvim .xinitrc
+chmod 755 .xinitrc
+sudo nvim /usr/share/xsessions/dwm.dektop
+btop
+dwm
+sh .xinit
+ls -a
+sh .xinitrc
+xrandr
+xrandr --output "DVI-I-1" "left inverted"
+xrandr
+xrandr --help
+xrandr --output "DVI-I-1" -o inverted
+xrandr --output "DVI-I-1" -o inverted,left
+xrandr --output "DVI-I-1" -o inverted left
+xrandr --output "DVI-I-1" -o 0
+xrandr --output "DVI-I-1" -o 1
+xrandr --output "DVI-I-1" -o 2
+xrandr
+xrandr --output "DVI-I-1" -o inverted
+xrandr --output "DVI-I-1" --orientation  inverted
+xrandr > xrandr_output.txt
+xrandr --output "DVI-I-1" --rotate  inverted
+xrandr --output "DVI-I-1" --rotate  left
+xrandr --output "DVI-I-1" --rotate  inverted
+xrandr --output "DVI-I-1" --rotate  right
+nvim xrandr_output.txt
+nvim .xinitrc
+btop
+nvim xrandr_output.txt
+logout
+sudo logout
+uninstall xfwm4
+install sddm
+sudo systemctl enable sddm.service
+install xfwm4
+sudo systemctl disable lightdm
+sudo systemctl stop lightdm
+sudo systemctl enable sddm
+sudo systemctl start sddm
+sudo /usr/share/xsessions/dwm.dektop /usr/share/xsessions/dwm.desktop
+sudo cp /usr/share/xsessions/dwm.dektop /usr/share/xsessions/dwm.desktop
+sudo rm /usr/share/xsessions/dwm.dektop
+sudo nvim /usr/share/xsessions/dwm.desktop
+journalctl -xe | grep sddm
+nvim ~/start_dwm.sh
+chmod +x ~/start_dwm.sh
+sudo nvim /usr/share/xsessions/dwm.desktop
+nvim .xinitrc
+xrandr > xrandr_output.txt
+nvim xrandr_output.txt
+xrandr --output "DVI-I-1" --rotate  left
+xrandr --output "DVI-I-1" --rotate  right
+nvim .xinitrc
+logout
+kill dwm
+tmux
+startx
+xrandr --output "DVI-I-1" --rotate  left
+xrandr --output "DVI-I-1" --rotate  right
+xrandr --output "DVI-I-1" --rotate  left
+xrandr --output "DVI-I-1" --rotate  right
+nvim .xinitrc
+cd Git
+cd suckless
+cd dwm
+nvim config.h
+cp config.h config.h.backup
+nvim config.h
+tmux
+cd Git/suckless/dwm
+sudo make clean install
+sudo pacman -Syu
+cls
+fastfetch
+pacman -S lf
+lf
+cls
+fastfetch
+nvim
+uninstall thunar
+uninstall xfce4
+uninstall xfce4 > uninstall.txt
+pacman -Qi xfce4
+pacman -Qi xfwm4
+pacman -Qi xfce4
+uninstall xfce4
+pacman -Qi xfce4
+pacman -Qi xfwm4
+sudo pacman -Rcns xfce4 xfwm4
+uninstall firefox
+fastfetch
+cls
+sudo pacman -Rcns xfce4 xfwm4
+uninstall lightdm
+sudo pacman -Rcns xfce4 xfwm4
+nvim .
+xrdb -merge ~/.Xresources
+sudo pacman xrdb
+sudo pacman -S xrdb
+sudo pacman -S xorg-xrdb
+xrdb -merge ~/.Xresources
+cls fastfetch
+cls
+fastfetch
+which pulseaudio
+sudo pacman pulseaudio-ctl
+sudo pacman -S pulseaudio-ctl
+sudo pacman -S pavucontrol
+pavucontrol
+uninstall pavucontrol
+install pamixer
+pamixer --decrease 10
+pamixer --increase 10
+sudo pacman -S xorg-xev
+xev
+cd Git/suckless/dwm
+sudo make clean install
+tmux
+lf
+btop
+btop
+killall btop
+btop
+pkill btop
+tmux
+pkill chromium
+nvim .
+cd .wallpaper
+which feh
+install feh
+feh --help
+feh --scale ~/.wallpaper/Arch-Linux-Wallpaper.png
+feh --scale '~/.wallpaper/Arch Linux Wallpapers (4).jpg'
+feh --scale ~/.wallpaper/"Arch Linux Wallpapers (4).jpg"
+feh --scale ~/.wallpaper/"Arch Linux Wallpapers (1).jpg"
+feh --stretch ~/.wallpaper/"Arch Linux Wallpapers (1).jpg"
+feh --bg-scale ~/.wallpaper/"Arch Linux Wallpapers (1).jpg"
+cd ~
+install feh
+cd .bash.d
+cd ../
+cd .Conky
+cd conkyx
+cd bin
+./conkyx-start.sh
+btop
+cls
+fastfetch
+cd ~
+cd .fonts
+cd ~/Downloads
+cd ~/.fonts
+cls
+fastfetch
+cd .Conky/conkyx
+cd bin
+./conkyx-start.sh
+cd ~/.Conky/conky
+cd scripts
+cd C
+~/.Conky/conkyx/scripts/C/interfacedownspeed wlp5s6
+~/.Conky/conkyx/scripts/interfacedownspeed.py wlp5s6
+~/.Conky/conkyx/scripts/interfacedownspeed.py wlp5s6 | dmenu
+dmenu -w $(xdo id)
+install xdo
+dmenu -w $(xdo id)
+~/.Conky/conkyx/scripts/interfacedownspeed.py wlp5s6 | dmenu -w $(xdo id)
+uninstall xdo
+~/.Conky/conkyx/scripts/interfacedownspeed.py wlp5s6 " | " ~/.Conky/conkyx/scripts/interfaceupspeed.py wlp5s6 | dmenu
+~/.Conky/conkyx/scripts/interfaceupspeed.py wlp5s6 | dmenu
+~/.Conky/conkyx/scripts/weather.py | dmenu
+~/.Conky/conkyx/scripts/wireless-essid.py | dmenu
+~/.Conky/conkyx/scripts/wireless-essid.py wlp5s6 | dmenu
+~/.Conky/conkyx/scripts/C/wireless-essid wlp5s6 | dmenu
+dwmblocks
+touch ~/.config/lf/lfrc
+mkdir ~/.config/lf
+touch ~/.config/lf/lfrc
+nvim .config/lf/lfrc
+./lan
+./moon_phase
+./freemem
+./freeswap
+./totalmem
+./totalswap
+./usedmem
+./wan
+./wireless-essid
+./core_temps
+./core_temps 1
+./usedswap
+./weather
+./weather 48178
+tldr fzf
+tldr dmenu
+tldr st
+dwmblocks
+tldr dwmblocks
+cd ~/Git/suckless
+git clone https://git.suckless.org/slstatus
+cd slstatus
+tldr slstatus
+nivm .
+nvim .config/lf/lfrc
+nvim .
+make clean install
+sudo make clean install
+nvim .
+sudo logout
+nvim .
+slstatus
+slstatus &
+tmux
+mkdir -p ~/.config/systemd/user
+nvim .
+touch ~/.config/autostart/slstatus.desktop
+nvim .config/autostart
+nano  ~/.config/autostart/slstatus.desktop
+nano  ~/.config/autostart/Wifi.desktop
+nano  ~/.config/autostart/plank.desktop
+which xclip
+install xclip
+cd .config
+cd nv
+cd ~
+touch .vimrc
+nano .vimrc
+slstatus &
+nano .
+tmux
+btop
+btop
+btop
+wifi.sh
+cd "She
+cd "Shell Scripts
+cd "Shell Scripts"
+./wifi.sh list
+nvim .
+./wifi.sh disconnect
+./wifi.sh connect TheMadHatter 12345
+./wifi.sh connect
+./wifi.sh disconnect
+./wifi.sh connect zbdgy 12345
+./wifi.sh connect
+./wifi.sh disconnect
+./wifi.sh connect
+./wifi.sh disconnect
+./wifi.sh connect TheMadHatter 12345
+./wifi.sh connect
+nmcli device wifi list | grep -q -w "TheMadHatter"
+nmcli device wifi list 
+nmcli device wifi list | grep -q "TheMadHatter"
+nmcli device wifi list | grep -q "TheMadHatter-5G"
+nmcli device wifi list | grep -q TheMadHatter-5G
+nmcli device wifi list | grep  TheMadHatter-5G
+nmcli device wifi list | grep  TheMadHatter-5
+nmcli device wifi list | grep -w  TheMadHatter-5
+nmcli device wifi list | grep -w  TheMadHatter-5G
+./wifi.sh disconnect
+./wifi.sh connect TheMadHatter 12345
+./wifi.sh connect
+nmcli device wifi list | grep -w  TheMadHatter
+nmcli device wifi list | grep -i -w  TheMadHatter
+nmcli device wifi list | grep -w  "TheMadHatter"
+nmcli device wifi list | grep -w  "\<TheMadHatter\>"
+./.fehbg
+cd .
+cd ..
+nano .bashrc
+nano .tmux.conf
+cd .config
+cd ..
+fastfetch
+nvim .
+neovim .
+cd Git/suckless/dwm
+sudo make clean install
+nvim .
+slstatus &
+cd .fonts
+cd Jet
+cd JetBrainsMono
+nvim .
+cd ..
+cd Git/suckless
+cd slstatus
+sudo make clean install
+pkill slstatus
+slstatus &
+pkill slstatus
+slstatus &
+nvim ~/Git/suckless/slstatus
+pkill slstatus
+sudo make clean install
+slstatus &
+nvim ~/Git/suckless/slstatus
+pkill slstatus
+slstatus &
+nvim ~/Git/suckless/slstatus
+tmux
+slstatus &
+pamixer --increase 5
+nvim ~/Git/suckless/slstatus
+cd Git/suckless/dwm
+sudo make clean install
+./.fehbg
+cd .font
+cd Jet
+cd ~/.fonts
+cd Jet
+cd ~/Git/suckless/slstatus/st
+cd Git/suckless/slstatus/st
+cd Git/suckless//st
+sudo make clean install
+nvim ~/Git/suckless/slstatus
+sudo make clean install
+nvim ~/Git/suckless/slstatus
+cd "Python
+cd "Python Scripts"
+l
+cd "Python Scripts"
+cd "Morse Code"
+chmod +x txt-morse.py
+./txt-morse.py
+cd ~
+install python-pygame
+install python-re
+install python-time
+python txt-morse.py
+source ~.bashrc
+source ~/.bashrc
+morse
+source ~/.bashrc
+morse
+nvim .
+nvim ~/Git/suckless/slstatus
+cd Git/suckless/slstatus
+sudo make clean install
+pkill slstatus
+slstatus &
+cd ~/.Conky/conkyx/scripts
+cd C
+cd sou
+cd Source
+cd ../
+weather 48178
+install elinks
+weather 48178
+cd ../
+./weather.py 48178
+cd C
+weather
+weather 48178
+cd Source 
+gcc weather.c weather
+gcc weather weather.c
+gcc weather.c weather
+gcc weather.c -o weather
+gcc weather.c -o weather -lcurl
+weather 48178
+cd ..
+python weather.py 48178
+install python-xmltodict
+python weather.py 48178
+./weather.py 48178
+install python-requests
+install python-argparse
+./weather.py 48178
+install python-argparse
+./weather.py 48178
+cd .Conk
+cd conkyx/sc
+./weather.py 48178
+cd C
+cd sou
+gcc -o weather weather.c -lcurl
+./weather 48178
+gcc -o weather weather.c -lcurl
+./weather 48178
+gcc -o weather weather.c -lcurl
+./weather 48178
+gcc -o weather weather.c -lcurl
+./weather 48178
+mv weather.c ~/.Conky/conkyx/scripts/C
+pkill slstatus
+slstatus
+pkill slstatus
+slstatus &
+gcc -o weather weather.c -lcurl
+mv weather.c ~/.Conky/conkyx/scripts/C
+pkill slstatus
+slstatus &
+cd ..
+cd Source
+cd ..
+mv weather.c Source/weather.c
+cd Source
+mv weather ~/.Conky/conkyx/scripts/C
+pkill slstatus
+slstatus &
+cd ..
+./weather 48178
+battery_condition
+./battery_condition
+./battery_status
+./core_temps 0
+./core_temps 2
+./freemem
+./freeswap
+./interfacedownspeed
+cd C
+cd Sou
+gcc -o interfacedownspeed interfacedownspeed.c
+interfacedownspeed wlp5s6
+./interfacedownspeed wlp5s6
+mv interfacedownspeed ..
+gcc -o interfaceupspeed interfaceupspeed.c
+./interfaceupspeed wlp5s6
+mv interfaceupspeed ..
+cd ..
+lan
+./lan
+./moon_phase
+./totalmem
+./totalswap
+./usedmem
+./usedswap
+./wan
+cd Sou
+gcc -o wan wan.c -lcurl
+./wan
+mv wan ..
+cd ..
+wireless-essid
+./wireless-essid
+cd ..
+cd C
+weather Detroit
+weather 48126
+weather 48178
+cd .Conky/conkyx/sc
+cd C
+weather 48178
+cd Sou
+gcc -o weather weather.c -lcurl
+weather 48178
+mv weather ..
+curl https://wttr.in/48178?format=1
+cd ../
+weather 48178
+pkill slstatus
+slstatus &
+weather 48178
+curl https://wttr.in/48178?format=1
+pkill slstatus
+slstatus &
+pkill slstatus
+slstatus &
+pkill slstatus
+slstatus &
+pkill slstatus
+slstatus &
+pkill slstatus
+slstatus &
+cd .Git/suckless/slstatus
+cd Git/suckless/slstatus
+sudo make clean install
+cd ~/.Conky/conkyx/scripts/C/sou
+gcc -o weather weather.c -lcurl
+cd ~/.Conky/conkyx/scripts/C/sou
+gcc -o weather weather.c -lcurl
+weather 48178
+cd ~/Git/suckless/slstatus
+sudo make clean install
+pkill slstatus
+slstatus &
+lf
+tmux
+slstatus &
+pkill slstatus
+cd Git/suckless/slstatus
+sudo make clean install
+slstatus
+slstatus &
+./fehbg
+./.fehbg
+slstatus &
+pkill slstatus
+slstatus &
+nvim .
+cd .Conky/conkyx/scripts/C/
+cp *.* ~/local/bin
+cp * ~/local/bin
+cp battery_condition battery_status core_temps freemem freeswap interfacedownspeed interfaceupspeed lan moon_phase totalmem totalswap usedmem usedswap wan weather wireless-essid ~/local/bin
+cp battery_condition battery_status core_temps freemem freeswap interfacedownspeed interfaceupspeed lan moon_phase totalmem totalswap usedmem usedswap wan weather wireless-essid ~/.local/bin
+wireless-essid
+cp battery_condition battery_status core_temps freemem freeswap interfacedownspeed interfaceupspeed lan moon_phase totalmem totalswap usedmem usedswap wan weather wireless-essid ~/.local/bin
+weather 48178
+interfaceupspeed
+interfaceupspeed wlp5s6
+df -h
+df /dev/sda -h
+df / -h
+tail /var/log/btrfs_snapshots.log
+cd /var/log/
+cd ~
+cd "Shell Scripts"/
+./snapshot.sh
+sudo ./snapshot.sh
+cd /var/log/
+tail /var/log/btrfs_snapshots.log
+d ~
+cd ~
+cd .Conky/conkyx/scripts/C
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/rubbermetal/Conky-helpers.git
+git push -u origin main
+git branch -M main
+git remote add origin https://github.com/rubbermetal/Conky-helpers.git
+git push -u origin main
+git branch -M main
+git remote add origin git@github.com:rubbermetal/Conky-helpers.git
+git push -u origin main
+cd .ssh
+nano id_ed25519.pub
+nano id_ed25519
+nano id_ed25519.pub
+git remote add origin git@github.com:rubbermetal/Conky-helpers.git
+git branch -M main
+git push -u origin main
+git branch -M main
+git push -u origin main
+cd .ssh
+cd ..
+cd .gnupg
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+git remote add origin git@github.com:rubbermetal/Conky-helpers.git
+git branch -M main
+git push -u origin main
+git remote set-url origin git@github.com:yourusername/my-app.git
+git branch -M main
+git push -u origin main
+git branch -M main
+git remote add origin git@github.com:rubbermetal/Conky-helpers.git
+git push -u origin main
+git remote add origin git@github.com:rubbermetal/Conky-helpers.git
+git branch -M main
+git push -u origin main
+git remote remove origin
+git remote add origin git@github.com:rubbermetal/Conky-helpers.git
+git remote -v
+git push -u origin main
+cd .Conky/conky
+cd sc
+cd C
+cd ..
+cp .gitconfig
+cat .gitconfig
+nvim .gitconfig
+cd "Shell Scripts"/
+nvim makegit
+chmod +x makegit
+mv makegit ~/.local/bin
+cd ~
+makegit
+cd "Py
+cd "Python Scripts
+cd "Python Scripts"
+cd Morse Code
+rm 'Morse Code.code-workspace'
+nvim txt-morse.py
+echo "pygame" >> requirements.txt
+echo "requests" >> requirements.txt
+echo "__pycache__/" >> .gitignore
+echo "*.pyc" >> .gitignore
+echo "venv/" >> .gitignore
+nvim README.md
+nvim txt-morse.py
+mkdir source
+mv txt-morse.py source
+mv dash.wav source/media
+cd source
+cd media
+mkdir media
+cd media
+mv media dash.wav
+mkdir media
+mv dash.wav media
+cd ..
+mv dot.wav source/media/dot.wav
+cd source
+vim text-morse.py
+vim txt-morse.py
+cd ..
+vim README.md
+vim setup.py
+mkdir tests
+cd tests
+vim test_main.py
+cd ..
+cd source
+vim txt-morse.py
+cd ..
+cd tests
+vim test_main.py
+python test_main.py
+vim test_main.py
+python test_main.py
+vim test_main.py
+python test_main.py
+cd ../source
+mv txt-morse.py main.py
+cd ..
+cd tests
+python test_main.py
+vim test_main.py
+python test_main.py
+vim test_main.py
+cd ..
+mv source src
+cd src
+cd ..
+cd tests
+python test_main.py
+vim test_main.py
+python test_main.py
+cd ../src/media
+cd ../../tests
+cd ../src/
+vim main.py
+./main.py
+vim main.py
+./main.py
+vim main.py
+python main.py
+cd ../tests
+python test_main.py
+vim test_main.py
+pytest test_main.py
+cd ../src
+vim txt_morse_functions.py
+vim main.py
+python main.py
+cd ../tests
+pytest test_main.py
+vim test_main.py
+pytest test_main.py
+cd ../s
+cd ../sr
+cd ../src
+vim txt_morse_functions.py
+cd ../te
+cd ../tests/
+vim test_main.py
+pytest test_main.py
+cd ../src
+vim txt_morse_functions.py
+cd ../tests/
+vim test_main.py
+pytest test_main.py
+cd ../src
+vim txt_morse_functions.py
+cd ../tests/
+pytest test_main.py
+vim test_main.py
+pytest test_main.py
+cd ../src
+vim txt_morse_functions.py
+cd ../tests/
+vim test_main.py
+pytest test_main.py
+cd "Pyt
+cd "Python Scripts"/
+z "Mors
+z "Morse Code"/
+cd src
+lf
+python test_main.py
+vim test_main.py
+pytest test_main.py
+vim test_main.py
+pytest test_main.py
+pytest test_main.py > results.txt
+cat results.txt
+vim txt_morse_functions.py
+pytest test_main.py
+pytest test_main.py > results.txt
+pytest test_main.py -s
+pytest test_main.py -s > results.txt
+cat results.txt
+pytest test_main.py -s > results.txt
+cat results.txt
+pytest test_main.py -s > results.txt
+vim test_main.py
+pytest test_main.py -s
+pytest test_main.py -s > results.txt
+vim test_main.py
+pytest test_main.py -s
+vim test_main.py
+pytest test_main.py -s
+vim test_main.py
+pytest test_main.py -s
+vim test_main.py
+pytest test_main.py -s
+vim test_main.py
+pytest test_main.py -s > results.txt
+vim test_main.py
+pytest test_main.py -s
+pytest test_main.py -s > results.txt
+pytest test_main.py -s
+python main.py
+vim txt_morse_functions.py
+python main.py
+cd ..
+cd src
+vim txt_morse_functions.py
+cd ..
+vim README.md
+vim requirements.txt
+makegit Morse-Code
+cd ..
+which thonny
+cd ~
+cd .ssh
+las
+cd ../
+cd .gnupg
+gpg --export -a 'Clay Grace' > ~/.gnupg/public_key.asc
+gpg --export-secret-keys -a 'Clay Grace' > ~/.gnupg/private_key.asc
+cd ~
+which firefox
+vim .xinitrc
+pkill slstatus
+slstatus &
+cd Git
+cd suckless/slstatus
+vim config.h
+sudo make clean install
+pkill slstatus
+slstatus &
+pkill slstatus
+cd ~/Shell\ Scripts/
+cd ~/.Conky/conkyx/scripts/C/Source/
+nano weather.c
+mv weather ..
+cd ..
+./weather 48178
+cd Sour
+nano weather.c
+gcc -o weather weather.c -lcurl
+mv weather ..
+slstatus &
+vim config.h
+vim .
+vim .vim .
+cd ~
+cd /Git
+cd /Git/suc
+cd slstatus/
+mv fehbg.desktop ~/.config/autostart
+cd ~/.config/autostart/
+cd ~/Git
+mkdir linux-setup
+touch setup.sh
+mv setup.sh linux-setup/
+cd .bash.d
+vim aliases
+cd ..
+pkglist
+pkglistmore
+pkglistmore > packages.txt
+cat packages.txt
+vim .aliases
+mv packages.txt Git/linux-setup/
+cd Git
+cd linux-setup
+mkdir src tests
+mv setup.sh src
+mv packages.txt src
+vim .
+cd ~/Shell\ Scripts/
+vim .
+cd ~/Git/linux-setup/src
+vim linux-setup.sh
+cd ~
+cd Git/linux-setup/
+cd src
+pacman -Qe > all_packages.txt
+grep -Ev "^(linux|linux-headers|linux-firmware|base|base-devel|linux-lts|linux-zen|linux-hardened)" all_packages.txt > packages.txt
+vim setup.sh
+pacman -Qe
+pacman -Q
+wan
+install histr
+install hstr
+hstr
+version
+VERSION
+$VERSION
+fastfetch
+history -a
+930
+yay -S hstr
+fzf --height 40% --reverse --border
+which fzf
+install fzf
+fzf --height 40% --reverse --border
+vim $(fzf)
+vim $(fzf)
+hh
+yay -S exa
+exa la
+exa -la
+exa la
+exa -la
+exa -ls
+exa -l
+yay -S ripgrep
+rg /.sh/
+rg $.sh
+rg .sh
+rg import os
+rg "import os"
+exa --tree
+exa -l
+exa -lh --group --time-style=long-iso --git
+cd Git/
+exa
+cd ..
+exa
+cd "Python Scripts"/
+cd "Morse Code"/
+exa
+exa --git
+exa --icons
+exa --icons --la
+exa --icons -la
+exa --icons -la --directories-first
+exa --icons -la --group-directories-first
+exa -l --git
+cd ~
+source .bashrc
+ftc
+cd ~
+cd .Conky/conky
+cd /scripts/C
+ftc
+lt2
+lt
+lg
+exa --tree --icons
+cd .Conky/conkyx/scripts/C
+lt
+lg
+lt
+fastfetch
+vim packages.txt
+cd ~
+nvim .xinitrc
+cd She
+vim sys_mon.sh
+chmod +x sys_mon.sh
+tmux
+cd Shell\ Scripts/
+./sys_mon.sh
+cd ~
+cd ..
+cd Shell\ Scripts
+vim .xinitrc
+./sys_mon.sh
+tmux
+yay -S wmctrl
+vim .xinitrc
+:q
+logout
+startx
+hh
+startx
+X
+btop
+btop
+fzf --height 40% --reverse --border
+btop
+btop
+btop
+vim .xinitrc
+btop
+pkill Xorg
+sudo kill X
+sudo kill Xorg
+slstatus &
+sudo pacman -Syyu
+vim .xinitrc
+la .config/autostart
+ll .config/autostart
+ls .config/autostart
+lt .config/autostart
+cd ~
+fzf
+tmux
+cd Shell\ Scripts
+lt
+./sys_mon.sh
+fastfetch
+./Shell\ Scripts/sys_mon.sh
+df -h
+lsblk
+mount /dev/sdd2 disk_d
+sudo mount /dev/sdd2 disk_d
+mount --help
+mkdir -p .mount/ssd_d
+mkdir -p .mount/ssd_a
+mkdir -p .mount/ssd_b
+mkdir -p .mount/ssd_c
+cd .mount
+sudo mount /dev/sdd2 ~/.mount/ssd_a
+sudo mount /dev/sdd2 /home/madhatter/.mount/ssd_a
+lsblk
+sudo mount /dev/sdb3 /home/madhatter/.mount/ssd_a
+sudo mount /dev/sdf1 /home/madhatter/.mount/ssd_a
+tldr mount
+sudo mount -t /dev/sdb3 /home/madhatter/.mount/ssd_a
+sudo blkid /dev/sdb3
+sudo blkid /dev/sdd2
+sudo blkid /dev/sdc5
+sudo blkid /dev/sdc4
+sudo blkid /dev/sdc3
+lsblk
+sudo blkid /dev/sdc2
+sudo blkid /dev/sdc1
+tree
+lt
+sudo mount ntfs /dev/sdd2 /home/madhatter/.mount/ssd_d
+sudo mount -t ntfs /dev/sdd2 /home/madhatter/.mount/ssd_d
+tldr mount
+sudo mount -t NTFS /dev/sdd2 /home/madhatter/.mount/ssd_d
+sudo blkid /dev/sdd2
+sudo mount -t "ntfs" /dev/sdd2 /home/madhatter/.mount/ssd_d
+mount -t "ntfs" /dev/sdd2 /home/madhatter/.mount/ssd_d
+mount
+sudo blkid /dev/sdc1
+sudo blkid /dev/sdc2
+sudo mount -t "ext4" /dev/sdc1 /home/madhatter/.mount/ssd_c
+sudo mount -t /dev/sdc1 /home/madhatter/.mount/ssd_c
+nvim ~/.bash.d/.commands
+colors
+chmodcalc
+sudo mount -t "ext4" /dev/sdc1 /home/madhatter/.mount/ssd_c
+sudo mount -t ext4 /dev/sdc1 /home/madhatter/.mount/ssd_c
+sudo mount ext4 /dev/sdc1 /home/madhatter/.mount/ssd_c
+sudo m -t ext4 /dev/sdc1 /home/madhatter/.mount/ssd_c
+sudo m -t EXT4 /dev/sdc1 /home/madhatter/.mount/ssd_c
+sudo m -t "ext4" /dev/sdc1 /home/madhatter/.mount/ssd_c
+m -t "ntfs" /dev/sdd2 /home/madhatter/.mount/ssd_d
+m -t ntfs /dev/sdd2 /home/madhatter/.mount/ssd_d
+sudo m -t ntfs /dev/sdd2 /home/madhatter/.mount/ssd_d
+sudo m -t "ntfs" /dev/sdd2 /home/madhatter/.mount/ssd_d
+sudo m -t "NTFS" /dev/sdd2 /home/madhatter/.mount/ssd_d
+sudo m -t NTFS /dev/sdd2 /home/madhatter/.mount/ssd_d
+lsblk
+sudo blkid /dev/sdb3
+sudo m -t btrfs /dev/sdb3 /home/madhatter/.mount/ssd_b
+cd ~/.mount/ssd_b
+lt
+cd home
+cd rubbermetal
+lt2
+nvim ~/.bash.d/.functions
+vim .
+which sendmail
+lt2
+ssh madhatter@themadhatter.us
+lt2
+nvim .bashrc
+cd Python
+lt2
+python agentSmith.py
+ssh madhatter@themadhatter.us
+cls
+lt2
+cd Shell\ Scripts/
+lt2
+nvim health\
+nvim health
+chmod +x health
+nvim health
+health
+./health
+health
+nvim health
+cd ../.bashrc
+nvim ../.bashrc
+la ..
+la ../.local
+la ../.local/bin
+mv health ../.local/bin
+la ../.local/bin
+source .
+source .bashrc
+source ~/.bashrc
+cls
+health
+install hostname
+yay -S hostname
+hostname
+install net-tools
+hostname
+install inetutils
+hostname
+cls
+hostname
+cls
+health
+hostname --help
+nvim ../.local/bin/health
+health
+lt
+lt ~
+exa -lT
+lt2
+exa -CF
+exa -CF --group-directories-first --color=auto --icons
+exa -cF --group-directories-first --color=auto --icons
+exa -F --group-directories-first --color=auto --icons
+nvim dotfilecopy
+chmod +x dotfilecopy
+./dotfilecopy
+la ~/Git/DotFiles
+ls ~/Git/DotFiles
+cd ~/Git/DotFiles
+nvim ~/Shell\ Scripts/DotFiles
+ls ~/Shell\ Scripts/
+nvim ~/Shell\ Scripts/dotfilecopy

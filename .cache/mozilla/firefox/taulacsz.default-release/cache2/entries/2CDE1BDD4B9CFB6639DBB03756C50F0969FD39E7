@@ -1,0 +1,3108 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta http-equiv='content-type' content='text/html;charset=utf-8' />
+<title>Casey's Conky Reference with Examples</title>
+<style>
+@font-face {
+  font-family: "Lexend";
+  src: local("LexendDeca"), local("Lexend Deca"), url("./LexendDeca-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+:root {
+  font-size:14pt;
+  scroll-padding-top: 2em;
+}
+body {
+  background:#ddd;
+  font-family:Lexend, sans-serif;
+  line-height:1.5rem; /* Spread out lines for easier reading */
+  overflow:auto;
+}
+table {
+  border-collapse:collapse;
+  margin:0;
+  padding:0;
+}
+th {
+  text-align:left;
+  margin:0;
+  padding:0 1rem;
+  color:#fff;
+  background:#555;
+  top:0;
+  z-index:1;
+}
+th.top {
+  background:#000;
+  position:sticky; /* header bar sticks to top of screen */
+  position:-webkit-sticky; /* Safari */
+}
+td {
+  border-top:1px solid #bbb;
+  vertical-align:top;
+  margin:0;
+  padding:.5rem 1em 0 .5rem;
+}
+
+/* Prevent wrapping on white space for this class */
+.nw {
+  white-space:nowrap;
+}
+
+/* Make link words with descending letters and underscores easier to read by moving underline down */
+a {
+  text-decoration:none;
+  border-bottom:1px solid #977;
+}
+/* But not for links inside examples */
+.ex a, .ex2 a {
+  border:0;
+  text-decoration:underline;
+}
+
+/* Bold links in first td content but not if it is the only td in the table */
+td:first-child a {
+  font-weight:bold;
+}
+td:last-child {
+  font-weight:normal;
+  width:100%;
+}
+
+/* Sections get padding */
+.t0, .t1, .t2, .t3, .t4, .t5, .t6, .t7, li a {
+  padding:1rem;
+  border:1px solid #777;
+}
+/* Except the menu list items */
+.menu :is(.t0, .t1, .t2, .t3, .t4, .t5, .t6, .t7) {
+  padding:0;
+}
+
+/* Menu list item links */
+.menu a {
+  text-decoration:none;
+  border-bottom:0;
+  display:block;
+  color:#000;
+}
+/* Bold part of link text should be on a line by itself */
+.menu a b {
+  display:block;
+  text-decoration:underline;
+}
+/* For mouse users */
+.menu a:hover {
+  background-color:#000;
+  color:#fff;
+}
+
+/* Section background colors */
+.t0 {background:LightSkyBlue;}
+.t1 {background:Khaki;}
+.t2 {background:Thistle;}
+.t3 {background:Tan;}
+.t4 {background:Aquamarine;}
+.t5 {background:BurlyWood;}
+.t6 {background:Plum;}
+.t7 {background:Aquamarine;}
+.red {color:red;}
+
+/* Make stuff look a bit nicer */
+.t0, .t1, .t2, .t3, .t4, .t5, .t6, .t7, fieldset {
+  /* Rounded corners */
+  border-radius:.25rem;
+  /* Make background colors less saturated for more text contrast */
+  background-image: linear-gradient(to right, rgba(255,255,255,.7),rgba(192,192,192,.7));
+}
+
+/* The jump-to-menu button */
+a.nav {
+  font-size:3vh;
+  bottom:.5rem;
+  right:0;
+  background:rgba(64,64,64,.7);
+  color:#fff;
+  position:fixed;
+  padding:.25rem .5rem;
+  text-decoration:none;
+}
+a.nav:hover {
+  background:rgba(0,0,0,1);
+}
+
+/* Grouped related items */
+tbody.g th, tbody.g tr td:first-child {
+  border-left:.5rem solid #555;
+  padding-left:1rem;
+}
+tbody.g th {
+  border-top:.5rem solid #555;
+}
+tbody.g tr:last-child td {
+  border-bottom:.5rem solid #555;
+}
+
+/* Lists that can be shown in columns */
+div.col {
+  margin:1em 0 0 1em;
+}
+.col ul {
+  padding:0;
+  margin:0;
+}
+.col {
+  column-count:auto;
+  column-fill:balance;
+  column-width:8rem;
+}
+fieldset {
+  border: 1px solid #000;
+}
+legend {
+  font-weight: bold;
+}
+/* Arguments and examples */
+.ar:before, .ex:before {
+  background:rgba(255,255,255,0);
+  color:#500;
+  display:block;
+  font-style:italic;
+  position:absolute;
+  top:-1.5rem;
+}
+.ar, .ex, .ex2 {
+  color:#008;
+  display:block;
+  font-size:1rem;
+  font-family:monospace;
+  position:relative;
+  margin:2rem 0 1rem 0;
+}
+
+/* Repetitive content is here for easier editing and to reduce html size */
+
+/* Arguments */
+.ar:before {
+  content:"Arguments:";
+}
+
+/* Empty Arguments have no heading */
+.ar:empty:before {
+  content:"";
+}
+.ar:empty:after {
+  content:"(No Arguments)";
+  color:#999;
+  position:absolute;
+  top:-1.5rem;
+}
+
+/* Examples */
+.ex:before {
+  content:"Example:";
+}
+.ex,.ex2 {
+  background:#eee;
+  border:1px solid #aaa;
+  border-radius:3px;
+  white-space:break-spaces;
+}
+
+/* Empty examples have different heading text */
+.ex:empty::after {
+  content:"-Pending-";
+  background:rgba(0,0,0,.6);
+  color:#aaa;
+  display:block;
+  padding:0 1rem;
+}
+
+/* Repetitive text stuff */
+.warn:after {
+  color:#a00;
+  content:" Notice: this takes more resources than other variables. It is better to code desired behaviour in C and post a patch.";
+}
+
+/* Change layout on smaller screens */
+@media screen and (max-width: 879px) {
+  /* Stack th and td elements */
+  th,td {
+    display:block;
+    padding:1rem;
+    max-width:96%;
+  }
+  /* Add left hand group border to stacked elements */
+  tbody.g td, tbody.g tr td:first-child, tbody.g tr:last-child td {
+    border-left:.5rem solid #555;
+    border-top:0;
+    border-bottom:0;
+  }
+  /* Set top group border only to first stacked element */
+  tbody.g tr td:first-child, td:first-child {
+    border-top:3px solid #000;
+  }
+}
+</style>
+</head>
+<body>
+<a id='nav'></a><h1>Casey's Conky Reference with Examples</h1>
+<p><small>Last updated 20210416 by Casey Sprangel, IFX Group. Conky and this document are licensed under GNU General Public License. This page is self contained and may be saved locally for off-line reference. The latest version is at <a href="http://www.ifxgroup.net/conky.htm">www.ifxgroup.net/conky.htm</a></small></p>
+
+<h3>Sections</h3>
+<ol class='menu'>
+<li class='t0'><a href='#p0'><b>Conky Command Line Options</b> Conky settings passed on the command line.</a></li>
+<li class='t1'><a href='#p1'><b>Conky Configuration File Commands</b> Conky settings stuff above the TEXT line.</a></li>
+<li class='t2'><a href='#p2'><b>Conky Variables</b> Conky display stuff below the TEXT line.</a></li>
+<li class='t3'><a href='#p3'><b>Time Format String Variables</b> Used by all TIME variables in Conky.</a></li>
+<li class='t4'><a href='#p4'><b>Installing Conky</b> The quick Conky installation guide.</a></li>
+<li class='t5'><a href='#notes'><b>Notes</b> Stuff to keep things from getting too verbose elsewhere.</a></li>
+<li class='t6'><a href='#tips'><b>Conky Tips and Tricks</b> Examples for showing non-native and dynamic information in Conky.</a></li>
+<li class='t7'><a href='#about'><b>About Conky</b> A short explanation of Conky just in case.</a></li>
+</ol>
+
+<p>A different background color is used for each major section of this document as a visual clue when you scroll or search. Every command or variable in the first column is linked to make it easier to direct attention at a specific section of this document if needed. This also makes cross reference navigation possible.</p>
+
+<fieldset class='feedback'><legend>Conky Compatibility Note</legend>
+<p>This document is written to cover the configuration file syntax supported by the widest variety of Conky versions also known as legacy format. Unfortunately somewhere in the 1.x range things got a little confusing with Ubuntu repositories hosting a Conky version that did not correctly fall back to the legacy configuration file syntax. Please make sure your Conky version is before 1.0 or after 1.10.1 for best results with the commands and syntax described here.</p>
+</fieldset>
+
+<a id='p0'></a><h2>Conky Command Line Options</h2>
+<p>Command line options override settings defined in configuration file. Command line options are case sensitive.</p>
+
+<table class='t0'>
+<tbody>
+<tr><th class='top'>Option (case sensitive)</th><th class='top'>Explanation</th></tr>
+<tr><td><a id='cl-v'></a><a href='#cl-v'>-v | -V | --version</a></td><td>Prints Conky version with a list of compiled in options then exits. <p class='ex'>conky --version</p></td></td>
+<tr><td><a id='cl-q'></a><a href='#cl-q'>-q | --quiet</a></td><td>Run Conky in quiet mode with no output in the terminal used to start conky. The default is to show errors, warnings, and progress information in the terminal. <p class='ex'>conky --quiet</p></td></tr>
+<tr><td><a id='cl-D'></a><a href='#cl-D'>-D | -DD | --debug</a></td><td>Debugging output with two detail levels. <q>-D</q> is level one detail, <q>-DD</q> for more detail. <p class='ex'>conky --debug</p></td></tr>
+<tr><td><a id='cl-a'></a><a href='#cl-a'>-a | --alignment=&lt;position&gt;</a></td><td>Text alignment on screen. Syntax: {top,bottom,middle}_{left,right,middle} or none. Can also be abbreviated with first characters of position.  See <a href="#alignment">alignment</a> command. <p class='ex'>conky --alignment=top_right</p></td></tr>
+<tr><td><a id='cl-b'></a><a href='#cl-b'>-b | --double-buffer</a></td><td>Use double buffering. This helps eliminate <q>flicker</q> by using more memory. See <a href="#double_buffer">double_buffer</a> command. <p class='ex'>conky --double-buffer</p></td></tr>
+<tr><td><a id='cl-c'></a><a href='#cl-c'>-c | --config=&lt;file_name&gt;</a></td><td>Config file to load instead of the default. <p>The default configuration file location is <q><code>$HOME/.config/conky/conky.conf</code></q> or <q><code>${sysconfdir}/conky/conky.conf</code></q> On most systems, sysconfdir is /etc, and you can find the sample config file there (/etc/conky/conky.conf).</p><p class='ex'>conky -c conkyrc.conf</p></td></tr>
+<tr><td><a id='cl-C'></a><a href='#cl-C'>-C | --print-config</a></td><td>Print internal default config to stdout. This is useful when starting from scratch. <p class='ex'>conky --print-config</p></td></tr>
+<tr><td><a id='cl-d'></a><a href='#cl-d'>-d | --daemonize</a></td><td>Daemonize Conky by forking process to background. See <a href="#background">background</a> command. <p class='ex'>conky --daemonize</p></td></tr>
+<tr><td><a id='cl-f'></a><a href='#cl-f'>-f | --font=&lt;font_name&gt;</a></td><td>Set default font to use. Font name must be quoted if it contains spaces. See <a href="#font_c">font</a> command. <p class='ex'>conky -f Ubuntu</p></td></tr>
+<tr><td><a id='cl-h'></a><a href='#cl-h'>-h | --help</a></td><td>Prints command line help and exits. <p class='ex'>conky --help</p></td></tr>
+<tr><td><a id='cl-o'></a><a href='#cl-o'>-o | --own-window</a></td><td>Create own window to draw. See <a href="#own_window">own_window</a> command. <p class='ex'>conky --own-window</p></td></tr>
+<tr><td><a id='cl-s'></a><a href='#cl-s'>-s | --for-scripts 'string'</a></td><td>Prints the string of text to standard output and exits. This is useful when using Conky in scripts. TEXT has to be enclosed by single quotes. <p class='ex'>conky --for-scripts 'Your uptime is: $uptime'<br>conky -s 'Your uptime is: $uptime'</p></td></tr>
+<tr><td><a id='cl-S'></a><a href='#cl-S'>-S | --stdin-config</a></td><td>Read configuration from stdin (standard input). <p class='ex'>cat conkyrc.conf | conky --stdin-config</p></td></tr>
+<tr><td><a id='cl-t'></a><a href='#cl-t'>-t | --text='string'</a></td><td>Text to render. The text must be in single quotes.<p class='ex'>conky --text=' $uptime '<br>conky -t ' $uptime '</p></td></tr>
+<tr><td><a id='cl-p'></a><a href='#cl-p'>-p | --pause=&lt;seconds&gt;</a></td><td>Time to pause before actually starting Conky. <p class='ex'>conky --pause=10<br>conky -p 10</p></td></tr>
+<tr><td><a id='cl-u'></a><a href='#cl-u'>-u | --interval=&lt;seconds&gt;</a></td><td>Update interval in seconds. See <a href="#update_interval">update_interval</a> command. <p class='ex'>conky --interval=2<br>conky -u 2</p></td></tr>
+<tr><td><a id='cl-w'></a><a href='#cl-w'>-w | <span class='nw'>--window-id=&lt;win_id_number&gt;</span></a></td><td>Window id to draw. <p class='ex'>conky -w 4101</p></td></tr>
+<tr><td><a id='cl-X'></a><a href='#cl-X'>-X | --display=&lt;display_number&gt;</a></td><td>X11 display to use. <p class='ex'>conky --display=2</p></td></tr>
+<tr><td><a id='cl-x'></a><a href='#cl-x'>-x &lt;pixels&gt;</a></td><td>X position from left edge of screen in pixels. Negative numbers are position from right edge. See <a href="#gap_x">gap_x</a> command. <p class='ex'>conky -x 150</p></td></tr>
+<tr><td><a id='cl-y'></a><a href='#cl-y'>-y &lt;pixels&gt;</a></td><td>Y position from top edge of screen in pixels. Negative numbers are position from bottom edge. See <a href="#gap_y">gap_y</a> command. <p class='ex'>conky -y 20</p></td></tr>
+<tr><td><a id='cl-i'></a><a href='#cl-i'>-i &lt;COUNT&gt;</a></td><td>Number of times to update Conky before exit. See <a href="#total_run_times">total_run_times</a> command. <p class='ex'>conky -i 300</p></td></tr>
+</tbody>
+</table>
+
+
+<a id='p1'></a><h2>Conky Configuration File Commands</h2>
+
+<p>The Conky configuration file(s) can be placed anywhere you want. The default is <q><code>$HOME/.config/conky/conky.conf</code></q> (in your home directory) or <q><code>${sysconfdir}/conky/conky.conf</code></q> (on most systems sysconfdir is /etc). The configuration is defined in a text file with two main parts divided by a line with the word <q>TEXT</q>.</p>
+<p>This section describes commands that appear above the <q>TEXT</q> command in the Conky configuration file.</p>
+
+<table class='t1'>
+<tbody>
+<tr><th class='top'>Variable</th><th class='top'>Explanation</th></tr>
+
+<tr>
+<td><a id='alignment'></a><a href='#alignment'>alignment</a></td>
+<td>Aligned position on screen, may be top_left, top_right, top_middle, bottom_left, bottom_right, bottom_middle, middle_left, middle_middle, middle_right, or none. Also can be abbreviated as tl, tr, tm, bl, br, bm, ml, mm, mr. See also <a href='#gap_x'>gap_x</a> and <a href='#gap_y'>gap_y</a>. <p class='ex'>#alignment top_left<br>alignment top_right<br>#alignment bottom_left<br>#alignment bottom_right<br>#alignment none</p></td>
+</tr>
+
+<tr>
+<td><a id='append_file'></a><a href='#append_file'>append_file</a></td>
+<td>Append the file given as argument. <p class='ex'>append_file /home/user/.config/conky/common.conf</p></td>
+</tr>
+
+<tr>
+<td><a id='background'></a><a href='#background'>background</a></td>
+<td>Boolean value. If true Conky is forked to a background process when started. <p class='ex'>background yes</p></td>
+</tr>
+
+<tr>
+<td><a id='border_inner_margin'></a><a href='#border_inner_margin'>border_inner_margin</a></td>
+<td>Inner border margin in pixels is the margin between the border and text. <p class='ex'>border_inner_margin 0</p></td>
+</tr>
+
+<tr>
+<td><a id='border_outer_margin'></a><a href='#border_outer_margin'>border_outer_margin</a></td>
+<td>Outer border margin in pixels is the margin between the border and the edge of the window. <p class='ex'>border_outer_margin 0</p></td>
+</tr>
+
+<tr>
+<td><a id='border_width'></a><a href='#border_width'>border_width</a></td>
+<td>Border width in pixels. <p class='ex'>border_width 0</p></td>
+</tr>
+
+<tr>
+<td><a id='colorN_c'></a><a href='#colorN_c'>colorN</a></td>
+<td>Predefine a color for use inside TEXT segments. Substitute N by a digit between 0 and 9 inclusive. When specifying the color value in hex, omit the leading hash (#). See <a href='#colorN'>colorN</a> text variable. <p class='ex'>color8 995500<br>TEXT<br>${color8}</p></td>
+</tr>
+
+<tr>
+<td><a id='cpu_avg_samples'></a><a href='#cpu_avg_samples'>cpu_avg_samples</a></td>
+<td>The number of samples to average for CPU monitoring. <p class='ex'>cpu_avg_samples 2</p></td>
+</tr>
+
+<tr>
+<td><a id='default_bar_size'></a><a href='#default_bar_size'>default_bar_size</a></td>
+<td>Specify a default width and height for bars. The following example is particularly useful for execbar and execibar as they do not take size arguments. <p class='ex'>default_bar_size 0 6</p></td>
+</tr>
+
+<tr>
+<td><a id='default_color'></a><a href='#default_color'>default_color</a></td>
+<td>Default color and border color. <p class='ex'>default_color AAAAAA</p></td>
+</tr>
+
+<tr>
+<td><a id='default_gauge_size'></a><a href='#default_gauge_size'>default_gauge_size</a></td>
+<td>Specify a default width and height for gauges in pixels. This is particularly useful for execgauge and execigauge as they do not take size arguments. <p class='ex'>default_gauge_size 25 25</p></td>
+</tr>
+
+<tr>
+<td><a id='default_graph_size'></a><a href='#default_graph_size'>default_graph_size</a></td>
+<td>Specify a default width and height for graphs. This is particularly useful for execgraph and execigraph as they do not take size arguments. <p class='ex'>default_graph_size 0 25</p></td>
+</tr>
+
+<tr>
+<td><a id='default_outline_color'></a><a href='#default_outline_color'>default_outline_color</a></td>
+<td>Default outline color. <p class='ex'>default_outline_color green</p></td>
+</tr>
+
+<tr>
+<td><a id='default_shade_color'></a><a href='#default_shade_color'>default_shade_color</a></td>
+<td>Default shading color and border's shading color. <p class='ex'>default_shade_color red</p></td>
+</tr>
+
+<tr>
+<td><a id='disable_auto_reload'></a><a href='#disable_auto_reload'>disable_auto_reload</a></td>
+<td>Set this to <q>True</q> or <q>Yes</q> to disable the inotify-based auto config reload feature. <p class='ex'>disable_auto_reload yes</p></td>
+</tr>
+
+<tr>
+<td><a id='diskio_avg_samples'></a><a href='#diskio_avg_samples'>diskio_avg_samples</a></td>
+<td>The number of samples to average for disk I/O monitoring. <p class='ex'>diskio_avg_samples 2</p></td>
+</tr>
+
+<tr>
+<td><a id='display'></a><a href='#display'>display</a></td>
+<td>Specify an X to connect to. <p class='ex'>display 1</p></td>
+</tr>
+
+<tr>
+<td><a id='double_buffer'></a><a href='#double_buffer'>double_buffer</a></td>
+<td>Use the Xdbe extension? (eliminates flicker) It is highly recommended to use own window with this one so double buffer won't be so big. <p class='ex'>double_buffer yes</p></td>
+</tr>
+
+<tr>
+<td><a id='draw_borders'></a><a href='#draw_borders'>draw_borders</a></td>
+<td>Draw borders around text? [YES or NO] <p class='ex'>draw_borders no</p></td>
+</tr>
+
+<tr>
+<td><a id='draw_graph_borders'></a><a href='#draw_graph_borders'>draw_graph_borders</a></td>
+<td>Draw borders around graphs? [YES or NO] <p class='ex'>draw_graph_borders yes</p></td>
+</tr>
+
+<tr>
+<td><a id='draw_outline'></a><a href='#draw_outline'>draw_outline</a></td>
+<td>Draw outlines around text and lines? This makes text much easier to read on a very low contrast background. [YES or NO] <p class='ex'>draw_outline yes</p></td>
+</tr>
+
+<tr>
+<td><a id='draw_shades'></a><a href='#draw_shades'>draw_shades</a></td>
+<td>Adds a narrow shadow on text and lines to make them easier to read on relatively low contrast backgrounds. For more contrast see <q><a href='#draw_outline'>draw_outline</a></q>. [YES or NO] <p class='ex'>draw_shades yes</p></td>
+</tr>
+
+<tr>
+<td><a id='extra_newline'></a><a href='#extra_newline'>extra_newline</a></td>
+<td>Put an extra newline at the end when writing to stdout, useful for writing to awesome's wiboxes. [YES or NO] <p class='ex'>extra_newline no</p></td>
+</tr>
+
+<tr>
+<td><a id='font_c'></a><a href='#font_c'>font</a></td>
+<td>Set the default font name to use in X. There are three parts.
+<ol>
+<li><b>Font Name</b> - The name of the font as it appears in your system. The xfontsel program can be used to find a nice font installed on your system.</li>
+<li>[<b>size=</b>] - [optional] The desired size of the font in pixels.</li>
+<li>[<b>weight</b>] - [optional] The font weight. For example: <b>bold</b>, <b>normal</b></li>
+</ol>
+If one or both of the optional parts are given a colon character must be used to separate the parts. <p class='ex'>font Ubuntu:size=11:bold</p></td>
+</tr>
+
+<tr>
+<td><a id='format_human_readable'></a><a href='#format_human_readable'>format_human_readable</a></td>
+<td>If enabled, values which are in bytes are printed in human readable format (i.e., KiB, MiB, etc). If disabled, the number always shows bytes. [YES or NO] <p class='ex'>format_human_readable yes</p></td>
+</tr>
+
+<tr>
+<td><a id='gap_x'></a><a href='#gap_x'>gap_x</a></td>
+<td>Gap in pixels between right or left border of screen. The following example is the same as passing <q>-x 10</q> at command line. For other position related stuff, see <a href='#alignment'>alignment</a>. <p class='ex'>gap_x 10</p></td>
+</tr>
+
+<tr>
+<td><a id='gap_y'></a><a href='#gap_y'>gap_y</a></td>
+<td>Gap in pixels between top or bottom border of screen. The following example is the same as passing <q>-y 10</q> at command line. For other position related stuff, see <a href='#alignment'>alignment</a>. <p class='ex'>gap_y 10</p></td>
+</tr>
+
+<tr>
+<td><a id='hddtemp_host'></a><a href='#hddtemp_host'>hddtemp_host</a></td>
+<td>Hostname to connect to for hddtemp objects. Defaults to 127.0.0.1. This is required for <q><a href='#hddtemp'>hddtemp</a></q> to work. <p class='ex'>hddtemp_host 127.0.0.1</p></td>
+</tr>
+
+<tr>
+<td><a id='hddtemp_port'></a><a href='#hddtemp_port'>hddtemp_port</a></td>
+<td>Port to use for hddtemp connections. Defaults to 7634. This is required for <q><a href='#hddtemp'>hddtemp</a></q> to work. <p class='ex'>hddtemp_port 7634</p></td>
+</tr>
+
+<tr>
+<td><a id='if_up_strictness'></a><a href='#if_up_strictness'>if_up_strictness</a></td>
+<td>How strict should <a href='#if_up'>${if_up}</a> be when testing an interface for being connected? The value is one of the following choices:
+<ul>
+<li><b>up</b> = the interface is connected</li>
+<li><b>link</b> = the interface has a link (to hub, switch, modem, etc.)</li>
+<li><b>address</b> = the interface has an assigned IP address</li>
+</ul>
+<p class='ex'>if_up_strictness address</p></td>
+</tr>
+
+<tr>
+<td><a id='imap'></a><a href='#imap'>imap</a></td>
+<td>Default global IMAP server. Arguments are: <q>host user pass [-i interval (in seconds)] [-f 'folder'] [-p port] [-e 'command'] [-r retries]</q>. Default port is 143, default folder is 'INBOX', default interval is 5 minutes, and default number of retries before giving up is 5. If the password is supplied as a single asterisk <q>*</q> you are prompted to enter the password when Conky starts. <p class='ex'>imap mailserver.example.com user password -i 60 -f &quot;home&quot; -r 5</p></td>
+</tr>
+
+<tr>
+<td><a id='imlib_cache_flush_interval'></a><a href='#imlib_cache_flush_interval'>imlib_cache_flush_interval</a></td>
+<td>Interval (in seconds) to flush Imlib2 image memory cache. <p class='ex'># Update image every 5 minutes<br>imlib_cache_flush_interval 300</p></td>
+</tr>
+
+<tr>
+<td><a id='imlib_cache_size'></a><a href='#imlib_cache_size'>imlib_cache_size</a></td>
+<td>Imlib2 image cache size in bytes. Defaults to 4MiB. Increase this value if you use a lot of ${<a href='#image'>image</a>} tags. Set to 0 to disable the image cache. <p class='ex'>imlib_cache_size 4096</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'><a id='lua_scripting'></a>Lua Scripting</th></tr>
+
+<tr>
+<td><a id='lua_draw_hook_post'></a><a href='#lua_draw_hook_post'>lua_draw_hook_post</a></td>
+<td>This function, if defined, is called by Conky each iteration after drawing to the window. <span class="red">Requires X support.</span> Takes any number of optional arguments. Use this hook for drawing things <b>on top of</b> what Conky draws. Conky puts <q>conky_</q> with the trailing underscore in front of the function_name to prevent accidental calls to the wrong function unless you place <q>conky_</q> in front of it yourself. <p class='ex'>lua_draw_hook_post conky_my_overlay</p></td>
+</tr>
+
+<tr>
+<td><a id='lua_draw_hook_pre'></a><a href='#lua_draw_hook_pre'>lua_draw_hook_pre</a></td>
+<td>This function, if defined, is called by Conky each iteration before drawing to the window. <span class="red">Requires X support.</span> Takes any number of optional arguments. Use this hook for drawing things <b>under</b> what Conky draws. Conky puts <q>conky_</q> with the trailing underscore in front of the function_name to prevent accidental calls to the wrong function unless you place <q>conky_</q> in front of it yourself.<p class='ex'>lua_draw_hook_pre conky_my_background</p></td>
+</tr>
+
+<tr>
+<td><a id='lua_load'></a><a href='#lua_load'>lua_load</a></td>
+<td>Loads Lua script(s) separated by spaces. <p class='ex'>lua_load ~/.config/conky/scripts/example.lua ~/.config/conky/scripts/example2.lua</p></td>
+</tr>
+
+<tr>
+<td><a id='lua_shutdown_hook'></a><a href='#lua_shutdown_hook'>lua_shutdown_hook</a></td>
+<td>This function, if defined, is called by Conky at shutdown or when the configuration is reloaded. Use this hook to clean up after yourself such as freeing memory which has been allocated by external libraries via Lua. Conky puts <q>conky_</q> with the trailing underscore in front of the function_name to prevent accidental calls to the wrong function unless you place <q>conky_</q> in front of it yourself. <p class='ex'>lua_shutdown_hook conky_my_cleanup</p></td>
+</tr>
+
+<tr>
+<td><a id='lua_startup_hook'></a><a href='#lua_startup_hook'>lua_startup_hook</a></td>
+<td>This function, if defined, is called by Conky at startup or when the configuration is reloaded. Use this hook to initialize values, or for any run-once applications. Conky puts <q>conky_</q> in front of the function_name to prevent accidental calls to the wrong function unless you place <q>conky_</q> in front of it yourself.<p>Both of the following lua functions are called with the function name; <q>conky_my_wakeup</q></p> <p class='ex'>lua_startup_hook conky_my_wakeup<br># Is the same as<br>lua_startup_hook my_wakeup</p></td>
+</tr>
+
+</tbody>
+<tbody>
+
+<tr>
+<td><a id='mail_spool'></a><a href='#mail_spool'>mail_spool</a></td>
+<td>Mail spool for mail checking. <p class='ex'>mail_spool $MAIL</p></td>
+</tr>
+
+<tr>
+<td><a id='max_port_monitor_connections'></a><a href='#max_port_monitor_connections'>max_port_monitor_connections</a></td>
+<td>Allow each port monitor to track at most this many connections. If 0 or not set, default is 256. <p class='ex'>max_port_monitor_connections 256</p></td>
+</tr>
+
+<tr>
+<td><a id='max_specials'></a><a href='#max_specials'>max_specials</a></td>
+<td>Maximum number of special things, e.g. fonts, offsets, aligns, etc. Default is 512. <p class='ex'>max_specials 512</p></td>
+</tr>
+
+<tr>
+<td><a id='max_text_width'></a><a href='#max_text_width'>max_text_width</a></td>
+<td>When a line in the output contains <q>width</q> characters and the end isn't reached, the next character starts a new line. If you want to make sure that long lines don't get broken into multiple lines, set this to 0. <p class='ex'>max_text_width 0</p></td>
+</tr>
+
+<tr>
+<td><a id='max_user_text'></a><a href='#max_user_text'>max_user_text</a></td>
+<td>Maximum size of the user text buffer in memory. At a minimum this must be large enough to hold all of the layout information below the TEXT line in your Conky config file. Default is 16384 bytes. <p class='ex'>max_user_text 16384</p></td>
+</tr>
+
+<tr>
+<td><a id='maximum_width'></a><a href='#maximum_width'>maximum_width</a></td>
+<td>Maximum width of window in pixels. <p class='ex'>maximum_width 200</p></td>
+</tr>
+
+<tr>
+<td><a id='minimum_size'></a><a href='#minimum_size'>minimum_size</a></td>
+<td>Minimum size of window in pixels. <p class='ex'>maximum_size 400</p></td>
+</tr>
+
+<tr>
+<td><a id='mpd_host'></a><a href='#mpd_host'>mpd_host</a></td>
+<td>Host of Music Player Daemon MPD server. Be sure to <q>export MPD_HOST=127.0.0.1</q> before using this command on a local machine. <p class='ex'>mpd_host 127.0.0.1</p></td>
+</tr>
+
+<tr>
+<td><a id='mpd_password'></a><a href='#mpd_password'>mpd_password</a></td>
+<td>Music Player Daemon MPD server password. <p class='ex'>mpd_password pass</p></td>
+</tr>
+
+<tr>
+<td><a id='mpd_port'></a><a href='#mpd_port'>mpd_port</a></td>
+<td>Music Player Daemon Port for the MPD server. <p class='ex'>mpd_port 6600</p></td>
+</tr>
+
+<tr>
+<td><a id='music_player_interval'></a><a href='#music_player_interval'>music_player_interval</a></td>
+<td>Music player thread update interval measured in Conky update intervals. Defaults to once each time Conky updates. <p class='ex'>music_player_interval 1</p></td>
+</tr>
+
+<tr>
+<td><a id='net_avg_samples'></a><a href='#net_avg_samples'>net_avg_samples</a></td>
+<td>The number of samples to average for network traffic data. Smaller numbers respond faster to changes in traffic. Larger numbers jump around less.<p class='ex'>net_avg_samples 2</p></td>
+</tr>
+
+<tr>
+<td><a id='no_buffers'></a><a href='#no_buffers'>no_buffers</a></td>
+<td>Subtract file system buffers from used memory numbers. [YES or NO] <p class='ex'>no_buffers yes</p></td>
+</tr>
+
+<tr>
+<td><a id='nvidia_c'></a><a href='#nvidia_c'>nvidia</a></td>
+<td>Enables the ${<a href='#nvidia'>nvidia</a>} variable to be used. [TRUE or FALSE] <p class='ex'>nvidia true</td>
+</tr>
+
+<tr>
+<td><a id='out_to_console'></a><a href='#out_to_console'>out_to_console</a></td>
+<td>Print text to <q>stdout</q> standard output for viewing in terminals. [YES or NO] <p class='ex'>out_to_console no</p></td>
+</tr>
+
+<tr>
+<td><a id='out_to_ncurses'></a><a href='#out_to_ncurses'>out_to_ncurses</a></td>
+<td>Print text in the console, but use ncurses so that Conky can print the text of a new update over the old text. In the future this will provide more useful things. <p class='ex'>out_to_ncurses no</p></td>
+</tr>
+
+<tr>
+<td><a id='out_to_stderr'></a><a href='#out_to_stderr'>out_to_stderr</a></td>
+<td>Print text to stderr the standard error output. [YES or NO] <p class='ex'>out_to_stderr no</p></td>
+</tr>
+
+<tr>
+<td><a id='out_to_x'></a><a href='#out_to_x'>out_to_x</a></td>
+<td>When set to <q>NO</q> there is no output in X. This is useful when you also use things like <a href="#out_to_console">out_to_console</a> set to YES. If you set this to NO make sure that it is placed above all other X-related settings. If you are unsure use the first line of your Conky config file to be safe. Default value is YES. [YES or NO] <p class='ex'>out_to_x yes</p></td>
+</tr>
+
+<tr>
+<td><a id='override_utf8_locale'></a><a href='#override_utf8_locale'>override_utf8_locale</a></td>
+<td>Force UTF8 character parsing even when the local settings do not use UTF8? This requires <a href='#use_xft'>XFT</a> (X FreeType interface Library). [YES or NO] <p class='ex'>override_utf8_locale yes</p></td>
+</tr>
+
+<tr>
+<td><a id='overwrite_file'></a><a href='#overwrite_file'>overwrite_file</a></td>
+<td>Overwrite the file given as argument. <p class='ex'>overwrite_file ~/example.log</td>
+</tr>
+
+<tr>
+<td><a id='own_window'></a><a href='#own_window'>own_window</a></td>
+<td>Boolean, create own window to draw? This may be required in nautilus. [YES or NO] <p class='ex'>own_window yes</p></td>
+</tr>
+
+<tr>
+<td><a id='own_window_class'></a><a href='#own_window_class'>own_window_class</a></td>
+<td>Manually set the window manager WM_CLASS name. Defaults to <q>Conky</q>. <p class='ex'>own_window_class Conky</p></td>
+</tr>
+
+<tr>
+<td><a id='own_window_colour'></a><a href='#own_window_colour'>own_window_colour</a></td>
+<td>If <a href='#own_window_transparent'>own_window_transparent</a> is set to NO, set a specified background color for Conky. Defaults to black. This command and all Conky color statements accept either a six digit hexadecimal value like <q>ffffff</q> (note the lack of leading <q>#</q>) or a valid RGB name. See <q>/usr/lib/X11/rgb.txt</q> for a list of supported color names. <p class='ex'>own_window_colour 000000</p></td>
+</tr>
+
+<tr>
+<td><a id='own_window_hints'></a><a href='#own_window_hints'>own_window_hints</a></td>
+<td>If own_window is set to YES, you may use these window manager hints to affect the way Conky displays. Notes: Use <q>own_window_type desktop</q> as another way to implement many of these hints implicitly. <p>If you use <q>own_window_type override</q> window manager hints have no meaning and are ignored.</p> <p class='ex'>own_window_type desktop<br>own_window_type override</p></td>
+</tr>
+
+<tr>
+<td><a id='own_window_title'></a><a href='#own_window_title'>own_window_title</a></td>
+<td>Manually set the window name. Defaults to <q>&lt;hostname&gt; - Conky</q>. <p class='ex'>own_window_title Conky</td>
+</tr>
+
+<tr>
+<td><a id='own_window_argb_visual'></a><a href='#own_window_argb_visual'>own_window_argb_visual</a></td>
+<td>Boolean answer to use alpha-red-green-blue ARGB visual display? ARGB can be used for real alpha layer transparency. A composite manager is required for real transparency. This option does not work as desired, in most cases, in conjunction with <q>own_window_type override</q>. [YES or NO] <p class='ex'>own_window_argb_visual no</p></td>
+</tr>
+
+<tr>
+<td><a id='own_window_argb_value'></a><a href='#own_window_argb_value'>own_window_argb_value</a></td>
+<td>When ARGB visuals are enabled, use this to modify the alpha value used. Valid range is 0-255, where 0 (zero) is 0% opacity, and 255 is 100% opacity. <p class='ex'>own_window_argb_value 128</p></td>
+</tr>
+
+<tr>
+<td><a id='own_window_transparent'></a><a href='#own_window_transparent'>own_window_transparent</a></td>
+<td>Boolean, set transparency? If ARGB visual is enabled, sets background opacity to 0%. [YES or NO] <p class='ex'>own_window_transparent yes</p></td>
+</tr>
+
+<tr>
+<td><a id='own_window_type'></a><a href='#own_window_type'>own_window_type</a></td>
+<td>If own_window is YES, you may specify type: <b>normal</b>, <b>desktop</b>, <b>dock</b>, <b>panel</b> or <b>override</b>. The default is <q>normal</q>. Desktop windows are special windows that have no window decorations; are always visible on your desktop; do not appear in your pager or taskbar; and are sticky across all workspaces. Panel windows reserve space along a desktop edge, just like panels and taskbars, preventing maximized windows from overlapping them. The edge is chosen based on the alignment option. Override windows are not under the control of the window manager. Hints are ignored. This type of window can be useful for certain situations. <p class='ex'>#own_window_type normal<br>#own_window_type desktop<br>#own_window_type dock<br>#own_window_type panel<br>own_window_type override</p></td>
+</tr>
+
+<tr>
+<td><a id='pad_percents'></a><a href='#pad_percents'>pad_percents</a></td>
+<td>Pad percentages to this many decimals. Default is 0 (zero) which adds no padding. <p class='ex'>pad_percents 2</p></td>
+</tr>
+
+<tr>
+<td><a id='pop3'></a><a href='#pop3'>pop3</a></td>
+<td>Default global POP3 server. Arguments are: <q>host user pass [-i interval (in seconds)] [-p port] [-e 'command'] [-r retries]</q>. Default port is 110, default interval is 5 minutes, and default number of retries before giving up is 5. If the password is supplied as a single asterisk <q>*</q> character you are prompted to enter the password when Conky starts. <p class='ex'>pop3 pop3.example.com user password -i 300 -p 110 -r 5</p></td>
+</tr>
+
+<tr>
+<td><a id='short_units'></a><a href='#short_units'>short_units</a></td>
+<td>Shortens units to a single character (kiB-&gt;k, GiB-&gt;G, etc.). Default is NO. [YES or NO] <p class='ex'>short_units yes</p></td>
+</tr>
+
+<tr>
+<td><a id='show_graph_range'></a><a href='#show_graph_range'>show_graph_range</a></td>
+<td>Shows the time range covered by a graph. [YES or NO] <p class='ex'>show_graph_range yes</p></td>
+</tr>
+
+<tr>
+<td><a id='show_graph_scale'></a><a href='#show_graph_scale'>show_graph_scale</a></td>
+<td>Shows the maximum value in scaled graphs. [YES or NO] <p class='ex'>show_graph_scale yes</p></td>
+</tr>
+
+<tr>
+<td><a id='stippled_borders'></a><a href='#stippled_borders'>stippled_borders</a></td>
+<td>Border stippling or dashing in pixels. <p class='ex'>stippled_borders 2</p></td>
+</tr>
+
+<tr>
+<td><a id='temperature_unit'></a><a href='#temperature_unit'>temperature_unit</a></td>
+<td>Desired output unit of all objects having a temperature. Parameters are either <q>fahrenheit</q> or <q>celsius</q>. Default unit is degrees Celsius. <p class='ex'>temperature_unit celsius<br>#temperature_unit fahrenheit</p></td>
+</tr>
+
+<tr>
+<td><a id='templateN_c'></a><a href='#templateN_c'>templateN</a></td>
+<td>Define a template for later use inside TEXT segments. N must be a digit between 0 and 9, inclusive. The whole template must be on one line. Variables are supported in each template using a backslash <q>\</q> character followed by a single digit 1 through 9 inclusive. The following special escape sequences are supported in the template and in the passed arguments.
+<ul>
+<li>\n = New line. This allows the one line template to expand to multiline output.</li>
+<li>\\ = A single backslash character.</li>
+<li><q>\ </q> = A space character (quotes used to show trailing space). Variables with spaces must use the backslash before each space character.</li>
+<li>\N = Template argument N (e.g. \1, \2, \3, \4, \5, \6, \7, \8, \9)</li>
+</ul>
+<p class='ex'>template0 ${\1\2}<br>template1 \1: ${fs_used \2} / ${fs_size \2}<br>template2 \1 \2<br><br>TEXT<br><br>The following lines show what each template expands to.<br>${template0 node name} = ${nodename}<br><br>${template1 root /} = root: ${fs_used /} / ${fs_size /}<br><br>You can even pass one template to another template.<br>${template1 ${template2\ disk\ root} /} = disk root: ${fs_used /} / ${fs_size /}</p></td>
+</tr>
+
+<tr>
+<td><a id='text_buffer_size'></a><a href='#text_buffer_size'>text_buffer_size</a></td>
+<td>Size of the standard text buffer. Default is 256 bytes. This buffer is used for intermediary text, such as individual lines, output from <a href='#exec'>$exec</a> vars, and various other variables. Increasing the size of this buffer can drastically reduce Conky's performance, but will allow for more text per variable. The size of this buffer cannot be smaller than the default value of 256 bytes. <p class='ex'>text_buffer_size 256</p></td>
+</tr>
+
+<tr>
+<td><a id='times_in_seconds'></a><a href='#times_in_seconds'>times_in_seconds</a></td>
+<td>If true, variables that output times output a number that represents seconds. This does not affect ${<a href='#time'>time</a>}, ${<a href='#tztime'>tztime</a>} nor ${<a href='#utime'>utime</a>}. [YES or NO] <p class='ex'>times_in_seconds yes</p></td>
+</tr>
+
+<tr>
+<td><a id='top_cpu_separate'></a><a href='#top_cpu_separate'>top_cpu_separate</a></td>
+<td>If set to true, CPU in top shows usage of one processor's power. If false, CPU in top shows the usage of all processors' power combined. [YES or NO] <p class='ex'>top_cpu_separate no</p></td>
+</tr>
+
+<tr>
+<td><a id='top_name_width'></a><a href='#top_name_width'>top_name_width</a></td>
+<td>Width for ${<a href='#top'>top</a>} name value in characters. Defaults to 15 characters. <p class='ex'>top_name_width 20</p></td>
+</tr>
+
+<tr>
+<td><a id='total_run_times'></a><a href='#total_run_times'>total_run_times</a></td>
+<td>Total number of times for Conky to update before quitting. 0 (zero) makes Conky run forever. <p class='ex'>total_run_times 0</p></td>
+</tr>
+
+<tr>
+<td><a id='update_interval'></a><a href='#update_interval'>update_interval</a></td>
+<td>Update interval in seconds. Fractions of a second are allowed using a decimal point. <p class='ex'>update_interval 0.5</p></td>
+</tr>
+
+<tr>
+<td><a id='update_interval_on_battery'></a><a href='#update_interval_on_battery'>update_interval_on_battery</a></td>
+<td>Update interval in seconds when running on battery power. <p class='ex'>update_interval_on_battery 5</p></td>
+</tr>
+
+<tr>
+<td><a id='uppercase'></a><a href='#uppercase'>uppercase</a></td>
+<td>Boolean value, if true, text is rendered in upper case. [YES or NO] <p class='ex'>uppercase no</p></td>
+</tr>
+
+<tr>
+<td><a id='use_spacer'></a><a href='#use_spacer'>use_spacer</a></td>
+<td>Adds spaces around certain objects to stop them from moving other things around. Arguments are <b>left</b>, <b>right</b>, and <b>none</b> (default). The old true/false values are deprecated and default to right/none respectively. Note that this only helps if you are using a mono font, such as Bitstream Vera Sans Mono. <p class='ex'>#use_spacer left<br>use_spacer right<br>#use_spacer none</p></td>
+</tr>
+
+<tr>
+<td><a id='use_xft'></a><a href='#use_xft'>use_xft</a></td>
+<td>Use Xft (X FreeType interface Library) for anti-aliased fonts and other display stuff. [YES or NO] <p class='ex'>use_xft yes</p></td>
+</tr>
+
+<tr>
+<td><a id='xftalpha'></a><a href='#xftalpha'>xftalpha</a></td>
+<td>Alpha of Xft font. Must be a value at or between 1 and 0. <p class='ex'>xftalpha 0.7</p></td>
+</tr>
+
+<tr>
+<td><a id='xftfont'></a><a href='#xftfont'>xftfont</a></td>
+<td>Xft font to use. <p class='ex'>xftfont Ubuntu</p></td>
+</tr>
+
+<tr>
+<td><a id='TEXT'></a><a href='#TEXT'>TEXT</a></td>
+<td>This begins the text to be formatted on screen and must be the LAST non-display command in the Conky configuration file. After the TEXT begins the backslash (\) escapes newlines in the text section. This can be useful for cleaning up configuration files where Conky is used to pipe input to dzen2. <p>The following list of variables can be used in the TEXT block.</p> <p class='ex'># Tell Conky to run 10 times then exit.<br>total_run_times 10<br># Update Conky display (in seconds) when on AC power.<br>update_interval 2<br><br>TEXT<br>Conky ${Conky_version}</p></td>
+</tr>
+
+</tbody>
+</table>
+
+<a id='p2'></a><h2>Conky Variables</h2>
+<p>These variables are used below the line with the <q>TEXT</q> command in the Conky configuration file. The syntax for the following commands starts with a Dollar <q>$</q> sign followed by curly brackets <q>{}</q> with the variable and any parameters inside. The curly brackets can be omitted when the variable is a single word with no parameters or options but that can make it harder for human reading and editing later.</p>
+<p>A bar down the left side of some variables shows groups with a related purpose or function.</p>
+
+<table class='t2'>
+<tbody>
+<tr><th class='top'>Variable/Arguments</th><th class='top'>Explanation</th></tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>Advanced Configuration and Power Interface (ACPI)</th></tr>
+<tr>
+<td><a id='acpiacadapter'></a><a href='#acpiacadapter'>acpiacadapter</a><p class='ar'>[adapter]</p></td>
+<td>Advanced Configuration and Power Interface (ACPI) power adapter state. On Linux the adapter option specifies the subfolder of <q>/sys/class/power_supply</q> containing the state information. Conky tries <q>AC</q> and <q>ADP1</q> if there is no argument given. Non-Linux systems ignore this. <p class='ex'>${acpiacadapter adp1}</p></td>
+</tr>
+
+<tr>
+<td><a id='acpifan'></a><a href='#acpifan'>acpifan</a><p class='ar'></p></td>
+<td>Advanced Configuration and Power Interface (ACPI) fan state. <p class='ex'>${acpifan}</p></td>
+</tr>
+
+<tr>
+<td><a id='acpitemp'></a><a href='#acpitemp'>acpitemp</a><p class='ar'></p></td>
+<td>Advanced Configuration and Power Interface (ACPI) temperature in Celsius. <p class='ex'>${acpitemp}</p></td>
+</tr>
+
+</tbody>
+<tbody>
+
+<tr>
+<td><a id='addr'></a><a href='#addr'>addr</a><p class='ar'>[interface]</p></td>
+<td>IP address for an interface, or <q>No Address</q> if no address is assigned. <p class='ex'>${addr eth0}</p></td>
+</tr>
+
+<tr>
+<td><a id='addrs'></a><a href='#addrs'>addrs</a><p class='ar'>[interface]</p></td>
+<td>Shows IP address list for an interface if there is at least one address assigned. This works like <a href='#addr'>addr</a> with the addition of supporting multiple IP addresses assigned to the interface. <b class='red'>Linux only.</b> <p class='ex'>${addrs eth0}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>Laptops with the ADT 746x Chipset</th></tr>
+<tr>
+<td><a id='adt746xcpu'></a><a href='#adt746xcpu'>adt746xcpu</a><p class='ar'></p></td>
+<td>CPU temperature from therm_adt746x. <p class='ex'>${adt746xcpu}</p></td>
+</tr>
+
+<tr>
+<td><a id='adt746xfan'></a><a href='#adt746xfan'>adt746xfan</a><p class='ar'></p></td>
+<td>Fan speed from therm_adt746x. <p class='ex'>${adt746xfan}</p></td>
+</tr>
+
+</tbody>
+<tbody>
+
+<tr>
+<td><a id='alignc'></a><a href='#alignc'>alignc</a><p class='ar'>[number]</p></td>
+<td>Align text to centre. The optional number adds spaces to the right (positive) or left (negative) side to adjust placement. <p class='ex'>${alignc -5}</p></td>
+</tr>
+
+<tr>
+<td><a id='alignr'></a><a href='#alignr'>alignr</a><p class='ar'>[number]</p></td>
+<td>Right-justify text. The optional number pads the right side with N spaces. <p class='ex'>${alignr 2}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>APC (American Power Conversion) UPS (uninterruptible power supply) Daemon (apcupsd)</th></tr>
+
+<tr>
+<td><a id='apcupsd'></a><a href='#apcupsd'>apcupsd</a><p class='ar'>host</p></td>
+<td>Sets up the connection to APC UPS Daemon (apcupsd). Prints nothing, defaults to <q>localhost:3551</q></td>
+</tr>
+
+<tr>
+<td><a id='apcupsd_cable'></a><a href='#apcupsd_cable'>apcupsd_cable</a><p class='ar'></p></td>
+<td>Shows the UPS connection type. <p class='ex'>${apcupsd_cable}</p></td>
+</tr>
+
+<tr>
+<td><a id='apcupsd_charge'></a><a href='#apcupsd_charge'>apcupsd_charge</a><p class='ar'></p></td>
+<td>Current battery capacity in percent. <p class='ex'>${apcupsd_charge}</p></td>
+</tr>
+
+<tr>
+<td><a id='apcupsd_lastxfer'></a><a href='#apcupsd_lastxfer'>apcupsd_lastxfer</a><p class='ar'></p></td>
+<td>Reason for last transfer from line to battery. <p class='ex'>${apcupsd_lastxfer}</p></td>
+</tr>
+
+<tr>
+<td><a id='apcupsd_linev'></a><a href='#apcupsd_linev'>apcupsd_linev</a><p class='ar'></p></td>
+<td>Nominal input voltage. <p class='ex'>${apcupsd_linev}</p></td>
+</tr>
+
+<tr>
+<td><a id='apcupsd_load'></a><a href='#apcupsd_load'>apcupsd_load</a><p class='ar'></p></td>
+<td>Current load in percent. <p class='ex'>${apcupsd_load}</p></td>
+</tr>
+
+<tr>
+<td><a id='apcupsd_loadbar'></a><a href='#apcupsd_loadbar'>apcupsd_loadbar</a><p class='ar'></p></td>
+<td>Bar showing current load. <p class='ex'>${apcupsd_loadbar}</p></td>
+</tr>
+
+<tr>
+<td><a id='apcupsd_loadgauge'></a><a href='#apcupsd_loadgauge'>apcupsd_loadgauge</a><p class='ar'>[height][,width]</p></td>
+<td>Gauge that shows current load. <p class='ex'>${apcupsd_loadgauge 10,20}</p></td>
+</tr>
+
+<tr>
+<td><a id='apcupsd_loadgraph'></a><a href='#apcupsd_loadgraph'>apcupsd_loadgraph</a><p class='ar'>[height][,width] [gradient color 1] [gradient color 2] [scale] [-t] [-l]</p></td>
+<td>History graph of current load. <p class='ex'>${apcupsd_loadgraph 20,120 FFFF00 FFCC00 -l}</p></td>
+</tr>
+
+<tr>
+<td><a id='apcupsd_model'></a><a href='#apcupsd_model'>apcupsd_model</a><p class='ar'></p></td>
+<td>Prints the model of the UPS. <p class='ex'>${apcupsd_model}</p></td>
+</tr>
+
+<tr>
+<td><a id='apcupsd_name'></a><a href='#apcupsd_name'>apcupsd_name</a><p class='ar'></p></td>
+<td>Prints the UPS user-defined name. <p class='ex'>${apcupsd_name}</p></td>
+</tr>
+
+<tr>
+<td><a id='apcupsd_status'></a><a href='#apcupsd_status'>apcupsd_status</a><p class='ar'></p></td>
+<td>Prints current status <q>on-line</q> or <q>on-battery</q>. <p class='ex'>${apcupsd_status}</p></td>
+</tr>
+
+<tr>
+<td><a id='apcupsd_temp'></a><a href='#apcupsd_temp'>apcupsd_temp</a><p class='ar'></p></td>
+<td>Current internal temperature. <p class='ex'>${apcupsd_temp}</p></td>
+</tr>
+
+<tr>
+<td><a id='apcupsd_timeleft'></a><a href='#apcupsd_timeleft'>apcupsd_timeleft</a><p class='ar'></p></td>
+<td>Time left to run on battery. <p class='ex'>${apcupsd_timeleft}</p></td>
+</tr>
+
+<tr>
+<td><a id='apcupsd_upsmode'></a><a href='#apcupsd_upsmode'>apcupsd_upsmode</a><p class='ar'></p></td>
+<td>Prints the UPS mode like <q>standalone</q>. <p class='ex'>${apcupsd_upsmode}</p></td>
+</tr>
+
+<tr>
+<td><a id='apm_adapter'></a><a href='#apm_adapter'>apm_adapter</a><p class='ar'></p></td>
+<td>Display APM AC adapter status. <b class='red'>FreeBSD only.</b> <p class='ex'>${apm_adapter}</p></td>
+</tr>
+
+<tr>
+<td><a id='apm_battery_life'></a><a href='#apm_battery_life'>apm_battery_life</a><p class='ar'></p></td>
+<td>Display APM battery life in percent. <b class='red'>FreeBSD only.</b> <p class='ex'>${apm_battery_life}</p></td>
+</tr>
+
+<tr>
+<td><a id='apm_battery_time'></a><a href='#apm_battery_time'>apm_battery_time</a><p class='ar'></p></td>
+<td>Display remaining APM battery life in <q>hh:mm:ss</q> or <q>unknown</q> if AC adapterstatus is on-line or charging. <b class='red'>FreeBSD only.</b> <p class='ex'>${apm_battery_time}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>Audacious Audio Player</th></tr>
+
+<tr>
+<td><a id='audacious_bar'></a><a href='#audacious_bar'>audacious_bar</a><p class='ar'>[height][,width]</p></td>
+<td>Progress bar for current song. <p class='ex'>${audacious_bar 10,20}</p></td>
+</tr>
+
+<tr>
+<td><a id='audacious_bitrate'></a><a href='#audacious_bitrate'>audacious_bitrate</a><p class='ar'></p></td>
+<td>Bitrate of current tune. <p class='ex'>${audacious_bitrate}</p></td>
+</tr>
+
+<tr>
+<td><a id='audacious_channels'></a><a href='#audacious_channels'>audacious_channels</a><p class='ar'></p></td>
+<td>Number of audio channels of current tune. <p class='ex'>${audacious_channels}</p></td>
+</tr>
+
+<tr>
+<td><a id='audacious_filename'></a><a href='#audacious_filename'>audacious_filename</a><p class='ar'></p></td>
+<td>Full path and filename of current tune. <p class='ex'>${audacious_filename}</p></td>
+</tr>
+
+<tr>
+<td><a id='audacious_frequency'></a><a href='#audacious_frequency'>audacious_frequency</a><p class='ar'></p></td>
+<td>Sampling frequency of current tune. <p class='ex'>${audacious_frequency}</p></td>
+</tr>
+
+<tr>
+<td><a id='audacious_length'></a><a href='#audacious_length'>audacious_length</a><p class='ar'></p></td>
+<td>Total length of current tune as MM:SS. <p class='ex'>${audacious_length}</p></td>
+</tr>
+
+<tr>
+<td><a id='audacious_length_seconds'></a><a href='#audacious_length_seconds'>audacious_length_seconds</a><p class='ar'></p></td>
+<td>Total length of current tune in seconds. <p class='ex'>${audacious_length_seconds}</p></td>
+</tr>
+
+<tr>
+<td><a id='audacious_main_volume'></a><a href='#audacious_main_volume'>audacious_main_volume</a><p class='ar'></p></td>
+<td>The current volume fetched from Audacious. <p class='ex'>${audacious_main_volume}</p></td>
+</tr>
+
+<tr>
+<td><a id='audacious_playlist_length'></a><a href='#audacious_playlist_length'>audacious_playlist_length</a><p class='ar'></p></td>
+<td>Number of tunes in playlist. <p class='ex'>${audacious_playlist_length}</p></td>
+</tr>
+
+<tr>
+<td><a id='audacious_playlist_position'></a><a href='#audacious_playlist_position'>audacious_playlist_position</a><p class='ar'></p></td>
+<td>Playlist position of current tune. <p class='ex'>${audacious_playlist_position}</p></td>
+</tr>
+
+<tr>
+<td><a id='audacious_position'></a><a href='#audacious_position'>audacious_position</a><p class='ar'></p></td>
+<td>Position of current tune in <q>MM:SS</q> format. <p class='ex'>${audacious_position}</p></td>
+</tr>
+
+<tr>
+<td><a id='audacious_position_seconds'></a><a href='#audacious_position_seconds'>audacious_position_seconds</a><p class='ar'></p></td>
+<td>Position of current tune in seconds. <p class='ex'>${audacious_position_seconds}</p></td>
+</tr>
+
+<tr>
+<td><a id='audacious_status'></a><a href='#audacious_status'>audacious_status</a><p class='ar'></p></td>
+<td>Player status. Possible choices are <q>Playing</q>, <q>Paused</q>, <q>Stopped</q>, <q>Not running</q>. <p class='ex'>${audacious_status}</p></td>
+</tr>
+
+<tr>
+<td><a id='audacious_title'></a><a href='#audacious_title'>audacious_title</a><p class='ar'>[max length]</p></td>
+<td>Title of current tune with optional maximum length specifier. <p class='ex'>${audacious_title 30}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>Laptop Battery Information</th></tr>
+<tr>
+<td><a id='battery'></a><a href='#battery'>battery</a><p class='ar'>[battery_number]</p></td>
+<td>Battery status and remaining percentage capacity of ACPI or APM battery. ACPI battery number can be given as argument and points to <q>/proc/acpi/battery/<b class='red'>BAT0</b>/state</q>. Default is battery <q>BAT0</q>. <p class='ex'>${battery BAT1}</p></td>
+</tr>
+
+<tr>
+<td><a id='battery_bar'></a><a href='#battery_bar'>battery_bar</a><p class='ar'>[height][,width] [battery_number]</p></td>
+<td>Battery percentage remaining of ACPI battery in a bar. ACPI battery number can be given as argument. Default is battery <q>BAT0</q>. <p class='ex'>${battery_bar 10,20 BAT1}</p></td>
+</tr>
+
+<tr>
+<td><a id='battery_percent'></a><a href='#battery_percent'>battery_percent</a><p class='ar'>[battery_number]</p></td>
+<td>Battery percentage remaining for ACPI battery. ACPI battery number can be given as argument. Default is battery <q>0</q>.<p class='ex'>${battery_percent BAT1}</p></td>
+</tr>
+
+<tr>
+<td><a id='battery_short'></a><a href='#battery_short'>battery_short</a><p class='ar'>[battery_number]</p></td>
+<td>Battery status and remaining percentage capacity of ACPI or APM battery. ACPI battery number can be given as argument. Default is battery <q>BAT0</q>. This mode display a short status, which means that C is displayed instead of charging, D for discharging, F for full, N for not present, E for empty and U for unknown.<p class='ex'>${battery_short BAT1}</p></td>
+</tr>
+
+<tr>
+<td><a id='battery_time'></a><a href='#battery_time'>battery_time</a><p class='ar'>[battery_number]</p></td>
+<td>Battery charge/discharge time remaining of ACPI battery. ACPI battery number can be given as argument Default is battery <q>BAT0</q>.<p class='ex'>${battery_time BAT1}</p></td>
+</tr>
+
+</tbody>
+<tbody>
+
+<tr>
+<td><a id='blink'></a><a href='#blink'>blink</a><p class='ar'>text_and_other_conky_vars</p></td>
+<td>Make <q>text_and_other_conky_vars</q> blink on and off. <p class='ex'>${blink &quot;Warning: ${battery_percent BAT1} depleted!&quot;}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>BMPx successor to the XMMS-based Beep Media Player</th></tr>
+<tr>
+<td><a id='bmpx_album'></a><a href='#bmpx_album'>bmpx_album</a><p class='ar'></p></td>
+<td>Album in current BMPx track. <p class='ex'>${bmpx_album}</p></td>
+</tr>
+
+<tr>
+<td><a id='bmpx_artist'></a><a href='#bmpx_artist'>bmpx_artist</a><p class='ar'></p></td>
+<td>Artist in current BMPx track. <p class='ex'>${bmpx_artist}</p></td>
+</tr>
+
+<tr>
+<td><a id='bmpx_bitrate'></a><a href='#bmpx_bitrate'>bmpx_bitrate</a><p class='ar'></p></td>
+<td>Bitrate of the current BMPx track. <p class='ex'>${bmpx_bitrate}</p></td>
+</tr>
+
+<tr>
+<td><a id='bmpx_title'></a><a href='#bmpx_title'>bmpx_title</a><p class='ar'></p></td>
+<td>Title of the current BMPx track. <p class='ex'>${bmpx_title}</p></td>
+</tr>
+
+<tr>
+<td><a id='bmpx_track'></a><a href='#bmpx_track'>bmpx_track</a><p class='ar'></p></td>
+<td>Track number of the current BMPx track. <p class='ex'>${bmpx_track}</p></td>
+</tr>
+
+<tr>
+<td><a id='bmpx_uri'></a><a href='#bmpx_uri'>bmpx_uri</a><p class='ar'></p></td>
+<td>URI of the current BMPx track. <p class='ex'>${bmpx_uri}</p></td>
+</tr>
+
+</tbody>
+<tbody>
+
+<tr>
+<td><a id='buffers'></a><a href='#buffers'>buffers</a><p class='ar'></p></td>
+<td>Amount of memory buffered. <p class='ex'>${buffers}</p></td>
+</tr>
+
+<tr>
+<td><a id='cached'></a><a href='#cached'>cached</a><p class='ar'></p></td>
+<td>Amount of memory cached. <p class='ex'>${cached}</p></td>
+</tr>
+
+<tr>
+<td><a id='cmdline_to_pid'></a><a href='#cmdline_to_pid'>cmdline_to_pid</a><p class='ar'>&quot;string&quot;</p></td>
+<td>PID of the first process that has <q>string</q> in it's command line. <p class='ex'>${cmdline_to_pid &quot;demo&quot;}</p></td>
+</tr>
+
+<tr>
+<td><a id='color'></a><a href='#color'>color</a><p class='ar'>[color]</p></td>
+<td>Change drawing color to <q>color</q> which is a name of a color or a hexadecimal code preceded with the <q>#</q>, for example #0A1B2C. If you use ncurses only the following colors are supported: <div class='col'><ul><li><q>red</q></li><li><q>green</q></li><li><q>yellow</q></li><li><q>blue</q></li><li><q>magenta</q></li><li><q>cyan</q></li><li><q>black</q></li><li><q>white</q></li></ul></div> <p class='ex'>${color red}This is Red<br>${color green}This is Green<br>${color blue}This is Blue<br>${color #FFA500}This is Orange</p></td>
+</tr>
+
+<tr>
+<td><a id='colorN'></a><a href='#colorN'>colorN</a><p class='ar'></p></td>
+<td>Change drawing color to <a href='#colorN_c'>predefined color</a> <q>N</q> configuration option, where N is a digit between 0 and 9 inclusive; color0, color1, color2, color3, color4, color5, color6, color7, color8, color9. <p class='ex'>color8 f9cc00<br>TEXT<br>${color8}</p></td>
+</tr>
+
+<tr>
+<td><a id='combine'></a><a href='#combine'>combine</a><p class='ar'>var1 var2</p></td>
+<td>Combines two lists into columns. The lines of var2 are added to the right of the lines of var1 separated by the character(s) that are put between var1 and var2.
+<p class='ex'>${combine ${head /proc/cpuinfo 2} - ${head /proc/meminfo 1}}</p> This gives as output <q>cpuinfo_line1 - meminfo_line1</q> on line 1 and <q>cpuinfo_line2 -</q> on line 2. Combined variables can also be nested to place more variables next to each other.</td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>Conky Information</th></tr>
+<tr>
+<td><a id='conky_build_arch'></a><a href='#conky_build_arch'>Conky_build_arch</a><p class='ar'></p></td>
+<td>CPU architecture Conky was built for. <p class='ex'>${conky_build_arch}</p></td>
+</tr>
+
+<tr>
+<td><a id='conky_build_date'></a><a href='#conky_build_date'>Conky_build_date</a><p class='ar'></p></td>
+<td>Date Conky was built. <p class='ex'>${conky_build_date}</p></td>
+</tr>
+
+<tr>
+<td><a id='conky_version'></a><a href='#conky_version'>Conky_version</a><p class='ar'></p></td>
+<td>Conky version number. <p class='ex'>${conky_version}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>CPU Information</th></tr>
+<tr>
+<td><a id='cpu'></a><a href='#cpu'>cpu</a><p class='ar'>[cpu_Number]</p></td>
+<td>CPU usage in percents. For SMP machines, the optional CPU number can be provided as an argument. <q>${cpu cpu0}</q> is the combined total usage, and <q>${cpu cpu#}</q> where # is a positive whole number for individual CPUs. <p class='ex'>${cpu cpu0}% Total<br>${cpu cpu1}% Core 1<br>${cpu cpu2}% Core 2</p></td>
+</tr>
+
+<tr>
+<td><a id='cpubar'></a><a href='#cpubar'>cpubar</a><p class='ar'>[cpu_Number] [height][,width]</p></td>
+<td>Bar that shows CPU usage. Height and width are in pixels. See ${<a href='#cpu'>cpu</a>} for more info on SMP hardware. <p class='ex'>${cpubar cpu0 10,60}</p></td>
+</tr>
+
+<tr>
+<td><a id='cpugauge'></a><a href='#cpugauge'>cpugauge</a><p class='ar'>[cpu_Number] [height][,width]</p></td>
+<td>Elliptical gauge that shows CPU usage, height and width are gauge's vertical and horizontal axis respectively. See <a href='#cpu'>cpu</a> for more info on SMP. <p class='ex'>${cpugauge cpu0 20,40}</p></td>
+</tr>
+
+<tr>
+<td><a id='cpugraph'></a><a href='#cpugraph'>cpugraph</a><p class='ar'>[cpu_Number] [height][,width] [gradient color 1] [gradient color 2] [scale] [-t] [-l]</p></td>
+<td>CPU usage graph with optional colors in RGB hexadecimal. See ${<a href='#cpu'>cpu</a>} for more info on SMP hardware. The lower case L <q>-l</q> switch uses a logarithmic scale to make small numbers more visible. The lower case T <q>-t</q> switch enables temperature gradient to make the color values change depending on the amplitude of the CPU load. <p class='ex'>${cpugraph cpu0 10,120 555555 AAAAAA -l}</p></td>
+</tr>
+
+</tbody>
+<tbody>
+
+<tr>
+<td><a id='curl'></a><a href='#curl'>curl</a><p class='ar'>url [interval_in_minutes]</p></td>
+<td>Download data from URI using Curl at the specified interval. The interval may be a floating point value greater than 0, otherwise defaults to 15 minutes. Most useful when used in conjunction with Lua and the Lua API. This object is threaded, and once a thread is created it can't be explicitly destroyed. One thread will run for each URI specified. You can use any protocol that Curl supports. <p class='ex'>${curl http://www.ifxgroup.net/conky.htm 1440}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>Desktop Information</th></tr>
+<tr>
+<td><a id='desktop'></a><a href='#desktop'>desktop</a><p class='ar'></p></td>
+<td>X-windows virtual desktop number or the message <q>Not running in X</q> if this is the case. <p class='ex'>${desktop}</p></td>
+</tr>
+
+<tr>
+<td><a id='desktop_name'></a><a href='#desktop_name'>desktop_name</a><p class='ar'></p></td>
+<td>Name of the desktop on which Conky is running or the message <q>Not running in X</q> if this is the case. <p class='ex'>${desktop_name}</p></td>
+</tr>
+
+<tr>
+<td><a id='desktop_number'></a><a href='#desktop_number'>desktop_number</a><p class='ar'></p></td>
+<td>Number of desktops or the message <q>Not running in X</q> if this is the case. <p class='ex'>${desktop_number}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>Disk Information</th></tr>
+<tr>
+<td><a id='disk_protect'></a><a href='#disk_protect'>disk_protect</a><p class='ar'>device</p></td>
+<td>Disk protection status, if supported. This may need a kernel-patch. Prints either <q>frozen</q> or <q>free </q>, note the padding after the word free. <p class='ex'>${disk_protect sda}</p></td>
+</tr>
+
+<tr>
+<td><a id='diskio'></a><a href='#diskio'>diskio</a><p class='ar'>[device]</p></td>
+<td>Displays current disk IO. Device is optional, and takes the form of sda for <q>/dev/sda</q>. Individual partitions are supported. <p class='ex'>${diskio /dev/sda}</p></td>
+</tr>
+
+<tr>
+<td><a id='diskio_read'></a><a href='#diskio_read'>diskio_read</a><p class='ar'>[device]</p></td>
+<td>Displays current disk IO for reads. <p class='ex'>${diskio_read /dev/sda}</p></td>
+</tr>
+
+<tr>
+<td><a id='diskio_write'></a><a href='#diskio_write'>diskio_write</a><p class='ar'>[device]</p></td>
+<td>Displays current disk IO for writes. <p class='ex'>${diskio_write /dev/sda}</p></td>
+</tr>
+
+<tr>
+<td><a id='diskiograph'></a><a href='#diskiograph'>diskiograph</a><p class='ar'>[device] [height][,width] [gradient color 1] [gradient color 2] [scale] [-t] [-l]</p></td>
+<td>Disk IO activity graph. Colors defined in RGB hexadecimal. If scale is non-zero, it becomes the scale for the graph. The lower case L <q>-l</q> switch uses a logarithmic scale to make small numbers more visible. The lower case T <q>-t</q> switch enables temperature gradient to make the color values change depending on the amplitude of the activity. <p class='ex'>${diskiograph /dev/sda 10,120 555555 AAAAAA -l}</p></td>
+</tr>
+
+<tr>
+<td><a id='diskiograph_read'></a><a href='#diskiograph_read'>diskiograph_read</a><p class='ar'>[device] [height][,width] [gradient color 1] [gradient color 2] [scale] [-t] [-l]</p></td>
+<td>Disk IO graph for reads. Colors are defined in RGB hexadecimal. If scale is non-zero, it becomes the scale for the graph. The lower case L <q>-l</q> switch uses a logarithmic scale to make small numbers more visible. The lower case T <q>-t</q> switch enables temperature gradient to make the color values change depending on the amplitude of the activity. <p class='ex'>${diskiograph_read /dev/sda 10,120 555555 AAAAAA -l}</p></td>
+</tr>
+
+<tr>
+<td><a id='diskiograph_write'></a><a href='#diskiograph_write'>diskiograph_write</a><p class='ar'>[device] [height][,width] [gradient color 1] [gradient color 2] [scale] [-t] [-l]</p></td>
+<td>Disk IO graph for writes. Colors are defined in RGB hexadecimal. If scale is non-zero, it becomes the scale for the graph. The lower case L <q>-l</q> switch uses a logarithmic scale to make small numbers more visible. The lower case T <q>-t</q> switch enables temperature gradient to make the color values change depending on the amplitude of the activity. <p class='ex'>${diskiograph_write /dev/sda 10,120 555555 AAAAAA -l}</p></td>
+</tr>
+
+</tbody>
+<tbody>
+
+<tr>
+<td><a id='downspeed'></a><a href='#downspeed'>downspeed</a><p class='ar'>[network_interface]</p></td>
+<td>Download speed in suitable IEC (International Electrotechnical Commission) units. <p class='ex'>${downspeed eth0}</p></td>
+</tr>
+
+<tr>
+<td><a id='downspeedf'></a><a href='#downspeedf'>downspeedf</a><p class='ar'>[network_interface]</p></td>
+<td>Download speed in KiB with one decimal place. <p class='ex'>${downspeedf eth0}</p></td>
+</tr>
+
+<tr>
+<td><a id='downspeedgraph'></a><a href='#downspeedgraph'>downspeedgraph</a><p class='ar'>[network_interface] [height][,width] [gradient color 1] [gradient color 2] [scale] [-t] [-l]</p></td>
+<td>Download speed graph. Colors are defined in RGB hexadecimal. If scale is non-zero, it becomes the scale for the graph. Uses a logarithmic scale (to see small numbers) when you use -l switch. Takes the switch -t to use a temperature gradient, which makes the gradient values change depending on the amplitude of a particular graph value.
+<p class='ex'>${downspeedgraph eth0 20,120 -t -l}</p>
+</td>
+</tr>
+
+<tr>
+<td><a id='draft_mails'></a><a href='#draft_mails'>draft_mails</a><p class='ar'>[mail_directory]</p></td>
+<td>Number of mails marked as draft in the specified mailbox or mail spool if not. Only maildir type mailboxes are supported, mbox type will return -1. <p class='ex'></p></td>
+</tr>
+
+<tr>
+<td><a id='else'></a><a href='#else'>else</a><p class='ar'></p></td>
+<td>Text to show only when the previous <q>${<a href='#if_empty'>if_*</a>}</q> is not true. Everything between the <q>${else}</q> and the <q>${<a href='#endif'>endif</a>}</q> is shown. <p class='ex'>${if_existing ~/example.log}<br>${else}<br>${endif}</p></td>
+</tr>
+
+<tr>
+<td><a id='endif'></a><a href='#endif'>endif</a><p class='ar'></p></td>
+<td>Ends an <q>${<a href='#if_empty'>if_*</a>}</q> block. <p class='ex'>${if_existing ~/example.log}<br>${else}<br>${endif}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>Entropy Information</th></tr>
+<tr>
+<td><a id='entropy_avail'></a><a href='#entropy_avail'>entropy_avail</a><p class='ar'></p></td>
+<td>Current entropy available for crypto freaks. <p class='ex'>${entropy_avail}</p></td>
+</tr>
+
+<tr>
+<td><a id='entropy_bar'></a><a href='#entropy_bar'>entropy_bar</a><p class='ar'>[height][,width]</p></td>
+<td>Normalized bar of available entropy for crypto freaks. <p class='ex'>${entropy_bar 10,20}</p></td>
+</tr>
+
+<tr>
+<td><a id='entropy_perc'></a><a href='#entropy_perc'>entropy_perc</a><p class='ar'></p></td>
+<td>Percentage of entropy available in comparison to the poolsize. <p class='ex'>${entropy_perc}</p></td>
+</tr>
+
+<tr>
+<td><a id='entropy_poolsize'></a><a href='#entropy_poolsize'>entropy_poolsize</a><p class='ar'></p></td>
+<td>Total size of system entropy pool for crypto freaks. <p class='ex'>${entropy_poolsize}</p></td>
+</tr>
+
+</tbody>
+<tbody>
+
+<tr>
+<td><a id='eval'></a><a href='#eval'>eval</a><p class='ar'>&quot;string&quot;</p></td>
+<td>Evaluates given string according to the rules of TEXT interpretation, i.e. parsing any contained text object specifications into their output, any occuring '$$' into a single '$' and so on. The output is then being parsed again. <p class='ex'>${eval "Local time is $${time %a, %d %b %Y %T %z}"}</p></td>
+</tr>
+
+<tr>
+<td><a id='eve'></a><a href='#eve'>eve</a><p class='ar'>api_userid api_key character_id</p></td>
+<td>Fetches your currently training skill from the Eve Online API servers (http://www.eve-online.com/) and displays the skill along with the remaining training time. <p class='ex'></p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>External Commands</th></tr>
+<tr>
+<td><a id='exec'></a><a href='#exec'>exec</a><p class='ar'>command</p></td>
+<td>Executes a shell command and displays the output in Conky.
+<p class='ex'>${exec cat /etc/debian_version}</p><span class='warn'>May cause conky to run slow.</span></td>
+</tr>
+
+<tr>
+<td><a id='execbar'></a><a href='#execbar'>execbar</a><p class='ar'>command</p></td>
+<td>Same as ${<a href='#exec'>exec</a>} except if the first value returned is a number between 0-100, it will use that number for a bar. The size for bars can be controlled via the default_bar_size config setting.
+<p class='ex'></p><span class='warn'>May cause conky to run slow.</span></td>
+</tr>
+
+<tr>
+<td><a id='execgauge'></a><a href='#execgauge'>execgauge</a><p class='ar'>command</td>
+<td>Same as ${<a href='#exec'>exec</a>} except if the first value returned is a number between 0-100, it will use that number for a gauge. The size for gauges can be controlled via the default_gauge_size config setting.
+<p class='ex'></p><span class='warn'>May cause conky to run slow.</span></td>
+</tr>
+
+<tr>
+<td><a id='execgraph'></a><a href='#execgraph'>execgraph</a><p class='ar'>[-t] [-l] command</td>
+<td>Same as ${<a href='#execbar'>execbar</a>} but graphs values. Uses a logarithmic scale when the log option, lower case L <q>-l</q> switch is given. This makes small numbers more visible. Values still have to be between 0 and 100. The size for graphs can be controlled via the <q>default_graph_size</q> config setting. Takes the switch <q>-t</q> to use a temperature gradient, which makes the gradient values change depending on the amplitude of a particular graph value. Try it and see. If -t or -l is your first argument, you may need to precede it by a space (<q>&nbsp;</q>).
+<p class='ex'></p><span class='warn'>May cause conky to run slow.</span></td>
+</tr>
+
+<tr>
+<td><a id='execi'></a><a href='#execi'>execi</a><p class='ar'>interval command</td>
+<td>Same as ${<a href='#exec'>exec</a>} but with a specific interval. Interval can't be less than <a href='#update_interval'>update_interval</a> in configuration. See also ${<a href='#texeci'>texeci</a>}.
+<p class='ex'>${execi 300 cat /etc/debian_version}</p><span class='warn'>May cause conky to run slow.</span></td>
+</tr>
+
+<tr>
+<td><a id='execibar'></a><a href='#execibar'>execibar</a><p class='ar'>interval command</td>
+<td>Same as <a href='#execbar'>execbar</a> except with an interval.
+<p class='ex'></p><span class='warn'>May cause conky to run slow.</span></td>
+</tr>
+
+<tr>
+<td><a id='execigauge'></a><a href='#execigauge'>execigauge</a><p class='ar'>interval command</td>
+<td>Same as <a href='#execgauge'>execgauge</a> but takes an interval arg and gauges values.
+<p class='ex'></p><span class='warn'>May cause conky to run slow.</span></td>
+</tr>
+
+<tr>
+<td><a id='execigraph'></a><a href='#execigraph'>execigraph</a><p class='ar'>interval [-t] [-l] command</td>
+<td>Same as <a href='#execgraph'>execgraph</a> but takes an interval arg and graphs values. If -t or -l is your first argument, you may need to precede it by a space (<q>&nbsp;</q>).
+<p class='ex'></p><span class='warn'>May cause conky to run slow.</span></td>
+</tr>
+
+<tr>
+<td><a id='execp'></a><a href='#execp'>execp</a><p class='ar'>command</td>
+<td>Executes a shell command and displays the output in Conky. This differs from ${<a href='#exec'>exec</a>} in that it parses the output of the command, so you can insert things like <q>${color red}hi!${color}</q> in your script and have it correctly parsed by Conky. Caveats: Conky parses and evaluates the output of ${execp} every time Conky loops, and then destroys all the objects. If you try to use anything like ${<a href='#execi'>execi</a>} within the ${execp} statement it will functionally run at the same interval that the ${execp} statement runs, as it is created and destroyed at every interval.
+<p class='ex'>${execp cat /etc/debian_version}</p><span class='warn'>May cause conky to run slow.</span></td>
+</tr>
+
+<tr>
+<td><a id='execpi'></a><a href='#execpi'>execpi</a><p class='ar'>interval command</td>
+<td>Same as <a href='#execp'>execp</a> but with specific interval. Interval can't be less than <a href='#update_interval'>update_interval</a> in configuration. Note the output from the execpi command is still parsed and evaluated at every update interval.
+<p class='ex'>${execpi 300 cat /etc/debian_version}</p><span class='warn'>May cause conky to run slow.</span></td>
+</tr>
+
+</tbody>
+<tbody>
+
+<tr>
+<td><a id='flagged_mails'></a><a href='#flagged_mails'>flagged_mails</a><p class='ar'>[mail_directory]</p></td>
+<td>Number of mails marked as flagged in the specified mailbox or mail spool if not. Only maildir type mailboxes are supported, mbox type will return -1. <p class='ex'></p></td>
+</tr>
+
+<tr>
+<td><a id='font'></a><a href='#font'>font</a><p class='ar'>[font][:weight][:size]</p></td>
+<td>Specify a font with optional weight and size. This font applies to the current line and everything following. You can use <q>${font}</q> with no arguments to change back to the default font much like with <q>${<a href='#color'>color</a>}</q> <p class='ex'>${font Ubuntu:bold:size=12}</p></td>
+</tr>
+
+<tr>
+<td><a id='format_time'></a><a href='#format_time'>format_time</a><p class='ar'>seconds format</td>
+<td>Format time given in seconds. This variable only works when the <a href='#times_in_seconds'>times_in_seconds</a> configuration setting is ON.<br>Format is a string that should start and end with a double quote (&quot;) character. The double quote characters are not part of the output.
+<ul>
+<li>\w = Weeks</li>
+<li>\d = Days</li>
+<li>\h = Hours</li>
+<li>\m = Minutes</li>
+<li>\s = Seconds</li>
+<li>\( = Open parens</li>
+<li>\) = Close parens</li>
+<li>\\ = Single backslash</li>
+<li>() = Text between paren characters is not visible if a replaced unit in the text is 0.</li>
+<li>\S# = Show the numbers behind the point if seconds is a decimal number. # is a number of digits behind the point to show. Maximum is 9. Use <q>x</q> (eg. <q>\Sx</q>) to show all digits behind the point with no trailing zeros up to a maximum of 9 digits.</li>
+</ul>
+If a unit is not given, its value is expressed in the highest unit less than the one left out. <p class='ex'>${format_time "\h:\m:\s"}</p>
+</td>
+</tr>
+
+<tr>
+<td><a id='forwarded_mails'></a><a href='#forwarded_mails'>forwarded_mails</a><p class='ar'>[mail_directory]</p></td>
+<td>Number of mails marked as forwarded in the specified mailbox or mail spool if not. Only maildir type mailboxes are supported, mbox type will return -1. <p class='ex'></p></td>
+</tr>
+
+<tr>
+<td><a id='freq'></a><a href='#freq'>freq</a><p class='ar'>[cpu_number]</p></td>
+<td>Returns CPU #n's frequency in MHz. CPUs are counted from 1. If omitted, the parameter defaults to 1. <p class='ex'>${freq}MHz</p></td>
+</tr>
+
+<tr>
+<td><a id='freq_g'></a><a href='#freq_g'>freq_g</a><p class='ar'>[cpu_number]</p></td>
+<td>Returns CPU #n's frequency in GHz. CPUs are counted from 1. If omitted, the parameter defaults to 1. <p class='ex'>${freq_g}Ghz</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>File System Information</th></tr>
+
+<tr>
+<td><a id='fs_bar'></a><a href='#fs_bar'>fs_bar</a><p class='ar'>[height][,width] file_system</td>
+<td>Bar that shows how much space is used on a file system. Height and Width are the height and width in pixels. <q>File_system</q> is any file or folder on that file system. <p class='ex'>${fs_bar /home}</p></td>
+</tr>
+
+<tr>
+<td><a id='fs_bar_free'></a><a href='#fs_bar_free'>fs_bar_free</a><p class='ar'>[height][,width] fs</td>
+<td>Bar that shows how much space is free on a file system. height is the height in pixels. fs is any file on that file system. <p class='ex'>${fs_bar_free /home}</p></td>
+</tr>
+
+<tr>
+<td><a id='fs_free'></a><a href='#fs_free'>fs_free</a><p class='ar'>[file_system]</p></td>
+<td>Free space on a file system available for users. <p class='ex'>${fs_free /home}</p></td>
+</tr>
+
+<tr>
+<td><a id='fs_free_perc'></a><a href='#fs_free_perc'>fs_free_perc</a><p class='ar'>[file_system]</p></td>
+<td>Free percentage of space on a file system available for users. <p class='ex'>${fs_free_perc /home}</p></td>
+</tr>
+
+<tr>
+<td><a id='fs_size'></a><a href='#fs_size'>fs_size</a><p class='ar'>[file_system]</p></td>
+<td>File system size. <p class='ex'>${fs_size /home}</p></td>
+</tr>
+
+<tr>
+<td><a id='fs_type'></a><a href='#fs_type'>fs_type</a><p class='ar'>[file_system]</p></td>
+<td>File system type. <p class='ex'>${fs_type /home}</p></td>
+</tr>
+
+<tr>
+<td><a id='fs_used'></a><a href='#fs_used'>fs_used</a><p class='ar'>[file_system]</p></td>
+<td>File system used space. <p class='ex'>${fs_used /home}</p></td>
+</tr>
+
+<tr>
+<td><a id='fs_used_perc'></a><a href='#fs_used_perc'>fs_used_perc</a><p class='ar'>[file_system]</p></td>
+<td>Percent of file system used space. <p class='ex'>${fs_used_perc /home}</p></td>
+</tr>
+
+</tbody>
+<tbody>
+
+<tr>
+<td><a id='goto'></a><a href='#goto'>goto</a><p class='ar'>number</td>
+<td>The next element is printed at position <q>number</q> from the left hand side of the Conky window. This is measured in characters and is useful for creating uniform indents and the illusion of columns. See also ${<a href='#offset'>offset</a>}. <p class='ex'>${goto 10}</p></td>
+</tr>
+
+<tr>
+<td><a id='gw_iface'></a><a href='#gw_iface'>gw_iface</a><p class='ar'></p></td>
+<td>Displays the default route's interface or <q>multiple</q> or <q>none</q> accordingly. <p class='ex'>${gw_iface}</p></td>
+</tr>
+
+<tr>
+<td><a id='gw_ip'></a><a href='#gw_ip'>gw_ip</a><p class='ar'></p></td>
+<td>Displays the default gateway's IP or <q>multiple</q> or <q>none</q> accordingly. <p class='ex'>${gw_ip}</p></td>
+</tr>
+
+<tr>
+<td><a id='hddtemp'></a><a href='#hddtemp'>hddtemp</a><p class='ar'>[device]</p></td>
+<td>Displays temperature of a selected hard disk drive as reported by the hddtemp daemon. Use <a href='#hddtemp_host'>hddtemp_host</a> and <a href='#hddtemp_port'>hddtemp_port</a> to specify a host and port for all hddtemp objects. If the <q>device</q> parameter is not given, the first disk returned by the hddtemp daemon is used. <p class='ex'>${hddtemp}</p></td>
+</tr>
+
+<tr>
+<td><a id='head'></a><a href='#head'>head</a><p class='ar'>logfile lines [next_check]</p></td>
+<td>Displays first N lines of supplied text file. The file is checked every <q>next_check</q> update. If next_check is not supplied, Conky defaults to 2. Max of 30 lines can be displayed, or until the <a href='#text_buffer_size'>text_buffer_size</a> is filled. See ${<a href='#tail'>tail</a>} for end of file. <p class='ex'>${head ~/sample.log 5 3}</p></td>
+</tr>
+
+<tr>
+<td><a id='hr'></a><a href='#hr'>hr</a><p class='ar'>[height]</p></td>
+<td>Horizontal line, height is the height in pixels. <p class='ex'>${hr 1}</p></td>
+</tr>
+
+<tr>
+<td><a id='hwmon'></a><a href='#hwmon'>hwmon</a><p class='ar'>[device] type n [factor offset]</p></td>
+<td>Hwmon sensor from sysfs (<b class='red'>Linux 2.6 or higher</b>). Parameter <q>device</q> is the device name and may be omitted if you have only one hwmon device. Parameter type is one of the following.
+<ul>
+<li><b>in</b> = Voltage (same as <q>vol</q>)</li>
+<li><b>vol</b> = Voltage (same as <q>in</q>)</li>
+<li><b>fan</b> = Fan speed</li>
+<li><b>temp</b> = System temperature</li>
+</ul>
+Parameter n is the number of the sensor. See <q>/sys/class/hwmon/</q> on your local computer. The optional arguments <q>factor</q> and <q>offset</q> allow pre-calculation of the raw input, which is calculated as: <q>input = input * factor + offset</q>. Note they have to be given as decimal values with at least one decimal place.
+<p class='ex'>${hwmon temp 1}Â°C</p></td>
+</tr>
+
+<tr>
+<td><a id='i2c'></a><a href='#i2c'>i2c</a><p class='ar'>[device] type n [factor offset]</p></td>
+<td>I2C sensor from sysfs (Linux 2.6). Parameter dev may be omitted if you have only one I2C device. Parameter type is either 'in' or 'vol' meaning voltage; 'fan' meaning fan; 'temp' meaning temperature. Parameter n is number of the sensor. See /sys/bus/i2c/devices/ on your local computer. The optional arguments 'factor' and 'offset' allow precalculation of the raw input, which is being modified as follows: 'input = input * factor + offset'. Note that they have to be given as decimal values with at least one decimal place. <p class='ex'></p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>Dell Inspiron Laptops</th></tr>
+
+<tr>
+<td><a id='i8k_ac_status'></a><a href='#i8k_ac_status'>i8k_ac_status</a><p class='ar'></p></td>
+<td>If running the i8k kernel driver for Dell Inspiron laptops this shows whether ac power is on, as listed in <q>/proc/i8k</q> translated to human-readable format. This is by default not enabled by i8k itself. <p class='ex'>${i8k_ac_status}</p></td>
+</tr>
+
+<tr>
+<td><a id='i8k_bios'></a><a href='#i8k_bios'>i8k_bios</a><p class='ar'></p></td>
+<td>If running the i8k kernel driver for Inspiron laptops, displays the bios version as listed in /proc/i8k. <p class='ex'>${i8k_bios}</p></td>
+</tr>
+
+<tr>
+<td><a id='i8k_buttons_status'></a><a href='#i8k_buttons_status'>i8k_buttons_status</a><p class='ar'></p></td>
+<td>If running the i8k kernel driver for Inspiron laptops, displays the volume buttons status as listed in /proc/i8k. <p class='ex'>${i8k_buttons_status}</p></td>
+</tr>
+
+<tr>
+<td><a id='i8k_cpu_temp'></a><a href='#i8k_cpu_temp'>i8k_cpu_temp</a><p class='ar'></p></td>
+<td>If running the i8k kernel driver for Inspiron laptops, displays the cpu temperature in Celsius, as reported by /proc/i8k. <p class='ex'>${i8k_cpu_temp}</p></td>
+</tr>
+
+<tr>
+<td><a id='i8k_left_fan_rpm'></a><a href='#i8k_left_fan_rpm'>i8k_left_fan_rpm</a><p class='ar'></p></td>
+<td>If running the i8k kernel driver for Inspiron laptops, displays the left fan's rate of rotation, in revolutions per minute as listed in /proc/i8k. In some laptops i8k reports these fans in reverse order. <p class='ex'>${i8k_left_fan_rpm}</p></td>
+</tr>
+
+<tr>
+<td><a id='i8k_left_fan_status'></a><a href='#i8k_left_fan_status'>i8k_left_fan_status</a><p class='ar'></p></td>
+<td>If running the i8k kernel driver for Inspiron laptops, displays the left fan status as listed in <q>/proc/i8k</q> translated to human-readable format. Beware, some laptops i8k reports these fans in reverse order. <p class='ex'>${i8k_left_fan_status}</p></td>
+</tr>
+
+<tr>
+<td><a id='i8k_right_fan_rpm'></a><a href='#i8k_right_fan_rpm'>i8k_right_fan_rpm</a><p class='ar'></p></td>
+<td>If running the i8k kernel driver for Inspiron laptops, displays the right fan's rate of rotation, in revolutions per minute as listed in /proc/i8k. Beware, some laptops i8k reports these fans in reverse order. <p class='ex'>${i8k_right_fan_rpm}</p></td>
+</tr>
+
+<tr>
+<td><a id='i8k_right_fan_status'></a><a href='#i8k_right_fan_status'>i8k_right_fan_status</a><p class='ar'></p></td>
+<td>If running the i8k kernel driver for Inspiron laptops, displays the right fan status as listed in <q>/proc/i8k</q> translated to human-readable format. Beware, some laptops i8k reports these fans in reverse order. <p class='ex'>${i8k_right_fan_status}</p></td>
+</tr>
+
+<tr>
+<td><a id='i8k_serial'></a><a href='#i8k_serial'>i8k_serial</a><p class='ar'></p></td>
+<td>If running the i8k kernel driver for Inspiron laptops, displays your laptop serial number as listed in /proc/i8k. <p class='ex'>${i8k_serial}</p></td>
+</tr>
+
+<tr>
+<td><a id='i8k_version'></a><a href='#i8k_version'>i8k_version</a><p class='ar'></p></td>
+<td>If running the i8k kernel driver for Inspiron laptops, displays the version formatting of /proc/i8k. <p class='ex'>${i8k_version}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>IBM Laptops</th></tr>
+
+<tr>
+<td><a id='ibm_brightness'></a><a href='#ibm_brightness'>ibm_brightness</a><p class='ar'></p></td>
+<td>If running the IBM ACPI, displays the brightness of the laptops's LCD. Range is 0 to 7. <p class='ex'>${ibm_brightness}</p></td>
+</tr>
+
+<tr>
+<td><a id='ibm_fan'></a><a href='#ibm_fan'>ibm_fan</a><p class='ar'></p></td>
+<td>If running the IBM ACPI, displays the fan speed. <p class='ex'>${ibm_fan}</p></td>
+</tr>
+
+<tr>
+<td><a id='ibm_temps'></a><a href='#ibm_temps'>ibm_temps</a><p class='ar'>number</td>
+<td>If running the IBM ACPI, displays the temperatures from the IBM temperature sensors. <q>Number</q> has the range of 0 to 7 inclusive. Sensor 0 is on the CPU, 3 is on the GPU. <p class='ex'>${ibm_temps 0}</p></td>
+</tr>
+
+<tr>
+<td><a id='ibm_volume'></a><a href='#ibm_volume'>ibm_volume</a><p class='ar'></p></td>
+<td>If running the IBM ACPI, displays the <q>master</q> volume, controlled by the volume keys (0-14). <p class='ex'>${ibm_volume}</p></td>
+</tr>
+
+</tbody>
+<tbody>
+
+<tr>
+<td><a id='iconv_start'></a><a href='#iconv_start'>iconv_start</a><p class='ar'>codeset_from codeset_to</td>
+<td>Convert text from one codeset to another using GNU iconv. Needs to be stopped with <q><a href='#iconv_stop'>iconv_stop</a></q>. All characters between the <q>start</q> and <q>stop</q> are converted. <p class='ex'>${iconv_start UTF-8 ISO_8859-1}<br>${iconv_stop}</p></td>
+</tr>
+
+<tr>
+<td><a id='iconv_stop'></a><a href='#iconv_stop'>iconv_stop</a><p class='ar'></p></td>
+<td>Stop iconv codeset conversion. <p class='ex'>${iconv_start UTF-8 ISO_8859-1}<br>${iconv_stop}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>Conditionals</th></tr>
+
+<tr>
+<td><a id='if_empty'></a><a href='#if_empty'>if_empty</a><p class='ar'>[var]</p></td>
+<td>If Conky variable VAR is empty, display everything between ${if_empty} and the matching ${<a href='#endif'>endif</a>}. <p class='ex'>${if_empty var}<br>${else}<br>${endif}</p></td>
+</tr>
+
+<tr>
+<td><a id='if_existing'></a><a href='#if_existing'>if_existing</a><p class='ar'>file_name [string]</p></td>
+<td>If the named file exists show everything between <q>${if_existing}</q> and the matching <q>${<a href='#endif'>endif</a>}</q>. The optional second parameter checks for file containing the specified string and prints everything between <q>${if_existing}</q> and the matching <q>${<a href='#endif'>endif</a>}</q>. <p class='ex'>${if_existing ~/results.log &quot;fail&quot;}<br>${endif}</p></td>
+</tr>
+
+<tr>
+<td><a id='if_gw'></a><a href='#if_gw'>if_gw</a><p class='ar'></p></td>
+<td>If there is at least one default gateway, display everything between ${if_gw} and the matching ${<a href='#endif'>endif</a>}. <p class='ex'>${if_gw}<br>${else}<br>${endif}</p></td>
+</tr>
+
+<tr>
+<td><a id='if_match'></a><a href='#if_match'>if_match</a><p class='ar'>expression</td>
+<td>Evaluates the given boolean expression, printing everything between <q>${if_match}</q> and the matching <q>${<a href='#endif'>endif</a>}</q> depending on whether the evaluation returns true or not. Valid expressions consist of a left side, an operator and a right side. Left and right sides are being parsed for contained text objects before evaluation. Recognized left and right side types are: <ul> <li> <b>double</b> - Argument consists of only digits and a single dot.</li> <li> <b>long</b> - Argument consists of only digits.</li> <li> <b>string</b> - Argument is enclosed in double quotation marks (&quot;).</li> </ul>Valid operands are:
+<ul>
+<li>&gt; - Greater than</li>
+<li>&lt; - Less than</li>
+<li>&gt;= - Greater than or Equal</li>
+<li>&lt;= - Less than or Equal</li>
+<li>== - Equal</li>
+<li>!= - Not equal</li>
+</ul>
+<p class='ex'>${if_match &quot;${tcp_portmon 1 65534 rip eth0}&quot;>&quot;&quot;}<br>${endif}</p></td>
+</tr>
+
+<tr>
+<td><a id='if_mixer_mute'></a><a href='#if_mixer_mute'>if_mixer_mute</a><p class='ar'>[mixer]</p></td>
+<td>If mixer exists, display everything between <q>${if_mixer_mute}</q> and the matching <q>${<a href='#endif'>endif</a>}</q>. If no mixer is specified, <q>Vol</q> is used. <p class='ex'>${if_mixer_mute}<br>${endif}</p></td>
+</tr>
+
+<tr>
+<td><a id='if_mounted'></a><a href='#if_mounted'>if_mounted</a><p class='ar'>[mountpoint]</p></td>
+<td>If MOUNTPOINT is mounted, display everything between <q>${if_mounted}</q> and the matching <q>${<a href='#endif'>endif</a>}</q>. <p class='ex'>${if_mounted /media/thumbdrive}<br>${endif}</p></td>
+</tr>
+
+<tr>
+<td><a id='if_mpd_playing'></a><a href='#if_mpd_playing'>if_mpd_playing</a><p class='ar'></p></td>
+<td>If mpd is playing or paused, display everything between <q>${if_mpd_playing}</q> and the matching <q>${<a href='#endif'>endif</a>}</q>. <p class='ex'>${if_mpd_playing}<br>${else}<br>${endif}</p></td>
+</tr>
+
+<tr>
+<td><a id='if_running'></a><a href='#if_running'>if_running</a><p class='ar'>[-x] process_name</td>
+<td>If PROCESS is running, display everything between the <q>${if_running}</q> and the matching <q>${<a href='#endif'>endif</a>}</q>. This uses the <q>pidof</q> command, so the -x switch is also supported. <ul><li>-x = Include process id's of shells running the named scripts.</li></ul> <p class='ex'>${if_running firefox} ... ${endif}</p></td>
+</tr>
+
+<tr>
+<td><a id='if_smapi_bat_installed'></a><a href='#if_smapi_bat_installed'>if_smapi_bat_installed</a><p class='ar'>[battery_number]</p></td>
+<td>When using SMAPI, if the battery with index <q>battery_number</q> (integer number only) is installed, display everything between <q>${if_smapi_bat_installed}</q> and the matching <q>${<a href='#endif'>endif</a>}</q>. Default battery_number is <q>0</q>. <p class='ex'>${if_smapi_bat_installed 1}<br>${endif}</p></td>
+</tr>
+
+<tr>
+<td><a id='if_up'></a><a href='#if_up'>if_up</a><p class='ar'>[interface]</p></td>
+<td>If the named <q>interface</q> exists and is up (according to the <a href='#if_up_strictness'>if_up_strictness</a> setting), display everything between <q>${if_up}</q> and the matching <q>${<a href='#endif'>endif</a>}</q>. <p class='ex'>${if_up eth0}<br>${else}<br>${endif}</p></td>
+</tr>
+
+<tr>
+<td><a id='if_updatenr'></a><a href='#if_updatenr'>if_updatenr</a><p class='ar'>[update_number]</p></td>
+<td>If it's the UPDATENR-th time that Conky updates, display everything between <q>${if_updatenr}</q> and the matching <q>${<a href='#endif'>endif</a>}</q>. The counter resets when the highest UPDATENR is reached. The following example sets the highest UPDATENR to <q>4</q>.
+<p class='ex'>${if_updatenr 1}foo${endif}<br>${if_updatenr 2}bar${endif}<br>${if_updatenr 4}${endif}</p> This shows <q>foo</q> 25% of the time followed by <q>bar</q> 25% of the time followed by nothing the other half of the time.</td>
+</tr>
+
+<tr>
+<td><a id='if_xmms2_connected'></a><a href='#if_xmms2_connected'>if_xmms2_connected</a><p class='ar'></p></td>
+<td>Display everything between <q>${if_xmms2_connected}</q> and the matching <q>${<a href='#endif'>endif</a>}</q> if xmms2 is running. <p class='ex'>${if_xmms2_connected}<br>${else}<br>${endif}</p></td>
+</tr>
+
+</tbody>
+<tbody>
+
+<tr>
+<td><a id='image'></a><a href='#image'>image</a><p class='ar'>&lt;path to image&gt; [-p x,y] [-s WxH] [-n] [-f interval]</p></td>
+<td>Renders an image from the path specified using Imlib2. Takes 4 optional arguments: a position (-p x,y), a size (-s width x height), a no-cache (-n) switch, and a cache flush (-f #) interval in seconds. Also see <a href='#imlib_cache_flush_interval'>imlib_cache_flush_interval</a>. Changing the x,y position moves the position of the image within the Conky window, and changing the WxH scales the image from the x,y center point. If you specify the no-cache flag (-n), the image will not be cached in memory forcing it to be loaded at each Conky refresh. Alternately, you can specify the -f # switch to specify a cache flush interval for a particular image in seconds.
+<p class='ex'>${image ~/cheeseburger.jpg -p 20,20 -s 200x200 -f 300}</p>
+This renders <q>cheeseburger.jpg</q> centered at (20,20) scaled to 200x200 pixels updated once every 5 minutes. Conky does not make any attempt to adjust the position or any other formatting of images, they are just rendered as per the arguments passed. The only reason ${image} is part of the TEXT section is to allow for runtime modifications to the image file directly through <q><a href='#execp'>execp</a></q>, <q><a href='#lua_parse'>lua_parse</a></q>, or through some other method. Images that do not change should be part of the background or wallpaper for best performance.</td>
+</tr>
+
+<tr>
+<td><a id='imap_messages'></a><a href='#imap_messages'>imap_messages</a><p class='ar'>host username password [-i interval (in seconds)] [-f &quot;folder&quot;] [-p port] [-e &quot;command&quot;] [-r retries]</p></td>
+<td>Displays the number of messages in your global IMAP inbox by default. You can define individual IMAP inboxes separately by passing the folder name with the <q>-f</q> argument. Arguments are:
+<ul>
+<li>host = The URL of the IMAP mail server</li>
+<li>username = The username to access the account</li>
+<li>password = Use <q>*</q> for Conky to prompt for the password.</li>
+<li>-i interval = Poll frequency in seconds. Default is 300 (5 minutes)</li>
+<li>-f &quot;folder&quot; = Default folder is <q>INBOX</q></li>
+<li>-p port = Default port is 143</li>
+<li>-e &quot;command&quot; = Optional IMAP command to send.</li>
+<li>-r retries = Default is 5 before giving up.</li>
+</ul>
+<p class='ex'>${imap_messages imap.example.com user *}</p></td>
+</tr>
+
+<tr>
+<td><a id='imap_unseen'></a><a href='#imap_unseen'>imap_unseen</a><p class='ar'>host username password [-i interval (in seconds)] [-f &quot;folder&quot;] [-p port] [-e &quot;command&quot;] [-r retries]</p></td>
+<td>Displays the number of messages in your global IMAP inbox by default. You can define individual IMAP inboxes separately by passing the folder name with the <q>-f</q> argument. Arguments are:
+<ul>
+<li>host = The URL of the IMAP mail server</li>
+<li>username = The username to access the account</li>
+<li>password = Use <q>*</q> for Conky to prompt for the password.</li>
+<li>-i interval = Poll frequency in seconds. Default is 300 (5 minutes)</li>
+<li>-f &quot;folder&quot; = Default folder is <q>INBOX</q></li>
+<li>-p port = Default port is 143</li>
+<li>-e &quot;command&quot; = Optional IMAP command to send.</li>
+<li>-r retries = Default is 5 before giving up.</li>
+</ul>
+<p class='ex'>${imap_unseen imap.example.com user *}</p></td>
+</tr>
+
+<tr>
+<td><a id='include'></a><a href='#include'>include</a><p class='ar'>filename</td>
+<td>Loads the specified config file, internally applies the config settings as if they appeared above the TEXT line in the original file and places the vars where the include variable appeared. This does not modify the source file. <p class='ex'>${include /etc/conky/common.cfg}</p></td>
+</tr>
+
+<tr>
+<td><a id='ioscheduler'></a><a href='#ioscheduler'>ioscheduler</a><p class='ar'>disk</td>
+<td>Prints the current ioscheduler used for the given disk name. The disk name looks like <q>hda</q> or <q>sdb</q>. <p class='ex'>${ioscheduler sda}</p></td>
+</tr>
+
+<tr>
+<td><a id='kernel'></a><a href='#kernel'>kernel</a><p class='ar'></p></td>
+<td>Shows current running Kernel version. <p class='ex'>${kernel}</p></td>
+</tr>
+
+<tr>
+<td><a id='laptop_mode'></a><a href='#laptop_mode'>laptop_mode</a><p class='ar'></p></td>
+<td>The value of <q>/proc/sys/vm/laptop_mode</q> <p class='ex'>${laptop_mode}</p></td>
+</tr>
+
+<tr>
+<td><a id='lines'></a><a href='#lines'>lines</a><p class='ar'>textfile</td>
+<td>Displays the number of lines in the given file. See <a href='#words'>words</a>. <p class='ex'>${lines ~/example.txt}</p></td>
+</tr>
+
+<tr>
+<td><a id='loadavg'></a><a href='#loadavg'>loadavg</a><p class='ar'>[1|2|3]</p></td>
+<td>System load average, <q>1</q> is for past 1 minute, <q>2</q> for past 5 minutes and <q>3</q> for past 15 minutes. Without argument, prints all three values separated by whitespace. <p class='ex'>${loadavg 1}</p></td>
+</tr>
+
+<tr>
+<td><a id='loadgraph'></a><a href='#loadgraph'>loadgraph</a><p class='ar'>[height][,width] [gradient color 1] [gradient color 2] [scale] [-t] [-l]</p></td>
+<td>Load1 average graph, similar to xload, with optional colors in RGB hexadecimal. Uses a logarithmic scale (to see small numbers) when you use the <q>-l</q> switch. Takes the switch <q>-t</q> to use a temperature gradient, which makes the gradient values change depending on the amplitude of a particular graph value (try it and see). <p class='ex'>${loadgraph 20,120 888888 FFFFFF -l}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>Lua Scripting</th></tr>
+
+<tr>
+<td><a id='lua'></a><a href='#lua'>lua</a><p class='ar'>function_name [function_parameters]</p></td>
+<td>Executes a Lua function with given parameters, then prints the returned string. See also <a href='#lua_load'>lua_load</a> on how to load scripts. Conky puts <q>conky_</q> in front of function_name to prevent accidental calls to the wrong function unless you put you place <q>conky_</q> in front of it yourself. <p class='ex'></p></td>
+</tr>
+
+<tr>
+<td><a id='lua_bar'></a><a href='#lua_bar'>lua_bar</a><p class='ar'>[height, width] function_name [function_parameters]</p></td>
+<td>Executes a Lua function with given parameters and draws a bar. Expects result value to be an integer between 0 and 100. See also <a href='#lua_load'>lua_load</a> on how to load scripts. Conky puts <q>conky_</q> in front of the function_name to prevent accidental calls to the wrong function unless you put you place <q>conky_</q> in front of it yourself. <p class='ex'></p></td>
+</tr>
+
+<tr>
+<td><a id='lua_gauge'></a><a href='#lua_gauge'>lua_gauge</a><p class='ar'>[height, width] function_name [function_parameters]</p></td>
+<td>Executes a Lua function with given parameters and draws a gauge. Expects result value to be an integer between 0 and 100. See also <a href='#lua_load'>lua_load</a> on how to load scripts. Conky puts <q>conky_</q> in front of the function_name to prevent accidental calls to the wrong function unless you put you place <q>conky_</q> in front of it yourself. <p class='ex'></p></td>
+</tr>
+
+<tr>
+<td><a id='lua_graph'></a><a href='#lua_graph'>lua_graph</a><p class='ar'>function_name [height][,width] [gradient color 1] [gradient color 2] [scale] [-t] [-l]</p></td>
+<td>Executes a Lua function with and draws a graph. Expects result value to be any number, and by default will scale to show the full range. See also <a href='#lua_load'>lua_load</a> on how to load scripts. Takes the switch '-t' to use a temperature gradient, which makes the gradient values change depending on the amplitude of a particular graph value (try it and see). Conky puts <q>conky_</q> in front of the function_name to prevent accidental calls to the wrong function unless you put you place <q>conky_</q> in front of it yourself. <p class='ex'></p></td>
+</tr>
+
+<tr>
+<td><a id='lua_parse'></a><a href='#lua_parse'>lua_parse</a><p class='ar'>function_name [function_parameters]</p></td>
+<td>Executes a Lua function with given parameters as per <q>$lua</q>, then parses and prints the result value as per the syntax for Conky's TEXT section. See also <a href='#lua_load'>lua_load</a> on how to load scripts. Conky puts <q>conky_</q> in front of the function_name to prevent accidental calls to the wrong function unless you put you place <q>conky_</q> in front of it yourself. <p class='ex'></p></td>
+</tr>
+
+</tbody>
+<tbody>
+
+<tr>
+<td><a id='machine'></a><a href='#machine'>machine</a><p class='ar'></p></td>
+<td>Shows the machine CPU class information. For example, <q>x86_64</q> or <q>i686</q>. <p class='ex'>${machine}</p></td>
+</tr>
+
+<tr>
+<td><a id='mails'></a><a href='#mails'>mails</a><p class='ar'>[mailbox]</p></td>
+<td>Mail count in the specified mailbox or your mail spool if not. Both mbox and maildir type mailboxes are supported. You can use a program like fetchmail to get mails from some server using your favourite protocol. See also <a href='#new_mails'>new_mails</a>. <p class='ex'></p></td>
+</tr>
+
+<tr>
+<td><a id='mboxscan'></a><a href='#mboxscan'>mboxscan</a><p class='ar'>[-n #] [-fw #] [-sw #] mbox</td>
+<td>Print a summary of recent messages in an mbox format mailbox file.
+<ul>
+<li>-n # = number of message to show</li>
+<li>-fw # = width in characters of FROM field</li>
+<li>-sw # = width in characters of SUBJECT field</li>
+<li>mbox = filename of the mailbox enclosed in double quotes (&quot;)</li>
+</ul>
+<p class='ex'>${mboxscan -n 10 &quot;/home/user/some box&quot;}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>Memory Information</th></tr>
+
+<tr>
+<td><a id='mem'></a><a href='#mem'>mem</a><p class='ar'></p></td>
+<td>Amount of memory in use. <p class='ex'>${mem}</p></td>
+</tr>
+
+<tr>
+<td><a id='membar'></a><a href='#membar'>membar</a><p class='ar'>[height][,width]</p></td>
+<td>Bar that shows amount of memory in use. <p class='ex'>${membar 10,60}</p></td>
+</tr>
+
+<tr>
+<td><a id='memeasyfree'></a><a href='#memeasyfree'>memeasyfree</a><p class='ar'></p></td>
+<td>Amount of free memory including the memory that is very easily freed like <q>buffers/cache</q>. <p class='ex'>${memeasyfree}</p></td>
+</tr>
+
+<tr>
+<td><a id='memfree'></a><a href='#memfree'>memfree</a><p class='ar'></p></td>
+<td>Amount of free memory. <p class='ex'>${memfree}</p></td>
+</tr>
+
+<tr>
+<td><a id='memgauge'></a><a href='#memgauge'>memgauge</a><p class='ar'>[height][,width]</p></td>
+<td>Gauge that shows amount of memory in use. See ${<a href='#cpugauge'>cpugauge</a>} for additional formatting information. <p class='ex'>${memgauge 10,120}</p></td>
+</tr>
+
+<tr>
+<td><a id='memgraph'></a><a href='#memgraph'>memgraph</a><p class='ar'>[height][,width] [gradient color 1] [gradient color 2] [scale] [-t] [-l]</p></td>
+<td>Memory usage graph. Uses a logarithmic scale to make small numbers more visible when you use the -l switch. Takes the switch '-t' to use a temperature gradient, which makes the gradient values change depending on the amplitude of a particular graph value. <p class='ex'>${memgraph 10,120 555555 AAAAAA -l}</p></td>
+</tr>
+
+<tr>
+<td><a id='memmax'></a><a href='#memmax'>memmax</a><p class='ar'></p></td>
+<td>Total amount of memory available to the host operating system. In systems with video display hardware that uses system RAM instead of discrete video memory, this number is always lower than the physical amount of RAM installed. <p class='ex'>${memmax}</p></td>
+</tr>
+
+<tr>
+<td><a id='memperc'></a><a href='#memperc'>memperc</a><p class='ar'></p></td>
+<td>Percentage of memory in use. <p class='ex'>${memperc}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>Audio Mixer</th></tr>
+
+<tr>
+<td><a id='mixer'></a><a href='#mixer'>mixer</a><p class='ar'>[device]</p></td>
+<td>Prints the mixer value as reported by the OS. On Linux, this variable uses the OSS emulation which requires the proper <b>kernel module</b> loaded. Default mixer is <q>Vol</q>, but you can specify one of the available OSS controls: <div class='col'><ul><li>Bass</li><li>CD</li><li>Digital1</li><li>Digital2</li><li>Digital3</li><li>IGain</li><li>Line</li><li>Line1</li><li>Line2</li><li>Line3</li><li>Mic</li><li>Mix</li><li>Monitor</li><li>OGain</li><li>Pcm</li><li>Pcm2</li><li>PhoneIn</li><li>PhoneOut</li><li>Radio</li><li>Rec</li><li>Spkr</li><li>Synth</li><li>Trebl</li><li>Video</li><li>Vol</li></ul></div> <p class='ex'>${mixer vol}</p></td>
+</tr>
+<tr>
+<td><a id='mixerbar'></a><a href='#mixerbar'>mixerbar</a><p class='ar'>&lt;device&gt; [size_x[,size_y]]</p></td>
+<td>Displays mixer value in a bar as reported by the OS. See <a href='#mixer'>mixer</a> for details on arguments. <p class='ex'>${mixerbar vol 10,20}</p></td>
+</tr>
+
+<tr>
+<td><a id='mixerl'></a><a href='#mixerl'>mixerl</a><p class='ar'>[device]</p></td>
+<td>Prints the left channel mixer value as reported by the OS. See <a href='#mixer'>mixer</a> for details on arguments. <p class='ex'>${mixerl vol}</p></td>
+</tr>
+
+<tr>
+<td><a id='mixerlbar'></a><a href='#mixerlbar'>mixerlbar</a><p class='ar'>&lt;device&gt; [size_x[,size_y]]</p></td>
+<td>Displays the left channel mixer value in a bar as reported by the OS. See <a href='#mixer'>mixer</a> for details on arguments. <p class='ex'>${mixerlbar vol 10,20}</p></td>
+</tr>
+
+<tr>
+<td><a id='mixerr'></a><a href='#mixerr'>mixerr</a><p class='ar'>[device]</p></td>
+<td>Prints the right channel mixer value as reported by the OS. See <a href='#mixer'>mixer</a> for details on arguments. <p class='ex'>${mixerr vol}</p></td>
+</tr>
+
+<tr>
+<td><a id='mixerrbar'></a><a href='#mixerrbar'>mixerrbar</a><p class='ar'>&lt;device&gt; [size_x[,size_y]]</p></td>
+<td>Displays the right channel mixer value in a bar as reported by the OS. See <a href='#mixer'>mixer</a> for details on arguments. <p class='ex'>${mixerrbar vol 10,20}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>Music on Console Player</th></tr>
+
+<tr>
+<td><a id='moc_album'></a><a href='#moc_album'>moc_album</a><p class='ar'></p></td>
+<td>Album of the current MOC song. <p class='ex'>${moc_album}</p></td>
+</tr>
+
+<tr>
+<td><a id='moc_artist'></a><a href='#moc_artist'>moc_artist</a><p class='ar'></p></td>
+<td>Artist of the current MOC song. <p class='ex'>${moc_artist}</p></td>
+</tr>
+
+<tr>
+<td><a id='moc_bitrate'></a><a href='#moc_bitrate'>moc_bitrate</a><p class='ar'></p></td>
+<td>Bitrate in the current MOC song. <p class='ex'>${moc_bitrate}</p></td>
+</tr>
+
+<tr>
+<td><a id='moc_curtime'></a><a href='#moc_curtime'>moc_curtime</a><p class='ar'></p></td>
+<td>Current time of the current MOC song. <p class='ex'>${moc_curtime}</p></td>
+</tr>
+
+<tr>
+<td><a id='moc_file'></a><a href='#moc_file'>moc_file</a><p class='ar'></p></td>
+<td>File name of the current MOC song. <p class='ex'>${moc_file}</p></td>
+</tr>
+
+<tr>
+<td><a id='moc_rate'></a><a href='#moc_rate'>moc_rate</a><p class='ar'></p></td>
+<td>Rate of the current MOC song. <p class='ex'>${moc_rate}</p></td>
+</tr>
+
+<tr>
+<td><a id='moc_song'></a><a href='#moc_song'>moc_song</a><p class='ar'></p></td>
+<td>The current song name being played in MOC. <p class='ex'>${moc_song}</p></td>
+</tr>
+
+<tr>
+<td><a id='moc_state'></a><a href='#moc_state'>moc_state</a><p class='ar'></p></td>
+<td>Current state of MOC; playing, stopped etc. <p class='ex'>${moc_state}</p></td>
+</tr>
+
+<tr>
+<td><a id='moc_timeleft'></a><a href='#moc_timeleft'>moc_timeleft</a><p class='ar'></p></td>
+<td>Time left in the current MOC song. <p class='ex'>${moc_timeleft}</p></td>
+</tr>
+
+<tr>
+<td><a id='moc_title'></a><a href='#moc_title'>moc_title</a><p class='ar'></p></td>
+<td>Title of the current MOC song. <p class='ex'>${moc_title}</p></td>
+</tr>
+
+<tr>
+<td><a id='moc_totaltime'></a><a href='#moc_totaltime'>moc_totaltime</a><p class='ar'></p></td>
+<td>Total length of the current MOC song. <p class='ex'>${moc_totaltime}</p></td>
+</tr>
+
+</tbody>
+<tbody>
+
+<tr>
+<td><a id='monitor'></a><a href='#monitor'>monitor</a><p class='ar'></p></td>
+<td>Number of the monitor on which Conky is running or the message <q>Not running in X</q> if this is the case. <p class='ex'>${monitor}</p></td>
+</tr>
+
+<tr>
+<td><a id='monitor_number'></a><a href='#monitor_number'>monitor_number</a><p class='ar'></p></td>
+<td>Number of monitors or the message <q>Not running in X</q> if this is the case. <p class='ex'>${monitor_number}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>Music Player Daemon (MPD)</th></tr>
+
+<tr>
+<td><a id='mpd_album'></a><a href='#mpd_album'>mpd_album</a><p class='ar'></p></td>
+<td>Album in current MPD song. <p class='ex'>${mpd_album}</p></td>
+</tr>
+
+<tr>
+<td><a id='mpd_artist'></a><a href='#mpd_artist'>mpd_artist</a><p class='ar'></p></td>
+<td>Artist in current MPD song must be enabled at compile. <p class='ex'>${mpd_artist}</p></td>
+</tr>
+
+<tr>
+<td><a id='mpd_bar'></a><a href='#mpd_bar'>mpd_bar</a><p class='ar'>[height][,width]</p></td>
+<td>Bar of mpd's progress. <p class='ex'>${mpd_bar 10,20}</p></td>
+</tr>
+
+<tr>
+<td><a id='mpd_bitrate'></a><a href='#mpd_bitrate'>mpd_bitrate</a><p class='ar'></p></td>
+<td>Bitrate of current song. <p class='ex'>${mpd_bitrate}</p></td>
+</tr>
+
+<tr>
+<td><a id='mpd_date'></a><a href='#mpd_date'>mpd_date</a><p class='ar'></p></td>
+<td>Date of current song. <p class='ex'>${mpd_date}</p></td>
+</tr>
+
+<tr>
+<td><a id='mpd_elapsed'></a><a href='#mpd_elapsed'>mpd_elapsed</a><p class='ar'></p></td>
+<td>Song's elapsed time. <p class='ex'>${mpd_elapsed}</p></td>
+</tr>
+
+<tr>
+<td><a id='mpd_file'></a><a href='#mpd_file'>mpd_file</a><p class='ar'></p></td>
+<td>Prints the file name of the current MPD song. <p class='ex'>${mpd_file}</p></td>
+</tr>
+
+<tr>
+<td><a id='mpd_length'></a><a href='#mpd_length'>mpd_length</a><p class='ar'></p></td>
+<td>Song's length. <p class='ex'>${mpd_length}</p></td>
+</tr>
+
+<tr>
+<td><a id='mpd_name'></a><a href='#mpd_name'>mpd_name</a><p class='ar'></p></td>
+<td>Prints the MPD name field. <p class='ex'>${mpd_name}</p></td>
+</tr>
+
+<tr>
+<td><a id='mpd_percent'></a><a href='#mpd_percent'>mpd_percent</a><p class='ar'></p></td>
+<td>Percent of song's progress. <p class='ex'>${mpd_percent}</p></td>
+</tr>
+
+<tr>
+<td><a id='mpd_random'></a><a href='#mpd_random'>mpd_random</a><p class='ar'></p></td>
+<td>Shows the current random status <q>On</q> or <q>Off</q>. <p class='ex'>${mpd_random}</p></td>
+</tr>
+
+<tr>
+<td><a id='mpd_repeat'></a><a href='#mpd_repeat'>mpd_repeat</a><p class='ar'></p></td>
+<td>Repeat status <q>On</q> or <q>Off</q>. <p class='ex'>${mpd_repeat}</p></td>
+</tr>
+
+<tr>
+<td><a id='mpd_smart'></a><a href='#mpd_smart'>mpd_smart</a><p class='ar'>[max_length]</p></td>
+<td>Shows the song name in either the form <q>artist - title</q> or file name, depending on what is available. <p class='ex'>${mpd_smart 30}</p></td>
+</tr>
+
+<tr>
+<td><a id='mpd_status'></a><a href='#mpd_status'>mpd_status</a><p class='ar'></p></td>
+<td>Playing, stopped, et cetera. <p class='ex'>${mpd_status}</p></td>
+</tr>
+
+<tr>
+<td><a id='mpd_title'></a><a href='#mpd_title'>mpd_title</a><p class='ar'>[max_length]</p></td>
+<td>Title of current MPD song. <p class='ex'>${mpd_title 30}</p></td>
+</tr>
+
+<tr>
+<td><a id='mpd_track'></a><a href='#mpd_track'>mpd_track</a><p class='ar'></p></td>
+<td>Prints the MPD track field. <p class='ex'>${mpd_track}</p></td>
+</tr>
+
+<tr>
+<td><a id='mpd_vol'></a><a href='#mpd_vol'>mpd_vol</a><p class='ar'></p></td>
+<td>MPD's volume. <p class='ex'>${mpd_vol}</p></td>
+</tr>
+
+</tbody>
+<tbody>
+
+<tr>
+<td><a id='nameserver'></a><a href='#nameserver'>nameserver</a><p class='ar'>[index]</p></td>
+<td>Print a DNS nameserver from <q>/etc/resolv.conf</q>. Index starts at and defaults to 0. <p class='ex'>${nameserver 0}</p></td>
+</tr>
+
+<tr>
+<td><a id='new_mails'></a><a href='#new_mails'>new_mails</a><p class='ar'>[mailbox]</p></td>
+<td>Unread mail count in the specified mailbox or mail spool if not. Both mbox and maildir type mailboxes are supported. <p class='ex'></p></td>
+</tr>
+
+<tr>
+<td><a id='nodename'></a><a href='#nodename'>nodename</a><p class='ar'></p></td>
+<td>Hostname of the local system. <p class='ex'>${nodename}</p></td>
+</tr>
+
+<tr>
+<td><a id='nodename_short'></a><a href='#nodename_short'>nodename_short</a><p class='ar'></p></td>
+<td>Short hostname. Same as <q>hostname -s</q> shell command. <p class='ex'>${nodename_short}</p></td>
+</tr>
+
+<tr>
+<td><a id='nvidia'></a><a href='#nvidia'>nvidia</a><p class='ar'>item</td>
+<td>Nvidia graphics card support using the XNVCtrl library. Each <q>item</q> option can be shortened to the least significant part as highlighted below. Temperatures are shown as float, all other values as integer. <ul> <li><b class='red'>th</b><b>reshold</b> - The threshold temperature at which the GPU slows down</li> <li><b class='red'>te</b><b>mp</b> - Gives the GPU current temperature</li> <li><b class='red'>a</b><b>mbient</b> - Gives current air temperature near GPU case</li> <li><b class='red'>g</b><b>pufreq</b> - Gives the current GPU frequency</li> <li><b class='red'>m</b><b>emfreq</b> - Gives the current memory frequency</li> <li><b class='red'>i</b><b>magequality</b> - Which image quality should be chosen by OpenGL applications</li> </ul>
+<p class='ex'>${nvidia threshold}</p></td>
+</tr>
+
+<tr>
+<td><a id='offset'></a><a href='#offset'>offset</a><p class='ar'>[pixels]</p></td>
+<td>Move text over by the given number of pixels to the right. Negative values move to the left. See also  See also ${<a href='#goto'>goto</a>} ${<a href='#voffset'>voffset</a>}. <p class='ex'>${offset 10}</p></td>
+</tr>
+
+<tr>
+<td><a id='outlinecolor'></a><a href='#outlinecolor'>outlinecolor</a><p class='ar'>[color]</p></td>
+<td>Change outline color. Same rules as <a href='#default_outline_color'>default_outline_color</a>. <p class='ex'>${outlinecolor FFAAAA}</p></td>
+</tr>
+
+<tr>
+<td><a id='pb_battery'></a><a href='#pb_battery'>pb_battery</a><p class='ar'>item</td>
+<td>If running on <span class="red">Apple Powerbook/iBook</span> display information on battery status. The item parameter specifies, what information to display. Exactly one item must be specified. Valid items are: <ul> <li><b>status</b> - Display if battery is fully charged, charging, discharging or absent when running on AC</li> <li><b>percent</b> - Display charge of battery in percent, if charging or discharging. Nothing is displayed if battery is fully charged or absent.</li> <li><b>time</b> - Display the time remaining until the battery is fully charged or discharged at current rate. Nothing is displayed if battery is absent or if it is present but fully charged and not discharging.</li></ul> <p class='ex'>${pb_battery status}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>Information by Program Identifier</th></tr>
+
+<tr>
+<td><a id='pid_chroot'></a><a href='#pid_chroot'>pid_chroot</a><p class='ar'>pid</td>
+<td>Directory used as root directory by the process. This will always be <q>/</q> unless the process did a <q>chroot syscall</q>. <p class='ex'>${pid_chroot 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_cmdline'></a><a href='#pid_cmdline'>pid_cmdline</a><p class='ar'>pid</td>
+<td>Command line this process was invoked with. <p class='ex'>${pid_cmdline 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_cwd'></a><a href='#pid_cwd'>pid_cwd</a><p class='ar'>pid</td>
+<td>Current working directory of the process. <p class='ex'>${pid_cwd 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_environ'></a><a href='#pid_environ'>pid_environ</a><p class='ar'>pid varname</td>
+<td>Contents of an environment-var of the process. <p class='ex'>${pid_environ 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_environ_list'></a><a href='#pid_environ_list'>pid_environ_list</a><p class='ar'>pid</td>
+<td>List of environment-vars that the process can see. <p class='ex'>${pid_environ_list 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_exe'></a><a href='#pid_exe'>pid_exe</a><p class='ar'>pid</td>
+<td>Path to executed command that started the process. <p class='ex'>${pid_exe 1679}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_nice'></a><a href='#pid_nice'>pid_nice</a><p class='ar'>pid</td>
+<td>The nice value of the process. <p class='ex'>${pid_nice 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_openfiles'></a><a href='#pid_openfiles'>pid_openfiles</a><p class='ar'>pid</td>
+<td>List of files that the process has open. <p class='ex'>${pid_openfiles 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_parent'></a><a href='#pid_parent'>pid_parent</a><p class='ar'>pid</td>
+<td>The pid of the parent of the process. <p class='ex'>${pid_parent 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_priority'></a><a href='#pid_priority'>pid_priority</a><p class='ar'>pid</td>
+<td>The priority of the process. See <q>priority</q> in <q>man 5 proc</q>. <p class='ex'>${pid_priority 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_read'></a><a href='#pid_read'>pid_read</a><p class='ar'>pid</td>
+<td>Total number of bytes read by the process. <p class='ex'>${pid_read 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_state'></a><a href='#pid_state'>pid_state</a><p class='ar'>pid</td>
+<td>State of the process. Running, Sleeping, Waiting, Zombie, Traced, Stopped, Paging. <p class='ex'>${pid_state 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_state_short'></a><a href='#pid_state_short'>pid_state_short</a><p class='ar'>pid</td>
+<td>One of the chars in <q>RSDZTW</q> representing the state of the process where
+<ul>
+<li>R = running</li>
+<li>S = sleeping in an interruptible wait</li>
+<li>D = waiting in uninterruptible disk sleep</li>
+<li>Z = zombie</li>
+<li>T = traced or stopped (on a signal)</li>
+<li>W = paging</li>
+</ul><p class='ex'>${pid_state_short 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_stderr'></a><a href='#pid_stderr'>pid_stderr</a><p class='ar'>pid</td>
+<td>Filedescriptor binded to the STDERR of the process. <p class='ex'>${pid_stderr 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_stdin'></a><a href='#pid_stdin'>pid_stdin</a><p class='ar'>pid</td>
+<td>Filedescriptor binded to the STDIN of the process. <p class='ex'>${pid_stdin 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_stdout'></a><a href='#pid_stdout'>pid_stdout</a><p class='ar'>pid</td>
+<td>Filedescriptor binded to the STDOUT of the process. <p class='ex'>${pid_stdout 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_threads'></a><a href='#pid_threads'>pid_threads</a><p class='ar'>pid</td>
+<td>Number of threads in process containing this thread. <p class='ex'>${pid_threads 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_thread_list'></a><a href='#pid_thread_list'>pid_thread_list</a><p class='ar'>pid</td>
+<td>List with pid's from threads from this process. <p class='ex'>${pid_thread_list 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_time_kernelmode'></a><a href='#pid_time_kernelmode'>pid_time_kernelmode</a><p class='ar'>pid</td>
+<td>Amount of time that the process has been scheduled in kernel mode in seconds. <p class='ex'>${pid_time_kernelmode 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_time_usermode'></a><a href='#pid_time_usermode'>pid_time_usermode</a><p class='ar'>pid</td>
+<td>Amount of time that the process has been scheduled in user mode in seconds. <p class='ex'>${pid_time_usermode 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_time'></a><a href='#pid_time'>pid_time</a><p class='ar'>pid</td>
+<td>Sum of $pid_time_kernelmode and $pid_time_usermode. <p class='ex'>${pid_time 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_uid'></a><a href='#pid_uid'>pid_uid</a><p class='ar'>pid</td>
+<td>The real uid of the process. <p class='ex'>${pid_uid 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_euid'></a><a href='#pid_euid'>pid_euid</a><p class='ar'>pid</td>
+<td>The effective uid of the process. <p class='ex'>${pid_euid 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_suid'></a><a href='#pid_suid'>pid_suid</a><p class='ar'>pid</td>
+<td>The saved set uid of the process. <p class='ex'>${pid_suid 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_fsuid'></a><a href='#pid_fsuid'>pid_fsuid</a><p class='ar'>pid</td>
+<td>The file system uid of the process. <p class='ex'>${pid_fsuid 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_gid'></a><a href='#pid_gid'>pid_gid</a><p class='ar'>pid</td>
+<td>The real gid of the process. <p class='ex'>${pid_gid 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_egid'></a><a href='#pid_egid'>pid_egid</a><p class='ar'>pid</td>
+<td>The effective gid of the process. <p class='ex'>${pid_egid 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_sgid'></a><a href='#pid_sgid'>pid_sgid</a><p class='ar'>pid</td>
+<td>The saved set gid of the process. <p class='ex'>${pid_sgid 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_fsgid'></a><a href='#pid_fsgid'>pid_fsgid</a><p class='ar'>pid</td>
+<td>The file system gid of the process. <p class='ex'>${pid_fsgid 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_vmpeak'></a><a href='#pid_vmpeak'>pid_vmpeak</a><p class='ar'>pid</td>
+<td>Peak virtual memory size of the process. <p class='ex'>${pid_vmpeak 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_vmsize'></a><a href='#pid_vmsize'>pid_vmsize</a><p class='ar'>pid</td>
+<td>Virtual memory size of the process. <p class='ex'>${pid_vmsize 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_vmlck'></a><a href='#pid_vmlck'>pid_vmlck</a><p class='ar'>pid</td>
+<td>Locked memory size of the process. <p class='ex'>${pid_vmlck 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_vmhwm'></a><a href='#pid_vmhwm'>pid_vmhwm</a><p class='ar'>pid</td>
+<td>Peak resident set size or <q>high water mark</q> of the process. <p class='ex'>${pid_vmhwm 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_vmrss'></a><a href='#pid_vmrss'>pid_vmrss</a><p class='ar'>pid</td>
+<td>Resident set size of the process. <p class='ex'>${pid_vmrss 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_vmdata'></a><a href='#pid_vmdata'>pid_vmdata</a><p class='ar'>pid</td>
+<td>Data segment size of the process. <p class='ex'>${pid_vmdata 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_vmstk'></a><a href='#pid_vmstk'>pid_vmstk</a><p class='ar'>pid</td>
+<td>Stack segment size of the process. <p class='ex'>${pid_vmstk 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_vmexe'></a><a href='#pid_vmexe'>pid_vmexe</a><p class='ar'>pid</td>
+<td>Text segment size of the process. <p class='ex'>${pid_vmexe 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_vmlib'></a><a href='#pid_vmlib'>pid_vmlib</a><p class='ar'>pid</td>
+<td>Shared library code size of the process. <p class='ex'>${pid_vmlib 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_vmpte'></a><a href='#pid_vmpte'>pid_vmpte</a><p class='ar'>pid</td>
+<td>Page table entries size of the process. <p class='ex'>${pid_vmpte 2649}</p></td>
+</tr>
+
+<tr>
+<td><a id='pid_write'></a><a href='#pid_write'>pid_write</a><p class='ar'>pid</td>
+<td>Total number of bytes written by the process. <p class='ex'>${pid_write 2649}</p></td>
+</tr>
+
+</tbody>
+<tbody>
+
+<tr>
+<td><a id='platform'></a><a href='#platform'>platform</a><p class='ar'>[dev] type n [factor offset]</p></td>
+<td>Platform sensor from sysfs on <b class='red'>Linux kernel 2.6 and higher.</b> Parameter dev may be omitted if you have only one platform device. Platform type options: <ul><li><b>in</b> or <b>vol</b> = voltage</li><li><b>fan</b> = fan</li><li><b>temp</b> = temperature</li></ul> Parameter n is number of the sensor. See /sys/bus/platform/devices/ on your local computer. The optional arguments <q>factor</q> and <q>offset</q> allow precalculation of the raw input, which is being modified as follows: <q>input = input * factor + offset</q>. Note that they have to be given as decimal values (i.e. contain at least one decimal place). <p class='ex'></p></td>
+</tr>
+
+<tr>
+<td><a id='pop3_unseen'></a><a href='#pop3_unseen'>pop3_unseen</a><p class='ar'>host username password [-i interval] [-p port] [-e &quot;command&quot;] [-r retries]</p></td>
+<td>Displays the number of unseen messages in your global POP3 inbox by default. You can define individual POP3 inboxes separately by passing arguments to this object. Arguments are:
+<ul>
+<li>host = POP3 server address</li>
+<li>username = POP3 user name</li>
+<li>password = Use an asterisk <q>*</q> to be prompted for password</li>
+<li>-i interval = Poll interval in seconds. Default is 300 (5 minutes)</li>
+<li>-p port = Default is 110</li>
+<li>-e &quot;command&quot; = Optional POP3 command</li>
+<li>-r retries = Default number of retries before giving up is 5</li>
+</ul>
+<p class='ex'></p></td>
+</tr>
+
+<tr>
+<td><a id='pop3_used'></a><a href='#pop3_used'>pop3_used</a><p class='ar'>host username password [-i interval] [-p port] [-e &quot;command&quot;] [-r retries]</p></td>
+<td>If no arguments are given this shows the amount of space (in MiB, 2^20) used in your global POP3 inbox. You can define individual POP3 inboxes separately by providing the server and account information.
+<ul>
+<li><b>host</b> = POP3 server address</li>
+<li><b>username</b> = POP3 user name</li>
+<li><b>password</b> = Use an asterisk <q>*</q> to be prompted for password</li>
+<li><b>-i interval</b> = Poll interval in seconds. Default is 300 (5 minutes)</li>
+<li><b>-p port</b> = Default is 110</li>
+<li><b>-e &quot;command&quot;</b> = Optional POP3 command</li>
+<li><b>-r retries</b> = Default number of retries before giving up is 5</li>
+</ul>
+<p class='ex'></p></td>
+</tr>
+
+<tr>
+<td><a id='pre_exec'></a><a href='#pre_exec'>pre_exec</a><p class='ar'>shell command</td>
+<td>Executes a shell command only one time before Conky displays anything and shows output as text.
+<p class='ex'># get current desktop info only at startup<br>
+${pre_exec env | grep '^DESKTOP_SESSION' | cut -d'=' -f2-}</p>
+<span class='red'>Note: This command may not work as documented in Conky versions after 1.0. Use ${<a href='#execi'>execi</a>} with a long interval (e.g., 86400) to approximate this function.</span></td>
+</tr>
+
+<tr>
+<td><a id='processes'></a><a href='#processes'>processes</a><p class='ar'></p></td>
+<td>Total processes including both <q>sleeping</q> and <q><a href='#running_processes'>running</a></q> states. <p class='ex'>${processes}</p></td>
+</tr>
+
+<tr>
+<td><a id='read_tcp'></a><a href='#read_tcp'>read_tcp</a><p class='ar'>[host] port</td>
+<td>Connects to a tcp port on a host. The default host <q>localhost</q> reads every char available at the moment and shows them. <p class='ex'></p></td>
+</tr>
+
+<tr>
+<td><a id='replied_mails'></a><a href='#replied_mails'>replied_mails</a><p class='ar'>[mail_directory]</p></td>
+<td>Number of mails marked as replied in the specified mailbox or mail spool if not. Only maildir type mailboxes are supported, mbox type will return -1. <p class='ex'></p></td>
+</tr>
+
+<tr>
+<td><a id='rss'></a><a href='#rss'>rss</a><p class='ar'>uri interval_in_minutes action [num_par [spaces_in_front]]</p></td>
+<td>Download and parse RSS feeds.
+<ul>
+<li><b>uri</b> = The address of the RSS feed. Can use any protocol curl supports.</li>
+<li><b>interval_in_minutes</b> = A floating point value of minutes between checking for updates. Must be more than 0. Default is 15.</li>
+<li><b>action</b> = One of the following:
+<ul>
+<li><b>feed_title</b></li>
+<li><b>item_title</b> &lt;parameter number&gt;</li>
+<li><b>item_desc</b> &lt;parameter number&gt;</li>
+<li><b>item_titles</b>  &lt;max number of items to show&gt; = Show up to this many titles.
+<ul><li>Note: Conky remembers the spaces in front of this item and uses that many spaces in front of each item shown if <q>spaces_in_front</q> is not specified.</li></ul></li>
+</ul>
+</li>
+<li><b>spaces_in_front</b> = The number of spaces to put in front of item_titles.</li>
+</ul>
+This object is threaded, and once a thread is created it can't be explicitly destroyed. One thread will run for each URI specified. <p class='ex'>${rss http://user:pass@example.com/news.rss 60 feed_title}<br>${rss http://user:pass@example.com/news.rss 60 item_title 1}<br>${rss http://user:pass@example.com/news.rss 60 item_title 2}</p></td>
+</tr>
+
+<tr>
+<td><a id='running_processes'></a><a href='#running_processes'>running_processes</a><p class='ar'></p></td>
+<td>Running processes (not sleeping) on <b class='red'>Linux kernel 2.6 or higher.</b> <p class='ex'>${running_processes}</p></td>
+</tr>
+
+<tr>
+<td><a id='running_threads'></a><a href='#running_threads'>running_threads</a><p class='ar'></p></td>
+<td>Number of running (runnable) threads. <b class='red'>Linux only.</b> <p class='ex'>${running_threads}</p></td>
+</tr>
+
+<tr>
+<td><a id='scroll'></a><a href='#scroll'>scroll</a><p class='ar'>length [step] text</td>
+<td>Scroll <q>text</q> by <q>step</q> characters showing <q>length</q> number of characters at the same time. The text may also contain Conky variables. <q>Step</q> is optional and defaults to <q>1</q> if not set. If a variable creates output on multiple lines then the lines are placed behind each other separated with a <q>|</q> sign. If you change the textcolor inside ${scroll} it automatically returns to the old value at the end. The end and the start of text is separated by <q>length</q> number of spaces. <p class='ex'>${scroll 30 ${audacious_title}}</p></td>
+</tr>
+
+<tr>
+<td><a id='seen_mails'></a><a href='#seen_mails'>seen_mails</a><p class='ar'>[mail_directory]</p></td>
+<td>Number of mails marked as seen in the specified mailbox or mail spool if not. Only maildir type mailboxes are supported, mbox type will return -1. <p class='ex'></p></td>
+</tr>
+
+<tr>
+<td><a id='shadecolor'></a><a href='#shadecolor'>shadecolor</a><p class='ar'>[color]</p></td>
+<td>Change the shading color. Uses same rules as <a href='#default_shade_color'>default_shade_color</a>. <p class='ex'>${shadecolor 888888}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>Simple Message Application Programming Interface</th></tr>
+
+<tr>
+<td><a id='smapi'></a><a href='#smapi'>smapi</a><p class='ar'>(FILENAME)<br>or<br>bat [index] (FILENAME)</td>
+<td>When using smapi, display contents of the /sys/devices/platform/smapi directory. ARGS are one of the following:
+<ul>
+<li>(FILENAME)</li>
+<li>bat [index] (FILENAME)</li>
+</ul>
+This is a very raw method of accessing the smapi values. When available, better use one of the smapi_* variables instead. <p class='ex'></p></td>
+</tr>
+
+<tr>
+<td><a id='smapi_bat_bar'></a><a href='#smapi_bat_bar'>smapi_bat_bar</a><p class='ar'>[index][,height][,width]</p></td>
+<td>When using smapi, display the remaining capacity of the battery with index INDEX as a bar. <p class='ex'></p></td>
+</tr>
+
+<tr>
+<td><a id='smapi_bat_perc'></a><a href='#smapi_bat_perc'>smapi_bat_perc</a><p class='ar'>[index]</p></td>
+<td>When using smapi, display the remaining capacity in percent of the battery with index INDEX. This is a separate variable because it supports the <q>use_spacer</q> configuration option. <p class='ex'></p></td>
+</tr>
+
+<tr>
+<td><a id='smapi_bat_power'></a><a href='#smapi_bat_power'>smapi_bat_power</a><p class='ar'>index</td>
+<td>When using smapi, display the current power of the battery with index INDEX in watt. This is a separate variable because the original read out value is being converted from mW. The sign of the output reflects charging (positive) or discharging (negative) state. <p class='ex'></p></td>
+</tr>
+
+<tr>
+<td><a id='smapi_bat_temp'></a><a href='#smapi_bat_temp'>smapi_bat_temp</a><p class='ar'>index</td>
+<td>When using smapi, display the current temperature of the battery with index INDEX in degree Celsius. This is a separate variable because the original read out value is being converted from milli degree Celsius. <p class='ex'></p></td>
+</tr>
+
+</tbody>
+<tbody>
+
+<tr>
+<td><a id='sony_fanspeed'></a><a href='#sony_fanspeed'>sony_fanspeed</a><p class='ar'></p></td>
+<td>Displays the Sony VAIO fanspeed information if sony-laptop kernel support is enabled. <b class='red'>Linux only.</b> <p class='ex'>${sony_fanspeed}</p></td>
+</tr>
+
+<tr>
+<td><a id='stippled_hr'></a><a href='#stippled_hr'>stippled_hr</a><p class='ar'>[space]</p></td>
+<td>Stippled or dashed horizontal line. The <q>space</q> number is the number of pixels for the gaps. <p class='ex'>${stippled_hr 5}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>Swap Information</th></tr>
+
+<tr>
+<td><a id='swap'></a><a href='#swap'>swap</a><p class='ar'></p></td>
+<td>Amount of swap in use. <p class='ex'>${swap}</p></td>
+</tr>
+
+<tr>
+<td><a id='swapbar'></a><a href='#swapbar'>swapbar</a><p class='ar'>[height][,width]</p></td>
+<td>Bar that shows amount of swap in use. <p class='ex'>${swapbar 10,60}</p></td>
+</tr>
+
+<tr>
+<td><a id='swapfree'></a><a href='#swapfree'>swapfree</a><p class='ar'></p></td>
+<td>Amount of free swap. <p class='ex'>${swapfree}</p></td>
+</tr>
+
+<tr>
+<td><a id='swapmax'></a><a href='#swapmax'>swapmax</a><p class='ar'></p></td>
+<td>Total amount of swap. <p class='ex'>${swapmax}</p></td>
+</tr>
+
+<tr>
+<td><a id='swapperc'></a><a href='#swapperc'>swapperc</a><p class='ar'></p></td>
+<td>Percentage of swap in use. <p class='ex'>${swapperc}</p></td>
+</tr>
+
+</tbody>
+<tbody>
+
+<tr>
+<td><a id='sysname'></a><a href='#sysname'>sysname</a><p class='ar'></p></td>
+<td>System name, <q>Linux</q> for example. <p class='ex'>${sysname}</p></td>
+</tr>
+
+<tr>
+<td><a id='tab'></a><a href='#tab'>tab</a><p class='ar'>[width[, start]]</p></td>
+<td>Puts a tab of the specified width, optionally starting from column <q>start</q>. The unit is pixels for both arguments. <p class='ex'>${tab 30}<br>${tab 5,30}</p></td>
+</tr>
+
+<tr>
+<td><a id='tail'></a><a href='#tail'>tail</a><p class='ar'>logfile lines [next_check]</p></td>
+<td>Displays last <q>lines</q> number of lines of supplied text file. The file is checked every <q>next_check</q> times Conky updates. If next_check is not supplied, Conky defaults to 2. Max of 30 lines can be displayed or until the <a href='#text_buffer_size'>text_buffer_size</a> is filled. See ${<a href='#head'>head</a>} for top of file.
+<p class='ex'>${tail ~/example.txt 5 3}</p>
+</td>
+</tr>
+
+<tr>
+<td><a id='tcp_portmon'></a><a href='#tcp_portmon'>tcp_portmon</a><p class='ar'>port_begin port_end item &lt;index&gt;</td>
+<td>TCP port for both IPv6 and IPv4 to monitor for specified local port activity. Port numbers must be in the range 1 to 65535.<br><br>The following <q>item</q> names can be used for monitoring. <ul> <li><b>count</b> - Total number of connections in the range. This item does not allow <q>index</q> to be given. The index number is required for all other items.</li> <li><b>rip</b> - Remote IP address</li> <li><b>rhost</b> - Remote host name</li> <li><b>rport</b> - Remote port number</li> <li><b>rservice</b> - Remote service name from /etc/services</li> <li><b>lip</b> - Local IP address</li> <li><b>lhost</b> - Local host name</li> <li><b>lport</b> - Local port number</li> <li><b>lservice</b> - Local service name from /etc/services</li> </ul> <p>The connection index provides you with access to each connection in the port monitor. The monitor returns information for index values from 0 to n-1 connections. Values higher than n-1 are simply ignored.</p> <p>Here are some examples showing how this works.</p> <p class='ex'>${tcp_portmon 6881 6999 count}</p> Displays the number of connections in the bittorrent port range. <p class='ex'>${tcp_portmon 22 22 rip 0}</p> Displays the remote host IP of the first sshd connection. <p class='ex'>${tcp_portmon 22 22 rip 9}</p> Displays the remote host IP of the tenth sshd connection. <p class='ex'>${tcp_portmon 1 1024 rhost 0}</p> Displays the remote host name of the first connection on a privileged port. <p class='ex'>${tcp_portmon 1 1024 rport 4}</p> Displays the remote host port of the fifth connection on a privileged port. <p class='ex'>${tcp_portmon 1 65535 lservice 14}</p> Displays the local service name of the fifteenth connection in the range of all ports. <p>Note that port monitor variables which share the same port range actually refer to the same monitor, so many references to a single port range for different items and different indexes all use the same monitor internally. In other words, the program avoids creating redundant monitors.</p></td>
+</tr>
+
+
+<tr>
+<td><a id='templateN'></a><a href='#templateN'>templateN</a><p class='ar'>[arg1] [arg2] [arg3] ...</td>
+<td>Evaluate the content of the templateN configuration variable where N is a value between 0 and 9 inclusive, applying substitutions as described in the documentation of the corresponding configuration variable.<br><br>The arguments are optional, but if any are given all must be given to match the highest referred index in the template. You can use the same special sequences in each argument as the ones valid for a template definition, e.g. to allow an argument to contain a whitespace the each space must be escaped. Also simple nesting of templates is possible this way. Here are some examples showing template definitions and use. Note the part below the TEXT line shows how each template is expanded.</td>
+</tr>
+<tr><td colspan=3><!-- hack for long example text below -->
+<p class='ex'>template0 ${\1\2}<br>
+template1 \1: ${fs_used \2} of ${fs_size \2}<br>
+template2 \1 \2<br><br>
+TEXT<br>
+# After the equal sign shows what the template expands to.<br>
+${template0 node name}<br>
+# result = ${nodename}<br><br>
+${template1 root /}<br>
+# result = root: ${fs_used /} of ${fs_size /}<br><br>
+You can even pass one template to another template.<br>
+${template1 ${template2\ disk\ root} /}<br>
+# result = disk root: ${fs_used /} of ${fs_size /}</p>
+</td></tr><!-- hack for long example text above -->
+
+
+<tr>
+<td><a id='texeci'></a><a href='#texeci'>texeci</a><p class='ar'>interval command</td>
+<td>Runs a command at an interval inside a thread and displays the output. Same as ${<a href='#execi'>execi</a>} except the command is run inside a thread. Use this if you have a slow script to keep Conky updating. You should make the interval slightly longer then the time it takes your script to execute. For example, if you have a script that takes 5 seconds to execute, you should make the interval at least 6 seconds. See also ${<a href='#execi'>execi</a>}. This object will clean up the thread when it is destroyed, so it can safely be used in a nested fashion, though it may not produce the desired behaviour if used this way. <p class='ex'>${texeci 600 ~/work.sh}</p></td>
+</tr>
+
+<tr>
+<td><a id='threads'></a><a href='#threads'>threads</a><p class='ar'></p></td>
+<td>Total threads. <p class='ex'>${threads}</p></td>
+</tr>
+
+<tr>
+<td><a id='time'></a><a href='#time'>time</a><p class='ar'>[format]</p></td>
+<td>Local time information customized with a format string. See <a href='#p3'>Time Format String Variables</a> below for more information about the format codes. <p class='ex'>${time %T}</p></td>
+</tr>
+
+<tr>
+<td><a id='to_bytes'></a><a href='#to_bytes'>to_bytes</a><p class='ar'>size</td>
+<td>If <q>size</q> is a number followed by a size-unit (kilobyte,mb,GiB,...) it is converted to bytes, otherwise the <q>size</q> parameter is shown unchanged. <p class='ex'>${to_bytes ${mem}}</p></td>
+</tr>
+
+<tr>
+<td><a id='top'></a><a href='#top'>top</a><p class='ar'>type num</td>
+<td>This shows information from the top command where processes are ranked from highest to lowest in terms of cpu usage. The types are:
+<ul>
+<li><b>name</b> - process name</li>
+<li><b>pid</b> - process id</li>
+<li><b>cpu</b> - current cpu usage percentage</li>
+<li><b>mem</b> - current memory usage percentage</li>
+<li><b>mem_res</b> - physical memory usage percentage</li>
+<li><b>mem_vsize</b> - virtual memory size</li>
+<li><b>time</b> - total time of activity</li>
+<li><b>uid</b> - user id of process owner</li>
+<li><b>user</b> - user name of process owner</li>
+<li><b>io_perc</b> - i/o percentage</li>
+<li><b>io_read</b> - i/o input</li>
+<li><b>io_write</b> - i/o output</li>
+</ul>
+The <q>num</q> parameter identifies the process as listed by the top command where 1 is the highest. A maximum of 10 processes (numbered 1 through 10) are supported. <p class='ex'>${top name 1} ${top cpu 1} ${top mem 1}<br>${top name 2} ${top cpu 2} ${top mem 2}</p></td>
+</tr>
+
+<tr>
+<td><a id='top_io'></a><a href='#top_io'>top_io</a><p class='ar'>type num</td>
+<td>Same as ${<a href='#top'>top</a>} except sorted by the amount of I/O the process has done during the update interval. <p class='ex'>${top_io name 1} ${top_io cpu 1} ${top_io io_perc 1}<br>${top_io name 2} ${top_io cpu 2} ${top_io io_perc 2}</p></td>
+</tr>
+
+<tr>
+<td><a id='top_mem'></a><a href='#top_mem'>top_mem</a><p class='ar'>type num</td>
+<td>Same as ${<a href='#top'>top</a>} except sorted by memory usage instead of CPU usage. <p class='ex'>${top_mem name 1} ${top_mem cpu 1} ${top_mem mem 1}<br>${top_mem name 2} ${top_mem cpu 2} ${top_mem mem 2}</p></td>
+</tr>
+
+<tr>
+<td><a id='top_time'></a><a href='#top_time'>top_time</a><p class='ar'>type num</td>
+<td>Same as ${<a href='#top'>top</a>} except sorted by total CPU time instead of current CPU usage. <p class='ex'>${top_time name 1} ${top_time cpu 1} ${top_time time 1}<br>${top_time name 2} ${top_time cpu 2} ${top_time time 2}</p></td>
+</tr>
+
+<tr>
+<td><a id='totaldown'></a><a href='#totaldown'>totaldown</a><p class='ar'>[network_interface]</p></td>
+<td>Total download volume after Conky started. May overflow at 4GiB on Linux with 32-bit architecture. <p class='ex'>${totaldown eth0}</p></td>
+</tr>
+
+<tr>
+<td><a id='totalup'></a><a href='#totalup'>totalup</a><p class='ar'>[network_interface]</p></td>
+<td>Total upload volume after Conky started. May overflow at 4GiB on Linux with 32-bit architecture. <p class='ex'>${totalup eth0}</p></td>
+</tr>
+
+<tr>
+<td><a id='trashed_mails'></a><a href='#trashed_mails'>trashed_mails</a><p class='ar'>[mail_directory]</p></td>
+<td>Number of mails marked as trashed in the specified mailbox or mail spool if not. Only maildir type mailboxes are supported, mbox type will return -1.</td>
+</tr>
+
+<tr>
+<td><a id='tztime'></a><a href='#tztime'>tztime</a><p class='ar'>[timezone [format]]</p></td>
+<td>Local time for specified timezone. The timezone argument is specified in similar fashion as TZ environment variable. For hints, look in /usr/share/zoneinfo. See <a href='#p3'>Time Format String Variables</a> below for more information about the optional format codes.
+<p class='ex'>${tztime America/Los_Angeles} Los Angeles<br>
+${tztime UTC %T} Universal Coordinate Time<br>
+${tztime Europe/Zurich %T} Zurich<br>
+${tztime Hongkong %T} Hong Kong</p></td>
+</tr>
+
+<tr>
+<td><a id='gid_name'></a><a href='#gid_name'>gid_name</a><p class='ar'>gid_number</td>
+<td>Name of group with this gid. <p class='ex'>${gid_name 1000}</p></td>
+</tr>
+
+<tr>
+<td><a id='uid_name'></a><a href='#uid_name'>uid_name</a><p class='ar'>uid_number</td>
+<td>Username of user with this uid. <p class='ex'>${uid_name 1000}</p></td>
+</tr>
+
+<tr>
+<td><a id='unflagged_mails'></a><a href='#unflagged_mails'>unflagged_mails</a><p class='ar'>[mail_directory]</p></td>
+<td>Number of mails not marked as flagged in the specified mailbox or mail spool if not. Only maildir type mailboxes are supported, mbox type will return -1.</td>
+</tr>
+
+<tr>
+<td><a id='unforwarded_mails'></a><a href='#unforwarded_mails'>unforwarded_mails</a><p class='ar'>[mail_directory]</p></td>
+<td>Number of mails not marked as forwarded in the specified mailbox or mail spool if not. Only maildir type mailboxes are supported, mbox type will return -1.</td>
+</tr>
+
+<tr>
+<td><a id='unreplied_mails'></a><a href='#unreplied_mails'>unreplied_mails</a><p class='ar'>[mail_directory]</p></td>
+<td>Number of mails not marked as replied in the specified mailbox or mail spool if not. Only maildir type mailboxes are supported, mbox type will return -1.</td>
+</tr>
+
+<tr>
+<td><a id='unseen_mails'></a><a href='#unseen_mails'>unseen_mails</a><p class='ar'>[mail_directory]</p></td>
+<td>Number of new or unseen mails in the specified mailbox or mail spool if not. Only maildir type mailboxes are supported, mbox type will return -1.</td>
+</tr>
+
+<tr>
+<td><a id='updates'></a><a href='#updates'>updates</a><p class='ar'></p></td>
+<td>Shows the number of times Conky has updated the display since it started. Mainly used for debugging. <p class='ex'>${updates}</p></td>
+</tr>
+
+<tr>
+<td><a id='upspeed'></a><a href='#upspeed'>upspeed</a><p class='ar'>[network_interface]</p></td>
+<td>Upload speed in suitable IEC (International Electrotechnical Commission) units. <p class='ex'>${upspeed eth0}</p></td>
+</tr>
+
+<tr>
+<td><a id='upspeedf'></a><a href='#upspeedf'>upspeedf</a><p class='ar'>[network_interface]</p></td>
+<td>Upload speed in KiB with one decimal place. <p class='ex'>${upspeedf eth0}</p></td>
+</tr>
+
+<tr>
+<td><a id='upspeedgraph'></a><a href='#upspeedgraph'>upspeedgraph</a><p class='ar'>[network_interface] [height][,width] [gradient color 1] [gradient color 2] [scale] [-t] [-l]</p></td>
+<td>Upload speed graph. Colors are defined in RGB hexadecimal. If scale is non-zero, it becomes the scale for the graph. Uses a logarithmic scale (to see small numbers) when you use the -l switch. Takes the switch '-t' to use a temperature gradient, which makes the gradient values change depending on the amplitude of a particular graph value (try it and see). <p class='ex'>${upspeedgraph eth0 20,120 888888 FFFFFF -l}</p></td>
+</tr>
+
+<tr>
+<td><a id='uptime'></a><a href='#uptime'>uptime</a><p class='ar'></p></td>
+<td>Uptime is the time elapsed since boot including seconds. <p class='ex'>${uptime}</p></td>
+</tr>
+
+<tr>
+<td><a id='uptime_short'></a><a href='#uptime_short'>uptime_short</a><p class='ar'></p></td>
+<td>Uptime in a shorter format without seconds. <p class='ex'>${uptime_short}</p></td>
+</tr>
+
+<tr>
+<td><a id='user_names'></a><a href='#user_names'>user_names</a><p class='ar'></p></td>
+<td>Lists the names of the users logged in. <p class='ex'>${user_names}</p></td>
+</tr>
+
+<tr>
+<td><a id='user_number'></a><a href='#user_number'>user_number</a><p class='ar'></p></td>
+<td>Number of users logged in. <p class='ex'>${user_number}</p></td>
+</tr>
+
+<tr>
+<td><a id='user_terms'></a><a href='#user_terms'>user_terms</a><p class='ar'></p></td>
+<td>Lists the consoles in use. <p class='ex'>${user_terms}</p></td>
+</tr>
+
+<tr>
+<td><a id='user_times'></a><a href='#user_times'>user_times</a><p class='ar'></p></td>
+<td>Lists how long users have been logged in for. <p class='ex'>${user_times}</p></td>
+</tr>
+
+<tr>
+<td><a id='user_time'></a><a href='#user_time'>user_time</a><p class='ar'>console</td>
+<td>Lists how long the user for the given console has been logged in for. <p class='ex'>${user_time 2}</p></td>
+</tr>
+
+<tr>
+<td><a id='utime'></a><a href='#utime'>utime</a><p class='ar'>[format]</p></td>
+<td>Display time in UTC (universal coordinate time). See <a href='#p3'>Time Format String Variables</a> below for more information about the optional format codes.
+<p class='ex'>${utime %T}</p></td>
+</tr>
+
+<tr>
+<td><a id='voffset'></a><a href='#voffset'>voffset</a><p class='ar'>[pixels]</p></td>
+<td>Change vertical offset by N pixels. Negative values cause text to overlap. See also ${<a href='#offset'>offset</a>}. <p class='ex'>${voffset -16}</p></td>
+</tr>
+
+<tr>
+<td><a id='voltage_mv'></a><a href='#voltage_mv'>voltage_mv</a><p class='ar'>[cpu_number]</p></td>
+<td>Returns CPU #n's voltage in mV. CPUs are counted from 1. If omitted, the parameter defaults to 1. <p class='ex'>${voltage_mv 1}</p></td>
+</tr>
+
+<tr>
+<td><a id='voltage_v'></a><a href='#voltage_v'>voltage_v</a><p class='ar'>[cpu_number]</p></td>
+<td>Returns CPU #n's voltage in V. CPUs are counted from 1. If omitted, the parameter defaults to 1. <p class='ex'>${voltage_v 1}</p></td>
+</tr>
+
+<tr>
+<td><a id='weather'></a><a href='#weather'>weather</a><p class='ar'>URI locID data_type [interval_in_minutes]</p></td>
+<td>Download, parse and display METAR data. For the URI. There are two possibilities: <ul> <li>http://weather.noaa.gov/pub/data/observations/metar/stations/</li> <li>http://xoap.weather.com/weather/local/</li> </ul> <p>The first one is free to use but the second requires you to register and obtain your partner ID and license key. These two must be written, separated by a space, into a file called .xoaprc which needs to be placed into your home directory.</p> <p>'locID' must be a valid location identifier for the required uri. For the NOAA site this must be a valid ICAO (see for instance https://pilotweb.nas.faa.gov/qryhtml/icao/). For the weather.com site this must be a valid location ID (see for instance http://aspnetresources.com/tools/locid.aspx).</p> <p>'data_type' must be one of the following:</p> <ul> <li><b>last_update</b> - The date and time stamp of the data. The result depends on the URI used. For the NOAA site it is date <q>yyyy/mm/dd</q> and UTC time. For the weather.com one it is date ([m]m/[d]d/yy) and Local Time of the station.</li> <li><b>temperature</b> - Air temperature. You can use the <q>temperature_unit</q> config setting to change units.</li> <li><b>cloud_cover</b> - The highest cloud cover status</li> <li><b>pressure</b> - Air pressure in millibar</li> <li><b>wind_speed</b> - Wind speed in km/h</li> <li><b>wind_dir</b> - Wind direction</li> <li><b>wind_dir_DEG</b> - Compass wind direction</li> <li><b>humidity</b> - Relative humidity in %</li> <li><b>weather</b> - Any relevant weather event (rain, snow, etc.). This is not used if you are querying the weather.com site since this data is aggregated into the cloud_cover one</li> <li><b>icon</b> - Weather icon only works for www.weather.com. Can be used together with the icon kit provided upon registering to their service.</li> </ul> <p>'delay_in_minutes' (optional, default 30) cannot be less than 30 minutes.</p> <p>This object is threaded, and once a thread is created it can't be explicitly destroyed. One thread will run for each URI specified.</p> <p class="red">Note these variables are still EXPERIMENTAL and can be subject to many future changes.</p> </td>
+</tr>
+
+<tr>
+<td><a id='weather_forecast'></a><a href='#weather_forecast'>weather_forecast</a><p class='ar'>URI locID day data_type [interval_in_minutes]</p></td>
+<td>Download, parse and display weather forecast data for a given day. Daytime only. <p>For the URI, for the time being only <q>http://xoap.weather.com/weather/local/</q> is supported. See <a href='#weather'>weather</a> above for details of usage</p> <p>locID, see <q>weather</q> above.</p> <p>day is a number from 0 (today) to 4 (3 days after tomorrow).</p> data_type must be one of the following:<ul> <li><b>day</b> - Day of the week</li> <li><b>date</b> - Date, in the form <q>Mon DD</q> (ie. Jul 14)</li> <li><b>low</b> - Minimun temperature. Use the <q>temperature_unit</q> config setting to change units</li> <li><b>hi</b> - Maximum temperature. Use the <q>temperature_unit</q> config setting to change units</li> <li><b>icon</b> - Weather icon. Can be used together with the icon kit provided upon registering to the weather.com service</li> <li><b>forecast</b> - Weather forecast (sunny, rainy, etc.)</li> <li><b>wind_speed</b> - Wind speed in km/h</li> <li><b>wind_dir</b> - Wind direction</li> <li><b>wind_dir_DEG</b> - Compass wind direction</li> <li><b>humidity</b> - Relative humidity percentage</li> <li><b>precipitation</b> - Probability of having a precipitation as percentage</li> </ul> <p>'delay_in_minutes' (optional, default 210) cannot be lower than 210 min.</p> <p>This object is threaded, and once a thread is created it can't be explicitly destroyed. One thread will run for each URI specified. You can use any protocol that Curl supports.</p> <p class="red">Note these variables are still EXPERIMENTAL and can be subject to many future changes.</p> </td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>Wireless Information</th></tr>
+
+<tr>
+<td><a id='wireless_ap'></a><a href='#wireless_ap'>wireless_ap</a><p class='ar'>[network_interface]</p></td>
+<td>Wireless access point MAC address. <b class='red'>Linux only.</b> <p class='ex'>${wireless_ap wlan0}</p></td>
+</tr>
+
+<tr>
+<td><a id='wireless_bitrate'></a><a href='#wireless_bitrate'>wireless_bitrate</a><p class='ar'>[network_interface]</p></td>
+<td>Wireless bitrate (ie 11 Mb/s). <b class='red'>Linux only.</b> <p class='ex'>${wireless_bitrate wlan0}</p></td>
+</tr>
+
+<tr>
+<td><a id='wireless_essid'></a><a href='#wireless_essid'>wireless_essid</a><p class='ar'>[network_interface]</p></td>
+<td>Wireless access point ESSID. <b class='red'>Linux only.</b> <p class='ex'>${wireless_essid wlan0}</p></td>
+</tr>
+
+<tr>
+<td><a id='wireless_link_bar'></a><a href='#wireless_link_bar'>wireless_link_bar</a><p class='ar'>[height][,width] [network_interface]</p></td>
+<td>Wireless link quality bar. <b class='red'>Linux only.</b> <p class='ex'>${wireless_link_bar 10,60 wlan0}</p></td>
+</tr>
+
+<tr>
+<td><a id='wireless_link_qual'></a><a href='#wireless_link_qual'>wireless_link_qual</a><p class='ar'>[network_interface]</p></td>
+<td>Wireless link quality. <b class='red'>Linux only.</b> <p class='ex'>${wireless_link_qual wlan0}</p></td>
+</tr>
+
+<tr>
+<td><a id='wireless_link_qual_max'></a><a href='#wireless_link_qual_max'>wireless_link_qual_max</a><p class='ar'>[network_interface]</p></td>
+<td>Wireless link quality maximum value. <b class='red'>Linux only.</b> <p class='ex'>${wireless_link_qual_max wlan0}</p></td>
+</tr>
+
+<tr>
+<td><a id='wireless_link_qual_perc'></a><a href='#wireless_link_qual_perc'>wireless_link_qual_perc</a><p class='ar'>[network_interface]</p></td>
+<td>Wireless link quality in percents. <b class='red'>Linux only.</b> <p class='ex'>${wireless_link_qual_perc wlan0}</p></td>
+</tr>
+
+<tr>
+<td><a id='wireless_mode'></a><a href='#wireless_mode'>wireless_mode</a><p class='ar'>[network_interface]</p></td>
+<td>Wireless mode. <q>Managed</q>, <q>Ad-Hoc</q>, <q>Master</q>. <b class='red'>Linux only.</b> <p class='ex'>${wireless_mode wlan0}</p></td>
+</tr>
+
+</tbody>
+<tbody>
+
+<tr>
+<td><a id='words'></a><a href='#words'>words</a><p class='ar'>textfile</td>
+<td>Displays the number of words in the given file. See <a href='#lines'>lines</a>. <p class='ex'>${words ~/example.txt}</p></td>
+</tr>
+
+</tbody>
+<tbody class='g'>
+
+<tr><th colspan='2'>X Multimedia System (XMMS) Audio Player</th></tr>
+
+<tr>
+<td><a id='xmms2_album'></a><a href='#xmms2_album'>xmms2_album</a><p class='ar'></p></td>
+<td>Album in current XMMS2 song. <p class='ex'>${xmms2_album}</p></td>
+</tr>
+
+<tr>
+<td><a id='xmms2_artist'></a><a href='#xmms2_artist'>xmms2_artist</a><p class='ar'></p></td>
+<td>Artist in current XMMS2 song. <p class='ex'>${xmms2_artist}</p></td>
+</tr>
+
+<tr>
+<td><a id='xmms2_bar'></a><a href='#xmms2_bar'>xmms2_bar</a><p class='ar'>[height][,width]</p></td>
+<td>Bar of XMMS2's progress. <p class='ex'>${xmms2_bar 10,20}</p></td>
+</tr>
+
+<tr>
+<td><a id='xmms2_bitrate'></a><a href='#xmms2_bitrate'>xmms2_bitrate</a><p class='ar'></p></td>
+<td>Bitrate of current song. <p class='ex'>${xmms2_bitrate}</p></td>
+</tr>
+
+<tr>
+<td><a id='xmms2_comment'></a><a href='#xmms2_comment'>xmms2_comment</a><p class='ar'></p></td>
+<td>Comment in current XMMS2 song. <p class='ex'>${xmms2_comment}</p></td>
+</tr>
+
+<tr>
+<td><a id='xmms2_date'></a><a href='#xmms2_date'>xmms2_date</a><p class='ar'></p></td>
+<td>Returns song's date. <p class='ex'>${xmms2_date}</p></td>
+</tr>
+
+<tr>
+<td><a id='xmms2_duration'></a><a href='#xmms2_duration'>xmms2_duration</a><p class='ar'></p></td>
+<td>Duration of current song. <p class='ex'>${xmms2_duration}</p></td>
+</tr>
+
+<tr>
+<td><a id='xmms2_elapsed'></a><a href='#xmms2_elapsed'>xmms2_elapsed</a><p class='ar'></p></td>
+<td>Song's elapsed time. <p class='ex'>${xmms2_elapsed}</p></td>
+</tr>
+
+<tr>
+<td><a id='xmms2_genre'></a><a href='#xmms2_genre'>xmms2_genre</a><p class='ar'></p></td>
+<td>Genre in current XMMS2 song. <p class='ex'>${xmms2_genre}</p></td>
+</tr>
+
+<tr>
+<td><a id='xmms2_id'></a><a href='#xmms2_id'>xmms2_id</a><p class='ar'></p></td>
+<td>XMMS2 id of current song. <p class='ex'>${xmms2_id}</p></td>
+</tr>
+
+<tr>
+<td><a id='xmms2_percent'></a><a href='#xmms2_percent'>xmms2_percent</a><p class='ar'></p></td>
+<td>Percent of song's progress. <p class='ex'>${xmms2_percent}</p></td>
+</tr>
+
+<tr>
+<td><a id='xmms2_playlist'></a><a href='#xmms2_playlist'>xmms2_playlist</a><p class='ar'></p></td>
+<td>Returns the XMMS2 playlist. <p class='ex'>${xmms2_playlist}</p></td>
+</tr>
+
+<tr>
+<td><a id='xmms2_size'></a><a href='#xmms2_size'>xmms2_size</a><p class='ar'></p></td>
+<td>Size of current song. <p class='ex'>${xmms2_size}</p></td>
+</tr>
+
+<tr>
+<td><a id='xmms2_smart'></a><a href='#xmms2_smart'>xmms2_smart</a><p class='ar'></p></td>
+<td>Prints the song name in either the form <q>artist - title</q> or file name, depending on whats available. <p class='ex'>${xmms2_smart}</p></td>
+</tr>
+
+<tr>
+<td><a id='xmms2_status'></a><a href='#xmms2_status'>xmms2_status</a><p class='ar'></p></td>
+<td>XMMS2 status. <q>Playing</q>, <q>Paused</q>, <q>Stopped</q>, or <q>Disconnected</q>. <p class='ex'>${xmms2_status}</p></td>
+</tr>
+
+<tr>
+<td><a id='xmms2_timesplayed'></a><a href='#xmms2_timesplayed'>xmms2_timesplayed</a><p class='ar'></p></td>
+<td>Number of times a song was played (presumably). <p class='ex'>${xmms2_timesplayed}</p></td>
+</tr>
+
+<tr>
+<td><a id='xmms2_title'></a><a href='#xmms2_title'>xmms2_title</a><p class='ar'></p></td>
+<td>Title in current XMMS2 song. <p class='ex'>${xmms2_title}</p></td>
+</tr>
+
+<tr>
+<td><a id='xmms2_tracknr'></a><a href='#xmms2_tracknr'>xmms2_tracknr</a><p class='ar'></p></td>
+<td>Track number in current XMMS2 song. <p class='ex'>${xmms2_tracknr}</p></td>
+</tr>
+
+<tr>
+<td><a id='xmms2_url'></a><a href='#xmms2_url'>xmms2_url</a><p class='ar'></p></td>
+<td>Full path to current song. <p class='ex'>${xmms2_url}</p></td>
+</tr>
+
+</tbody>
+</table>
+
+<a id='p3'></a><h2>Time Format String Variables</h2>
+<p>The time format string may contain special character sequences called <i>conversion specifications</i>, each of which is introduced by a percent <q>%</q> character and terminated by some other character known as a <i>conversion specifier character</i>. All other character sequences are <i>ordinary character sequences</i>.</p>
+<p>The characters of conversion specifications are <b class='red'>CASE SENSITIVE</b> and are replaced using the following variables. Everything in the format string that does not match one of these variables is shown as-is.</p>
+
+<table class='t3'>
+<tbody>
+<tr><th class='top'>Variable</th><th class='top'>Description</th></tr>
+<tr><td>%a</td><td>The abbreviated weekday name according to the current locale. <p class='ex'>Mon, Tue, Wed, Thu, Fri, Sat, Sun</p></td></tr>
+<tr><td>%A</td><td>The full weekday name according to the current locale. <p class='ex'>Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday</p></td></tr>
+<tr><td>%b</td><td>The abbreviated month name according to the current locale. <p class='ex'>Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec</p></td></tr>
+<tr><td>%B</td><td>The full month name according to the current locale. <p class='ex'>January, February, March, April, May, June, July, August, September, October, November, December</p></td></tr>
+<tr><td>%c</td><td>The preferred date and time representation for the current locale.</td></tr>
+<tr><td>%C</td><td>The century number as a 2-digit integer. [<a href='#su'>SU Note</a>]<br>Year/100.</td></tr>
+<tr><td>%d</td><td>The day of the month as a decimal number.<br>Range 01 to 31.</td></tr>
+<tr><td>%D</td><td>Equivalent to <b>%m/%d/%y</b>. For North Americans only. To avoid confusion in international context do not use this format. [<a href='#su'>SU Note</a>]</td></tr>
+<tr><td>%e</td><td>Like <b>%d</b> the day of the month as a decimal number but a leading zero is replaced by a space. [<a href='#su'>SU Note</a>]</td></tr>
+<tr><td><span class='red'>%E</span></td><td><b class='red'>Modifier:</b> use alternative format, see below. [<a href='#su'>SU Note</a>]</td></tr>
+<tr><td>%F</td><td>Equivalent to <b>%Y-%m-%d</b> also known as the ISO 8601 date format.</td></tr>
+<tr><td>%G</td><td>The ISO 8601 week-based year [see <a href='weeks'>Week Notes</a>] with century as a decimal number. The 4-digit year corresponding to the ISO week number. See <b>%V</b>. This has the same format and value as <b>%Y</b>, except that if the ISO week number belongs to the previous or next year, that year is used instead. [<a href='#tz'>TZ Note</a>]</td></tr>
+<tr><td>%g</td><td>Like <b>%G</b>, but without century, that is, with a 2-digit year. [<a href='#tz'>TZ Note</a>]<br>Range 00-99.</td></tr>
+<tr><td>%h</td><td>Equivalent to <b>%b</b>. [<a href='#su'>SU Note</a>]</td></tr>
+<tr><td>%H</td><td>The hour as a decimal number using a 24-hour clock.<br>Range 00 to 23.</td></tr>
+<tr><td>%I</td><td>The hour as a decimal number using a 12-hour clock.<br>Range 01 to 12.</td></tr>
+<tr><td>%j</td><td>The day of the year as a decimal number.<br>Range 001 to 366.</td></tr>
+<tr><td>%k</td><td>The hour, 24-hour clock, as a decimal number. Single digits are preceded by a blank. See also <b>%H</b>. [<a href='#tz'>TZ Note</a>]<br>Range 0 to 23.</td></tr>
+<tr><td>%l</td><td>The hour, 12-hour clock, as a decimal number. Single digits are preceded by a blank. See also <b>%I</b>. [<a href='#tz'>TZ Note</a>]<br>Range 1 to 12.</td></tr>
+<tr><td>%m</td><td>The month as a decimal number<br>Range 01 to 12</td></tr>
+<tr><td>%M</td><td>The minute as a decimal number<br>Range 00 to 59.</td></tr>
+<tr><td>%n</td><td>A newline character. [<a href='#su'>SU Note</a>]</td></tr>
+<tr><td><span class='red'>%O</span></td><td><b class='red'>Modifier:</b> use alternative format, see below. [<a href='#su'>SU Note</a>]</td></tr>
+<tr><td>%p</td><td>Either <q>AM</q> (Ante Meridiem) or <q>PM</q> (Post Meridiem) according to the given time value, or the corresponding strings for the current locale. 12:00 noon is <q>PM</q> and 12:00 midnight is <q>AM</q>.</td></tr>
+<tr><td>%P</td><td>Like <b>%p</b> but in lowercase: <q>am</q> or <q>pm</q> or a corresponding string for the current locale.</td></tr>
+<tr><td>%r</td><td>The time in <q>AM</q> or <q>PM</q> notation. In the POSIX locale this is equivalent to <b>%I:%M:%S %p</b>. [<a href='#su'>SU Note</a>]</td></tr>
+<tr><td>%R</td><td>The time in 24-hour notation, same as <b>%H:%M</b>. [<a href='#su'>SU Note</a>] For a version including the seconds see <q>%T</q> below.</td></tr>
+<tr><td>%s</td><td>The number of seconds since the Epoch, 1970-01-01 00:00:00 +0000 (UTC). [<a href='#tz'>TZ Note</a>]</td></tr>
+<tr><td>%S</td><td>The second as a decimal number with max value of 61. The 62 second range allows for the theoretical possibility of a minute that included a double leap second. There never has been such a minute.<br>Range 00 to 61.</td></tr>
+<tr><td>%t</td><td>The tab character. [<a href='#su'>SU Note</a>]</td></tr>
+<tr><td>%T</td><td>The time in 24-hour notation, <b>%H:%M:%S</b>. [<a href='#su'>SU Note</a>]</td></tr>
+<tr><td>%u</td><td>The day of the week as a decimal, range 1 to 7, Monday being 1. See also <b>%w</b>. [<a href='#su'>SU Note</a>]</td></tr>
+<tr><td>%U</td><td>The week number of the current year as a decimal number, range 00 to 53, starting with the first Sunday as the first day of week 01. See also <b>%V</b> and <b>%W</b>.</td></tr>
+<tr><td>%V</td><td>The ISO 8601 week number [see <a href='weeks'>Week Notes</a>] of the current year as a decimal number. See also <b>%U</b> and <b>%W</b>. [<a href='#su'>SU Note</a>]<br>Range 01 to 53.</td></tr>
+<tr><td>%w</td><td>The day of the week as a decimal, range 0 to 6, Sunday being 0. See also <b>%u</b>.</td></tr>
+<tr><td>%W</td><td>The week number of the current year as a decimal number, range 00 to 53, starting with the first Monday as the first day of week 01.</td></tr>
+<tr><td>%x</td><td>The preferred date representation for the current locale without the time.</td></tr>
+<tr><td>%X</td><td>The preferred time representation for the current locale without the date.</td></tr>
+<tr><td>%y</td><td>The year as a two digit decimal number without a century.<br>Range 00 to 99.</td></tr>
+<tr><td>%Y</td><td>The year as a four digit decimal number including the century.<br>Range 0000 to 9999.</td></tr>
+<tr><td>%z</td><td>The <i>+hhmm</i> or <i>-hhmm</i> numeric timezone showing the hour and minute offset from UTC. [<a href='#su'>SU Note</a>]</td></tr>
+<tr><td>%Z</td><td>The timezone or name or abbreviation.</td></tr>
+<tr><td>%+</td><td>The date and time in date(1) format. [<a href='#tz'>TZ Note</a>]
+<ul>
+<li><q>%a, %d %b %Y %T %z</q> - <b>RFC 2822-compliant date format</b> (with an English locale for %a and %b)</li>
+<li><q>%a, %d %b %y %T %z</q> - <b>RFC 822-compliant date format</b> (with an English locale for %a and %b)</li>
+</ul></td></tr>
+<tr><td>%%</td><td>The literal percent <q>%</q> character.</td></tr>
+</tbody>
+</table>
+
+<div class='t4'>
+
+<a id='p4'></a><h2>Installing and Starting Conky</h2>
+
+<p>This is not intended to be an exhaustive guide to getting Conky to run on every Linux distribution. Instead this is a quick guide how I got Conky running on most Ubuntu distributions. If you run into trouble help is often as close as the user support message board for your Linux distribution.</p>
+
+<p>On most distributions you can install <q>Conky</q> with the Ubuntu Software Center, with the Synaptic Package Manager, or using this terminal command.</p>
+
+<p class='ex'>sudo apt-get install conky-all</p>
+
+<p>The next step is to put a script in place to get Conky started when you log in. This uses two parts.</p>
+
+<p>The first is a Conky configuration file telling Conky what to show. If this file is missing the default <q><code>$HOME/.config/conky/conky.conf</code></q> (in your home directory) or <q><code>${sysconfdir}/conky/conky.conf</code></q> (on most systems, sysconfdir is /etc) is used to let you know Conky is installed and working.</p>
+
+<p>The second is a script to call Conky and tell it where to find your custom configuration file. The following shows two examples how to start Conky with a single configuration file and how to start Conky with more than one file. The second example shows how you can expanded this to call any number of Conky configuration files you want.</p>
+
+<p>The following bash script can be used to start Conky with a single configuration <q>/.config/conky/conky.conf</q> in your home directory.</p>
+
+<p>Open a text editor, paste the following text, and save it with the name <q><code>conky_start.sh</code></q>. </p>
+<p class='ex'>
+#!/bin/bash<br>
+# this is a copy of the conky_start.sh file located in /bin<br>
+conky <a href='#cl-c'>-c</a> $HOME/.config/conky/conky.conf</p>
+
+<p>After the <q>conky_start.sh</q> file is created the executable bit must be set to allow it to run.</p>
+
+<p class='ex'>sudo chmod +x /bin/conky_start.sh</p>
+
+<p>Next move the file to the <q>/bin</q> folder.</p>
+
+<p class='ex'>sudo mv conky_start.sh /bin</p>
+
+<p>If you want to have more than one Conky configuration file you can start multiple copies of Conky each with a different configuration file by adding a space followed by an ampersand to the end of all but the last Conky line.</p>
+<p class='ex'>
+#!/bin/bash<br>
+# this is a copy of the conky_start.sh file located in /bin<br>
+conky <a href='#cl-c'>-c</a> $HOME/.config/conky/conky.conf &amp;<br>
+conky <a href='#cl-c'>-c</a> $HOME/.config/conky/conky2.conf<br></p>
+
+
+<p>The last step is to tell Conky to automatically start when you log in. This can be done in <q><b>Settings -&gt; Session and Startup -&gt; Application Autostart</b></q> by adding a new item. The Name and Description can be whatever you want but the Command needs something extra.</p>
+
+<h3>Avoid starting too soon.</h3>
+<p>The desktop can have a lot of different things happening at login and some of these overwrite your Conky display making it look like Conky is not working when in fact it is hidden behind something else like the wallpaper. A good way around this is to delay calling Conky for a short while to give everything else a chance to run first. The following command waits 30 seconds (note the <q>30s</q> part in the middle) before calling conky_start.sh. This works well for me but you may need to add a little extra time on slower computers or if the desktop is extra busy at login.</p>
+
+<p class='ex'>sh -c &quot;sleep 30s; conky_start.sh&quot;</p>
+
+<p>This is all you need for the most simplistic information display. Most people want something more specific to their configuration and formatted to be more pleasing which is where customization comes into the picture. Using the information on this page you can create something that is unique and completely customized to your exact hardware and software setup but that is a big step to take starting from scratch. Instead it helps to start with a Conky config that someone else created and use it as your starting place for tinkering and tweaking.</p>
+
+<h3>Conky Themes</h3>
+
+<p>Many Conky themes are available that can be downloaded and used often without any modification. Most Conky themes are designed for Linux desktop environments but some BSD themes are available that use slightly different commands and may not work the same on Linux desktops. Start your search at places like <a href="http://gnome-look.org">gnome-look.org</a> and <a href="http://deviantart.com">deviantart.com</a>. Some themes may use Lua scripts and other external support programs. If this is the case you may need to edit the theme a little bit or just put the files where the theme wanted them originally. I put all the Conky theme and configuration files inside the <q>/.config/conky/</q> directory below my home directory to keep everything organized and out of the way.</p>
+
+<p>If you just want to install a simple Conky config file without special graphics or anything then you can just copy the default file to <q>~/.config/conky/conky.conf</q>. Some Conky tutorials suggest to put the <q>conky.conf</q> in your home folder. This works but it is often best to keep Conky related things organized together for easier editing and out of the way the rest of the time. To manually start Conky using your new theme, run the following command from a terminal.</p>
+
+<p class='ex'>conky <a href='#cl-c'>-c</a> ~/.config/conky/conky.conf</p>
+
+<p>It is a good idea at this point to log out and log back in to test if Conky starts correctly.</p>
+
+</div>
+
+<div class='t5'>
+<a id='notes'></a><h2>Notes:</h2>
+
+<a id='su'></a><h3>Single UNIX Specification</h3>
+<p>Some conversion specifications can be modified by preceding the conversion specifier character by the <b>E</b> or <b>O</b> (zero) <i>modifier</i> to indicate an alternative format should be used. If the alternative format or specification does not exist for the current locale, the behavior is as if the unmodified conversion specification were used. The Single UNIX (SU) specification mentions <b>%Ec</b>, <b>%EC</b>, <b>%Ex</b>, <b>%EX</b>, <b>%Ey</b>, <b>%EY</b>, <b>%Od</b>, <b>%Oe</b>, <b>%OH</b>, <b>%OI</b>, <b>%Om</b>, <b>%OM</b>, <b>%OS</b>, <b>%Ou</b>, <b>%OU</b>, <b>%OV</b>, <b>%Ow</b>, <b>%OW</b>, <b>%Oy</b>, where the effect of the <q>O</q> modifier is to use alternative numeric symbols (say, roman numerals), and that of the <q>E</q> modifier is to use a locale-dependent alternative representation.</p>
+
+<a id='weeks'></a><h3>ISO 8601 week dates</h3>
+<p><b>%G</b>, <b>%g</b>, and <b>%V</b> yield values calculated from the week-based year defined by the ISO 8601 standard. In this system, weeks start on a Monday, and are numbered from 01, for the first week, up to 52 or 53, for the last week. Week 01 is the first week where</p> <ul><li>Four or more days fall within the new year or</li><li>The first week of the year that contains a Thursday or</li><li>The week that has 4 January in it</li></ul> <p>When three or fewer days of the first calendar week of the new year fall within that year, then the ISO 8601 week-based system counts those days as part of week 53 of the preceding year. For example, 1 January 2010 was a Friday, meaning that just three days of that calendar week fall in 2010. Thus, the ISO 8601 week-based system considers these days to be part of week 53 (<b>%V</b>) of the year 2009 (<b>%G</b>) ; week 01 of ISO 8601 year 2010 started on Monday, 4 January 2010.</p>
+
+<a id='tz'></a><h3>Time Zone</h3>
+<p>All time values are based on the time zone of the local machine unless otherwise noted. The local time zone can change if Daylight Saving Time or Summer Time changes are observed on the local machine. Times that specifically reference UTC are not effected by the local time zone.</p>
+</div>
+
+
+<div class='t6'>
+<a id='tips'></a><h2>Conky Tips and Tricks</h2>
+
+<p>Conky already has many ways to directly access and display system information internally but sometimes you need something more. Here are some examples of how to use common external tools to bridge the information gap until Conky catches up.</p>
+
+<h3>Show name of current Ubuntu desktop variant.</h3>
+<p>Ubuntu versions with multiple words only show the last word. For example <q>Ubuntu MATE</q> and <q>Ubuntu GNOME</q> only show <q>MATE</q> or <q>GNOME</q> receptively.</p>
+<p class='ex2'># Shows Kubuntu, Lubuntu, Ubuntu, Xubuntu, etc.<br>
+${execi 60000 env | grep '^DESKTOP_SESSION' | cut -d'=' -f2-}</p>
+
+<h3>Dynamically show all mounted storage devices.</h3>
+<p>A very useful tool for hot-connect things like USB storage. This uses a template to both make the execpi call easier to understand and to make each device display more consistent with single point editing for changes as needed. The template must appear before the TEXT line in your configuration file.</p>
+<p class='ex2'># Format the storage information the same way for every device. Parameters: [human name] [path]<br>
+template3 \1 [${fs_size \2} ${fs_type \2}]${alignr}${fs_used \2} used ${fs_bar 10,60 \2}\n${alignr}${voffset -15}${fs_used_perc \2}%\nMount=${color2}\2<br>
+<br>TEXT<br>
+# show info about connected drives<br>
+${execpi 60 df -h --output=source,target | grep '^/dev/' | cut --characters=6- | sed 's/^/\$\{template3 /;s/$/\}/'}</p>
+
+<h3>Dynamically show attached USB devices.</h3>
+<p>Display the currently connected USB devices (not hubs) and the name each device reports to the system. This is very handy to see if a newly attached USB device claims to be something unexpected such as a thumbdrive showing up as a mouse, keyboard, or network interface. Updated once every 5 seconds for lower CPU load.</p>
+<p class='ex2'># Show number of USB connected items that are not hubs<br>
+USB Devices Attached ${execpi 5 lsusb | grep -iv 'hub' | cut --fields=7- --delimiter=' ' | wc -l}<br>
+# Get the name of each item<br>
+${execpi 5 lsusb | grep -iv 'hub' | cut --fields=7- --delimiter=' '}</p>
+
+<h3>Dynamically show all available Ethernet network interfaces.</h3>
+<p>This uses a template to make the execpi call easier to understand and to make each interface display more consistent with single point editing for changes as needed. The template must appear before the TEXT line in your configuration file. Works well for USB connected Ethernet network interfaces that are not connected all the time.</p>
+<p>Works for both <q>et*</q> and <q>en*</q> interface names.</p>
+<p class='ex2'># Ethernet interface info<br>
+template7 ${if_up \1}Ethernet (\1) ${alignr}IP ${addr \1}\nUp [${totalup}]${alignr}${upspeedgraph \1 10,120 884400 995500 -l}\n${voffset -15}${alignr}${upspeed \1}  \nDn [${totaldown}]${alignr}${downspeedgraph \1 10,120 884400 995500 -l}\n${voffset -15}${alignr}${downspeed \1}  ${else}Ethernet (\1)${alignr}not connected${endif}<br>
+<br>TEXT<br>
+# Show available Ethernet interface(s)<br>
+${execpi 60 cat /proc/net/dev | grep 'et' | cut --fields=-1 --delimiter=':' | sed 's/^/\$\{template7 /;s/$/\}/'}<br>
+${execpi 60 cat /proc/net/dev | grep 'en' | cut --fields=-1 --delimiter=':' | sed 's/^/\$\{template7 /;s/$/\}/'}<br>
+# The following line is the same as the above two if both are needed on your system.<br>
+#${execpi 60 cat /proc/net/dev | grep -e 'eth' -e 'enp' | cut --fields=-1 --delimiter=':' | sed 's/^/\$\{template7 /;s/$/\}/'}
+</p>
+
+<h3>Dynamically show all available wireless network interfaces.</h3>
+<p>This uses a template to make the execpi call easier to understand and to make each interface display more consistent with single point editing for changes as needed. The template must appear before the TEXT line in your configuration file. Works well for USB connected wireless network interfaces that are not connected all the time.</p>
+<p class='ex2'># Wifi interface info<br>
+template8 ${if_up \1}IP ${addr \1} ${alignr}Gateway ${gw_iface}\nEssid ${wireless_essid \1}\nSignal ${wireless_link_qual \1}: ${wireless_link_qual_perc \1}% ${alignr}${wireless_mode \1} Rate ${wireless_bitrate \1}\nUp [${totalup \1}] ${alignr}${upspeedgraph \1 10,120 884400 995500 -l}\n${voffset -15}${alignr}${upspeed \1}  \nDn [${totaldown \1}]${alignr}${downspeedgraph \1 10,120 884400 995500 -l}\n${voffset -15}${alignr}${downspeed \1}  ${else}WiFi (\1)${alignr}not connected${endif}<br>
+<br>
+TEXT<br>
+# Show available wireless interface(s)<br>
+${execpi 60 cat /proc/net/dev | grep 'wlan' | cut --fields=-1 --delimiter=':' | sed 's/^/\$\{template8 /;s/$/\}/'}</p>
+
+<h3>Transparent Conky background.</h3>
+<p>The following is a short list of things to check when Conky shows on the desktop with a black box background.</p>
+
+<ol>
+<li>1. Enable desktop compositing. Conky is able to show fake or real transparent background on some display managers even when compositing is disabled but generally it is a good idea to enable compositing. <br><code>Settings -&gt; Settings Manager -&gt; Window Manager Tweaks -&gt; Compositor -&gt; Enable Display Compositing</code><br><br></li>
+<li>2. Start with the following Conky settings. (Click on the links for options.) <br><p class='ex2'><a href="#own_window">own_window</a> yes<br><a href="#own_window_class">own_window_class</a> Conky<br><a href="#own_window_type">own_window_type</a> desktop<br><a href="#own_window_hints">own_window_hints</a> undecorated,sticky,skip_taskbar,skip_pager,below<br><a href="#own_window_argb_visual">own_window_argb_visual</a> yes<br><a href="#own_window_argb_value">own_window_argb_value</a> 255<br><a href="#own_window_transparent">own_window_transparent</a> yes</p></li>
+<li>3. Make sure X11 allows double buffering by editing <code>/etc/X11/xorg.conf</code> to update or include the following section. <p class='ex2'>Section &quot;Module&quot;
+&nbsp;&nbsp;Load &quot;dbe&quot;
+EndSection</p></li>
+</ol>
+
+
+</div>
+
+<div class='t7'>
+<a id='about'></a><h3>About Conky</h3>
+<p>Conky is a system monitor primarily for environments running the X Window System. Unlike other desktop information display methods using independently running scripts or programs (i.e. widgets), Conky is able to do most information gathering and display tasks on a single CPU thread which makes it amazingly light weight even when showing a lot of information. It is also very configurable.</p>
+<p>Conky can display just about anything, either on your root desktop, in a terminal, or in its own window. Conky has many <a href='p2'>built in objects</a> including support for a plethora of operating system statistics, built in <a href='#imap'>IMAP</a> and <a href='#pop3'>POP3</a> support, built in support for many popular music players, and much much more. Conky can display this information either as formatted text or using simple progress bars and graphs all with different fonts and colors. Light weight <a href='#lua_scripting'>Lua scripts</a> can be used to extend Conky in many ways including adding the ability to display dynamic graphics.</p>
+<p>Conky is licensed under the GNU General Public License (GPL).</p>
+<p>The latest version of Conky is available at <a href="https://github.com/brndnmtthws/conky">https://github.com/brndnmtthws/conky</a></p>
+</div>
+
+<!-- Scrolling kindness link for non-desktop users -->
+<a class='nav' title='Jump to Menu' href='#nav'>&#9776</a>
+
+</body>
+</html>
+è»G†…P      fY$©fY$©FòvÚfaÏš   K    O^partitionKey=%28http%2Cifxgroup.net%29,:http://www.ifxgroup.net/conky.htm strongly-framed 0 request-method GET response-head HTTP/1.0 200 OK
+Date: Thu, 30 May 2024 15:02:55 GMT
+Server: IOA-IPAD 9.11bl (IPAD-OS)
+Content-type: text/html
+Last-modified: Sat, 17 Apr 2021 02:53:20 GMT
+ original-response-headers Date: Thu, 30 May 2024 15:02:55 GMT
+Server: IOA-IPAD 9.11bl (IPAD-OS)
+Content-type: text/html
+Last-modified: Sat, 17 Apr 2021 02:53:20 GMT
+ ctid 1 uncompressed-len 0 net-response-time-onstart 5155 net-response-time-onstop 12203  ¾)

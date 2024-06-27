@@ -1,0 +1,6 @@
+2024/06/10-13:52:03.318 42756 Creating DB /home/madhatter/.config/chromium/Default/WebStorage/10/IndexedDB/indexeddb.leveldb since it was missing.
+2024/06/10-13:52:03.330 42756 Reusing MANIFEST /home/madhatter/.config/chromium/Default/WebStorage/10/IndexedDB/indexeddb.leveldb/MANIFEST-000001
+2024/06/10-13:52:07.309 42767 Level-0 table #5: started
+2024/06/10-13:52:07.315 42767 Level-0 table #5: 480 bytes OK
+2024/06/10-13:52:07.335 42767 Delete type=0 #3
+2024/06/10-13:52:07.338 42768 Manual compaction at level-0 from (begin) .. (end); will stop at (end)

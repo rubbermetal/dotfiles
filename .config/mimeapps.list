@@ -1,0 +1,9 @@
+[Default Applications]
+application/x-executable=org.xfce.mousepad.desktop
+application/octet-stream=nvim.desktop
+
+[Added Associations]
+application/x-executable=org.xfce.mousepad.desktop;
+text/plain=org.xfce.mousepad.desktop;
+application/octet-stream=nvim.desktop;
+text/x-python=nvim.desktop;

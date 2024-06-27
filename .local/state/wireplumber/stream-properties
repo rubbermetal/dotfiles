@@ -1,0 +1,7 @@
+[stream-properties]
+Audio/Sink:node.name:auto_null={"channelVolumes":[1.000000, 1.000000], "mute":false, "volume":1.000000, "channelMap":["FL", "FR"]}
+Input/Audio:application.id:org.PulseAudio.pavucontrol={"volume":1.000000, "mute":false, "channelVolumes":[1.000000], "channelMap":["MONO"]}
+Output/Audio:application.name:Chromium={"channelMap":["FL", "FR"], "volume":1.000000, "mute":false, "channelVolumes":[3.548132, 3.548132]}
+Output/Audio:application.name:Firefox={"channelVolumes":[0.799991, 0.799991], "channelMap":["FL", "FR"], "mute":false, "volume":1.000000}
+Output/Audio:application.name:python3.12={"mute":false, "volume":1.000000, "channelVolumes":[1.000000, 1.000000], "channelMap":["FL", "FR"]}
+Output/Audio:media.role:Notification={"channelMap":["MONO"], "mute":false, "channelVolumes":[2.459908]}

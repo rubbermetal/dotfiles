@@ -1,0 +1,103 @@
+
+#####################################################################
+    Health Check Report (CPU,Process,Disk Usage, Memory)
+#####################################################################
+
+
+Hostname         : archlinux
+Kernel Version   : 5.9.14-arch1-1
+Uptime           : 30 min
+Last Reboot Time : 2021-02-06 23:26
+
+
+
+*********************************************************************
+CPU Load - > Threshold < 1 Normal > 1 Caution , > 2 Unhealthy 
+*********************************************************************
+
+Please install mpstat!
+On Debian based systems:
+sudo apt-get install sysstat
+On RHEL based systems:
+yum install sysstat
+
+*********************************************************************
+                             Process
+*********************************************************************
+
+=> Top memory using processs/application
+
+PID %MEM RSS COMMAND
+917 3.3 273380 /opt/chromium-snapshot/chrome
+641 3.3 270456 /usr/bin/plasmashell
+1523 1.8 152976 /opt/chromium-snapshot/chrome
+413 1.7 144512 /usr/lib/radarr/bin/Radarr
+1008 1.6 135820 /opt/chromium-snapshot/chrome
+947 1.6 135372 /opt/chromium-snapshot/chrome
+598 1.5 128804 /usr/bin/kwin_x11
+881 1.4 115840 /usr/bin/dolphin
+1851 1.4 114692 /opt/chromium-snapshot/chrome
+991 1.2 103656 /opt/chromium-snapshot/chrome
+
+=> Top CPU using process/application
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+   2152 rubberm+  20   0   23828  11368   6712 R 100.0   0.1   8:00.70 perl
+    389 root      20   0  446868  39332  25928 S  12.5   0.5   1:14.82 Xorg
+    598 rubberm+  20   0 3211956 128804  95292 S   6.2   1.6   1:39.12 kwin_x11
+   2000 rubberm+  20   0  752932  67404  37864 S   6.2   0.8   0:31.61 geany
+      1 root      20   0  171040  10304   7828 S   0.0   0.1   0:01.36 systemd
+      2 root      20   0       0      0      0 S   0.0   0.0   0:00.00 kthreadd
+      3 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_gp
+      4 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_par+
+      6 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 kworker+
+      8 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 mm_perc+
+
+*********************************************************************
+Disk Usage - > Threshold < 90 Normal > 90% Caution > 95 Unhealthy
+*********************************************************************
+
+dev /dev 0% used 3.9G free space
+
+run /run 1% used 3.9G free space
+
+/dev/sda2 / 79% used 5.9G free space
+
+tmpfs /dev/shm 2% used 3.8G free space
+
+tmpfs /sys/fs/cgroup 0% used 4.0M free space
+
+tmpfs /tmp 1% used 3.9G free space
+
+/dev/sda3 /home 66% used 212G free space
+
+tmpfs /run/user/1000 1% used 787M free space
+
+
+
+Heath Status
+
+dev /dev 		 Normal
+run /run 		 Normal
+/dev/sda2 / 		 Normal
+tmpfs /dev/shm 		 Normal
+tmpfs /sys/fs/cgroup 		 Normal
+tmpfs /tmp 		 Normal
+/dev/sda3 /home 		 Normal
+tmpfs /run/user/1000 		 Normal
+
+*********************************************************************
+		     Memory 
+*********************************************************************
+
+=> Physical Memory
+
+Total	Used	Free	%Free
+
+7.68GB	1.13GB 	5.12GB	66%
+
+=> Swap Memory
+
+Total	Used	Free	%Free
+
+1.99GB	0GB	1.99GB	100%
+

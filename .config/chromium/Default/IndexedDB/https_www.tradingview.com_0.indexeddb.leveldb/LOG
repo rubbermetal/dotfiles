@@ -1,0 +1,15 @@
+2024/06/12-16:36:11.700 712 Reusing MANIFEST /home/madhatter/.config/chromium/Default/IndexedDB/https_www.tradingview.com_0.indexeddb.leveldb/MANIFEST-000001
+2024/06/12-16:36:11.701 712 Recovering log #7
+2024/06/12-16:36:11.702 712 Reusing old log /home/madhatter/.config/chromium/Default/IndexedDB/https_www.tradingview.com_0.indexeddb.leveldb/000007.log 
+2024/06/12-17:02:56.259 712 Level-0 table #12: started
+2024/06/12-17:02:56.265 712 Level-0 table #12: 5757 bytes OK
+2024/06/12-17:02:56.273 712 Delete type=0 #7
+2024/06/12-17:02:56.273 712 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2024/06/12-17:02:56.273 712 Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x02\x02 \x03\x00\x00\x00\x00\x00\x00\x1c@\x00\x03\x00\x00\x00\x00\x00\x80A@' @ 1023 : 1
+2024/06/12-17:02:56.273 712 Compacting 1@1 + 1@2 files
+2024/06/12-17:02:56.277 712 Generated table #13@1: 216 keys, 5174 bytes
+2024/06/12-17:02:56.277 712 Compacted 1@1 + 1@2 files => 5174 bytes
+2024/06/12-17:02:56.282 712 compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/06/12-17:02:56.282 712 Delete type=2 #9
+2024/06/12-17:02:56.282 712 Delete type=2 #12
+2024/06/12-17:02:56.288 712 Manual compaction at level-1 from '\x00\x02\x02 \x03\x00\x00\x00\x00\x00\x00\x1c@\x00\x03\x00\x00\x00\x00\x00\x80A@' @ 1023 : 1 .. (end); will stop at (end)

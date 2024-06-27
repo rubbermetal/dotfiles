@@ -1,0 +1,111 @@
+
+#####################################################################
+    Health Check Report (CPU,Process,Disk Usage, Memory)
+#####################################################################
+
+
+Hostname         : archlinux
+Kernel Version   : 6.2.6-arch1-1
+Uptime           : 22:44
+Last Reboot Time : 2023-03-17 09:43
+
+
+
+*********************************************************************
+CPU Load - > Threshold < 1 Normal > 1 Caution , > 2 Unhealthy 
+*********************************************************************
+
+
+CPU0 : 9.77
+CPU1 : 13.97
+CPU2 : 13.98
+CPU3 : 13.86
+
+Load Average   :  0.60
+
+Heath Status : Normal
+
+
+*********************************************************************
+                             Process
+*********************************************************************
+
+=> Top memory using processs/application
+
+PID %MEM RSS COMMAND
+622234 4.9 395056 /opt/komodo-edit/lib/mozilla/komodo
+620758 3.9 318516 /tmp/.mount_GoogletDLpTJ/chrome/chrome
+606 3.8 312192 /usr/bin/plasmashell
+621100 3.4 278540 /tmp/.mount_GoogletDLpTJ/chrome/chrome
+843 3.3 271368 /usr/lib/packagekitd
+620901 2.9 234260 /tmp/.mount_GoogletDLpTJ/chrome/chrome
+542 2.5 205620 /usr/bin/kwin_x11
+621317 2.5 203988 /tmp/.mount_GoogletDLpTJ/chrome/chrome
+620900 2.4 193324 /tmp/.mount_GoogletDLpTJ/chrome/chrome
+635726 2.1 170688 /tmp/.mount_GoogletDLpTJ/chrome/chrome
+
+=> Top CPU using process/application
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+ 186954 rubberm+  20   0 1883804  63068  11784 S  18.8   0.8  52:45.97 conky
+    365 root      20   0  410884  77320  52592 S   6.2   1.0  38:20.36 Xorg
+ 657278 rubberm+  20   0   10756   4096   3456 R   6.2   0.1   0:00.02 top
+      1 root      20   0  168952  14240   9836 S   0.0   0.2   0:05.26 systemd
+      2 root      20   0       0      0      0 S   0.0   0.0   0:00.02 kthreadd
+      3 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_gp
+      4 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_par+
+      5 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 slub_fl+
+      6 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 netns
+     10 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 mm_perc+
+
+*********************************************************************
+Disk Usage - > Threshold < 90 Normal > 90% Caution > 95 Unhealthy
+*********************************************************************
+
+dev /dev 0% used 3.9G free space
+
+run /run 1% used 3.9G free space
+
+/dev/sda2 / 71% used 8.2G free space
+
+tmpfs /dev/shm 2% used 3.8G free space
+
+tmpfs /tmp 2% used 3.8G free space
+
+/dev/sda1 /boot/EFI 1% used 250G free space
+
+/dev/sda3 /home 11% used 542G free space
+
+tmpfs /run/user/1000 1% used 786M free space
+
+/dev/sdb1 /run/media/rubbermetal/3231-6639 10% used 333G free space
+
+
+
+Heath Status
+
+dev /dev 		 Normal
+run /run 		 Normal
+/dev/sda2 / 		 Normal
+tmpfs /dev/shm 		 Normal
+tmpfs /tmp 		 Normal
+/dev/sda1 /boot/EFI 		 Normal
+/dev/sda3 /home 		 Normal
+tmpfs /run/user/1000 		 Normal
+/dev/sdb1 /run/media/rubbermetal/3231-6639 		 Normal
+
+*********************************************************************
+		     Memory 
+*********************************************************************
+
+=> Physical Memory
+
+Total	Used	Free	%Free
+
+7.67GB	2.48GB 	1.49GB	19%
+
+=> Swap Memory
+
+Total	Used	Free	%Free
+
+1.99GB	0.04GB	1.95GB	97%
+

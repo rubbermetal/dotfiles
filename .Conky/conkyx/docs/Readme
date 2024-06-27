@@ -1,0 +1,29 @@
+Conky Config Script
+
+This is a Conky configuration script that is modeled after the simple system monitor applet on KDE. It is designed to be simple and efficient, and provides information about the system's CPU usage, Wifi connection, and more.
+Required Scripts
+
+    weather.sh
+    wan.py
+    lan.py
+
+Installation
+
+    Install the required scripts (weather.sh, wan.py, lan.py)
+    Copy the contents of this script to your Conky config file (usually located at ~/.conkyrc)
+    Start or restart Conky
+
+Usage
+
+This script will display information about the system's CPU usage, Wifi connection, and more. The display can be customized by editing the script to change the font, colors, and layout.
+Additional Notes
+
+    This script uses several fonts, including ConkySymbols, Droid Sans, Noto Sans, PWSmallIcons, and Digital Camera Symbols. Make sure these fonts are installed on your system.
+    This script uses the temperature_unit fahrenheit, if you want it to be in Celsius, change the line temperature_unit fahrenheit to temperature_unit celsius
+    This script uses the wireless_essid wlo1, wlo1 is the default wifi interface, if you are using a different interface, please change the wlo1 to the correct interface of your device
+
+Disclaimer
+
+Please keep in mind that this script is provided as-is, and I do not provide any guarantee or support for it. Use it at your own risk.
+
+You can also consider adding some screenshots or images of your conky configuration to help people visualize the final output and make it easier to understand.

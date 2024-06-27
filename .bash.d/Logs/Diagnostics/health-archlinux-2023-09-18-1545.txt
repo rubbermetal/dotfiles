@@ -1,0 +1,98 @@
+
+#####################################################################
+    Health Check Report (CPU,Process,Disk Usage, Memory)
+#####################################################################
+
+
+Hostname         : archlinux
+Kernel Version   : 6.4.11-arch2-1
+Uptime           : 3 days
+Last Reboot Time : 2023-09-15 09:14
+
+
+
+*********************************************************************
+CPU Load - > Threshold < 1 Normal > 1 Caution , > 2 Unhealthy 
+*********************************************************************
+
+
+CPU0 : 11.39
+CPU1 : 35.18
+CPU2 : 33.49
+CPU3 : 34.77
+
+Load Average   :  0.71
+
+Heath Status : Normal
+
+
+*********************************************************************
+                             Process
+*********************************************************************
+
+=> Top memory using processs/application
+
+PID %MEM RSS COMMAND
+1560 6.4 520988 /tmp/.mount_firefoEp7e6V/firefox-bin
+196544 6.3 511072 /tmp/.mount_firefoEp7e6V/firefox-bin
+825 3.9 315832 /usr/bin/plasmashell
+208728 2.9 238176 /home/rubbermetal/.vscode/extensions/ms-vscode.cpptools-1.17.5-linux-x64/bin/cpptools
+142961 2.8 226180 /tmp/.mount_firefoEp7e6V/firefox-bin
+202923 2.7 217828 /tmp/.mount_VSCodefk09IB/usr/bin/code
+751 2.3 188436 /usr/bin/kwin_x11
+1035 2.1 175992 /usr/lib/packagekitd
+207894 1.7 138888 /tmp/.mount_VSCodefk09IB/usr/bin/code
+1736 1.6 129424 /tmp/.mount_firefoEp7e6V/firefox-bin
+
+=> Top CPU using process/application
+
+
+*********************************************************************
+Disk Usage - > Threshold < 90 Normal > 90% Caution > 95 Unhealthy
+*********************************************************************
+
+dev /dev 0% used 3.9G free space
+
+run /run 1% used 3.9G free space
+
+/dev/sda2 / 100% used 0 free space
+
+tmpfs /dev/shm 1% used 3.9G free space
+
+tmpfs /tmp 1% used 3.9G free space
+
+/dev/sda1 /boot/EFI 1% used 250G free space
+
+/dev/sda3 /home 23% used 470G free space
+
+tmpfs /run/user/1000 1% used 786M free space
+
+
+
+Heath Status
+
+dev /dev 		 Normal
+run /run 		 Normal
+/dev/sda2 / 		 Unhealty
+tmpfs /dev/shm 		 Normal
+tmpfs /tmp 		 Normal
+/dev/sda1 /boot/EFI 		 Normal
+/dev/sda3 /home 		 Normal
+tmpfs /run/user/1000 		 Normal
+
+*********************************************************************
+		     Memory 
+*********************************************************************
+
+=> Physical Memory
+
+Total	Used	Free	%Free
+
+7.67GB	3.55GB 	0.21GB	2%
+
+=> Swap Memory
+
+Total	Used	Free	%Free
+
+1.99GB	0.52GB	1.47GB	73%
+

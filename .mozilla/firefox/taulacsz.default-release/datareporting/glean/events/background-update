@@ -1,0 +1,1 @@
+{"timestamp":73792001,"category":"nimbus_events","name":"enroll_failed","extra":{"glean_timestamp":"1718051592830","reason":"feature-conflict","experiment":"relay-integration-into-firefox-release-for-all-fxa-users"}}

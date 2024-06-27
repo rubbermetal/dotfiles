@@ -1,0 +1,24 @@
+1.) Move systemd handling to .functions
+2.) Handle _SKIP_UPGRADE_NOTIFY=true and _SKIP_HELP_KEYBIND=false
+3.) 
+# -----------------------------------------------------
+# Unload
+# -----------------------------------------------------
+unset   clr_restore	  \										
+        fg_black     \										
+        fg_firebrick \										
+        fg_red       \										
+        fg_forest    \										
+        fg_green     \										
+        fg_brown     \										
+        fg_yellow    \										
+        fg_navy      \										
+        fg_blue      \										
+        fg_purple    \										
+        fg_magenta   \										
+        fg_cadet     \										
+        fg_cyan      \										
+        fg_gray      \										
+        fg_white     \										
+        fg_std       \																			
+        end_color										

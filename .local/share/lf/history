@@ -1,0 +1,24 @@
+: q
+: exit
+: quit
+: h
+: hidden
+: cd .bash.d
+: e .xinitrc
+: e status_bar_ap.sh
+: q
+: quit
+: quit
+: quit
+: quit
+: quit
+: quit
+: quit
+: quit
+: quit
+: qiut
+: quit
+: quit
+: quit
+: quit
+: config hidden false

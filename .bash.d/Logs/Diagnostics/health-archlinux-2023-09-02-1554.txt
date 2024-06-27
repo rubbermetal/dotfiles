@@ -1,0 +1,101 @@
+
+#####################################################################
+    Health Check Report (CPU,Process,Disk Usage, Memory)
+#####################################################################
+
+
+Hostname         : archlinux
+Kernel Version   : 6.4.10-arch1-1
+Uptime           : 11 days
+Last Reboot Time : 2023-08-21 21:05
+
+
+
+*********************************************************************
+CPU Load - > Threshold < 1 Normal > 1 Caution , > 2 Unhealthy 
+*********************************************************************
+
+
+CPU0 : 7.02
+CPU1 : 67.20
+CPU2 : 69.08
+CPU3 : 67.81
+
+Load Average   :  2.95
+
+Heath Status : Unhealthy
+
+
+*********************************************************************
+                             Process
+*********************************************************************
+
+=> Top memory using processs/application
+
+PID %MEM RSS COMMAND
+825 4.9 398708 /usr/bin/plasmashell
+1071316 3.4 275192 /tmp/.mount_eDEX-UlASHn8/edex-ui
+1070844 3.0 243332 /tmp/.mount_eDEX-UlASHn8/edex-ui
+828677 2.6 212928 /tmp/.mount_VSCode4UAjP2/usr/bin/code
+747 2.5 201576 /usr/bin/kwin_x11
+828632 2.3 188248 /tmp/.mount_VSCode4UAjP2/usr/bin/code
+828574 2.2 178644 /tmp/.mount_VSCode4UAjP2/usr/bin/code
+597963 2.0 161068 /usr/lib/kf5/kiod5
+1070809 1.8 145980 /tmp/.mount_eDEX-UlASHn8/edex-ui
+746 1.5 126964 /usr/bin/kded5
+
+=> Top CPU using process/application
+
+
+*********************************************************************
+Disk Usage - > Threshold < 90 Normal > 90% Caution > 95 Unhealthy
+*********************************************************************
+
+dev /dev 0% used 3.9G free space
+
+run /run 1% used 3.9G free space
+
+/dev/sda2 / 94% used 1.8G free space
+
+tmpfs /dev/shm 1% used 3.9G free space
+
+tmpfs /tmp 1% used 3.9G free space
+
+/dev/sda1 /boot/EFI 1% used 250G free space
+
+/dev/sda3 /home 18% used 502G free space
+
+tmpfs /run/user/1000 1% used 786M free space
+
+/dev/sdb1 /run/media/rubbermetal/0123-4567 98% used 410M free space
+
+
+
+Heath Status
+
+dev /dev 		 Normal
+run /run 		 Normal
+/dev/sda2 / 		 Caution
+tmpfs /dev/shm 		 Normal
+tmpfs /tmp 		 Normal
+/dev/sda1 /boot/EFI 		 Normal
+/dev/sda3 /home 		 Normal
+tmpfs /run/user/1000 		 Normal
+/dev/sdb1 /run/media/rubbermetal/0123-4567 		 Unhealty
+
+*********************************************************************
+		     Memory 
+*********************************************************************
+
+=> Physical Memory
+
+Total	Used	Free	%Free
+
+7.67GB	2.69GB 	1.39GB	18%
+
+=> Swap Memory
+
+Total	Used	Free	%Free
+
+1.99GB	0GB	1.99GB	100%
+

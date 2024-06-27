@@ -1,0 +1,24 @@
+2024/06/13-21:20:49.519 8b05a Reusing MANIFEST /home/madhatter/.config/chromium/Default/IndexedDB/https_www.youtube.com_0.indexeddb.leveldb/MANIFEST-000001
+2024/06/13-21:20:49.519 8b05a Recovering log #139
+2024/06/13-21:20:49.522 8b05a Reusing old log /home/madhatter/.config/chromium/Default/IndexedDB/https_www.youtube.com_0.indexeddb.leveldb/000139.log 
+2024/06/14-14:10:29.012 8b05b Level-0 table #144: started
+2024/06/14-14:10:29.066 8b05b Level-0 table #144: 1928526 bytes OK
+2024/06/14-14:10:29.073 8b05b Delete type=0 #139
+2024/06/14-14:12:15.745 8b05a Compacting 1@1 + 1@2 files
+2024/06/14-14:12:15.774 8b05a Generated table #145@1: 1077 keys, 61811 bytes
+2024/06/14-14:12:15.774 8b05a Compacted 1@1 + 1@2 files => 61811 bytes
+2024/06/14-14:12:15.778 8b05a compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/06/14-14:12:15.779 8b05a Delete type=2 #141
+2024/06/14-14:12:15.779 8b05a Delete type=2 #144
+2024/06/14-14:14:32.078 8b05d Level-0 table #147: started
+2024/06/14-14:14:32.108 8b05d Level-0 table #147: 316397 bytes OK
+2024/06/14-14:14:32.115 8b05d Delete type=0 #143
+2024/06/14-14:14:32.115 8b05d Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2024/06/14-14:14:32.115 8b05d Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x0f\x01\x1f\x03f>|\xd4\xf2vyB\x00\x01\x1c\x00y\x00t\x00-\x00m\x00i\x00n\x00i\x00p\x00l\x00a\x00y\x00e\x00r\x00-\x00s\x00h\x00o\x00w\x00n\x00-\x00v\x00i\x00d\x00e\x00o\x00-\x00i\x00d' @ 230707 : 0
+2024/06/14-14:14:32.115 8b05d Compacting 1@1 + 1@2 files
+2024/06/14-14:14:32.141 8b05d Generated table #148@1: 756 keys, 41930 bytes
+2024/06/14-14:14:32.141 8b05d Compacted 1@1 + 1@2 files => 41930 bytes
+2024/06/14-14:14:32.147 8b05d compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/06/14-14:14:32.147 8b05d Delete type=2 #145
+2024/06/14-14:14:32.147 8b05d Delete type=2 #147
+2024/06/14-14:14:32.148 8b05a Manual compaction at level-1 from '\x00\x0f\x01\x1f\x03f>|\xd4\xf2vyB\x00\x01\x1c\x00y\x00t\x00-\x00m\x00i\x00n\x00i\x00p\x00l\x00a\x00y\x00e\x00r\x00-\x00s\x00h\x00o\x00w\x00n\x00-\x00v\x00i\x00d\x00e\x00o\x00-\x00i\x00d' @ 230707 : 0 .. (end); will stop at (end)

@@ -1,0 +1,1219 @@
+#-----------------------------------------------------
+# .bashrc function file
+
+#-----------------------------------------------------
+# Displat weather
+function weather () {
+declare -a WEATHERARRAY
+WEATHERARRAY=( `elinks -dump "http://www.google.com/search?hl=en&lr=&client=firefox-a&rls=org.mozilla%3Aen-US%3Aofficial&q=weather+${1}&btnG=Search" | grep -A 5 -m 1 "Weather for" | sed 's;\[26\]Add to iGoogle\[27\]IMG;;g'`)
+echo ${WEATHERARRAY[@]}
+}
+#-----------------------------------------------------
+# Get WAN IP
+function getip () {
+elinks -dump http://checkip.dyndns.org:8245/ | awk '{ print $4 }' | sed '/^$/d; s/^[ ]*//g; s/[ ]*$//g' 
+}
+#-----------------------------------------------------
+# Define a word
+function define () {
+`elinks -dump "http://www.google.com/search?hl=en&q=define%3A+${1}&btnG=Google+Search" | grep -m 3 -w "*"  | sed 's/;/ -/g' | cut -d- -f1 > /home/rubbermetal/.tmp/templookup.txt`
+			if [[ -s  /home/rubbermetal/.tmp/templookup.txt ]] ;then
+				until ! read response
+					do
+					echo "${response}"
+					done < /home/rubbermetal/.tmp/templookup.txt
+				else
+					echo "Sorry $USER, I can't find the term \"${1} \""				
+			fi	
+\rm -f /home/rubbermetal/.tmp/templookup.txt
+}
+# MKDIR AND CD INTO NEW DIR{{{
+function mkcd() {
+  if [ $# != 1 ]; then
+    echo "Usage: mkcd <dir>"
+  else
+    mkdir -p $1 && cd $1
+  fi
+}
+
+function extract () {
+     if [ -f $1 ] ; then
+         case $1 in
+             *.tar.bz2)   tar xjf $1        ;;
+             *.tar.gz)    tar xzf $1     ;;
+             *.bz2)       bunzip2 $1       ;;
+             *.rar)       rar x $1     ;;
+             *.gz)        gunzip $1     ;;
+             *.tar)       tar xf $1        ;;
+             *.tbz2)      tar xjf $1      ;;
+             *.tgz)       tar xzf $1       ;;
+             *.zip)       unzip $1     ;;
+             *.Z)         uncompress $1  ;;
+             *.7z)        7z x $1    ;;
+             *)           echo "'$1' cannot be extracted via extract()" ;;
+         esac
+     else
+         echo "'$1' is not a valid file"
+     fi
+}
+#-----------------------------------------------------
+# Searched for an installed package
+function package-search() {
+  echo -e "$(pacman -Ss $@ | sed \
+       -e 's#core/.*#\\033[1;31m&\\033[0;37m#g' \
+       -e 's#extra/.*#\\033[0;32m&\\033[0;37m#g' \
+       -e 's#community/.*#\\033[1;35m&\\033[0;37m#g' \
+       -e 's#^.*/.* [0-9].*#\\033[0;36m&\\033[0;37m#g' )"
+}
+#-----------------------------------------------------
+# convert a single file to an mp3
+function convert-mp3 ( ) {
+FILE=$1
+NEWFILE="${FILE}.mp3"
+
+ffmpeg -i "${FILE}" -vn -ab 128k -ar 44100 -y "${NEWFILE}"
+if test -f "$NEWFILE"; then
+    rm "${FILE}"
+    echo -e "Successfully converted to '\e[32m$NEWFILE\e[0m'";
+    echo -e "Removed '\e[32m$FILE\e[0m'";
+fi
+}
+#-----------------------------------------------------
+# Convert a batch file list to mp3's
+function batch-convert-mp3 ( ) {
+	for FILE in *.$1; do
+    echo -e "Processing file '\e[32m$FILE\e[0m'";
+    NEWFILE="${FILE}.mp3"
+    ffmpeg -i "${FILE}" -vn -ab 128k -ar 44100 -y "${NEWFILE}";
+    if test -f "$NEWFILE"; then
+    rm "${FILE}"
+    echo -e "Successfully converted to '\e[32m$NEWFILE\e[0m'";
+    echo -e "Removed '\e[32m$FILE\e[0m'";
+fi
+done;
+}
+#-----------------------------------------------------
+# Quick up function
+function up( ) {
+LIMIT=$1
+P=$PWD
+for ((i=1; i <= LIMIT; i++))
+do
+    P=$P/..
+done
+cd $P
+export MPWD=$P
+}
+#-----------------------------------------------------
+# Quick back function
+function back( ) {
+LIMIT=$1
+P=$MPWD
+for ((i=1; i <= LIMIT; i++))
+do
+    P=${P%/..}
+done
+cd $P
+export MPWD=$P
+}
+#-----------------------------------------------------
+# Sudo function
+function sudo () {
+   local SCMD="/usr/bin/sudo"; local C=($@)
+   local OIFS=${IFS}; IFS=$'\n'
+   for A in $(alias); do
+      [[ ${A} =~ ^alias\ ([[:alpha:]]*)\=\'(.*)\' ]]
+      if [[ "${1}" == "${BASH_REMATCH[1]}" ]];then local C[0]="";SCMD="${SCMD} ${BASH_REMATCH[2]}"; fi
+   done
+   IFS=${OIFS}
+   ${SCMD} ${C[@]}
+} # END sudo ()
+#-----------------------------------------------------
+# Tar function
+function tar () {
+
+  local STDINSTDOUT=
+  local TARBIN="$(which tar)"
+
+  local CMD="${TARBIN}"
+
+  local IFS=$'\n'
+
+  #-- Retrieve options from "tar --help".
+  # Long-style opts containing (COMMAND|DATE|DATE-OR-FILE|FILE|NAME|STRING|STYLE)
+  # will have the value double-quoted.
+  #
+  R='^\ +(-[a-zA-Z]+,\ +)?(--[a-z\-]+=)(COMMAND|DATE(-OR-FILE)?|FILE|NAME|ST(RING|YLE))'
+  declare -A QOPTS
+
+  for L in $(${TARBIN} --help); do
+    [[ "${L}" =~ ${R} ]] && QOPTS["${BASH_REMATCH[2]}"]=1 || true
+
+  done
+
+
+  for O in "${@}"; do
+    #- "Short" style opts.
+    [[ "${O}" =~ ^-[a-zA-Z] ]] && {
+      CMD+=" ${O}"
+
+    } || {
+      #- "Long" style opts. Some have values that need double-quoting.
+      [[ "${O}" =~ ^(--[a-z\-]+=?)(.*) ]] && {
+        local ONAME="${BASH_REMATCH[1]}"
+        local OVAL="${BASH_REMATCH[2]}"
+
+        [ -n "${QOPTS[${ONAME}]}" ] &&
+          CMD+=" ${ONAME}\"${OVAL}\"" || CMD+=" ${ONAME}"
+
+      } || {
+        CMD+=" \"${O}\""
+
+      }
+    }
+
+    [ "${O}" = "-" ] && STDINSTDOUT=1 || true
+  done
+
+
+  [ -n "${STDINSTDOUT}" ] && {
+    echo "Piping to/from STDIN/STDOUT. Cannot filter STDERR at this time."
+    eval "${CMD}"
+
+  } || {
+    local STDERR=$( { eval "${CMD}"; } 2>&1 );
+
+    for ERR in ${STDERR}; do
+      [[ ! "${ERR}" =~ .*[Hh]eader\ [Kk]eyword\ [\"\']SCHILY.* ]] &&
+        echo "${ERR}" || true
+    done
+
+  }
+
+} # END tar ()
+#-----------------------------------------------------
+# Function addpath
+function addpath () {
+  #-- Enable the use of embedded regular expressions (if not already set)
+  shopt -s extglob
+
+  local NEW=${1}
+  local PPOS=;
+  [[ ${2} ]] && PPOS=${2}
+  #-- Add a little verbosity if this is nonzero.
+  # Useful for debugging things, if needed.
+  local VERB=${3}
+
+  #-- These are a couple helper functions to support addpath.
+  __addpath_verb () { [[ ${VERB} ]] && echo "-- ${1}"; }
+  __addpath_join () { local IFS="${AP_VAR_DELIM}"; echo "${*}"; }
+  __addpath_clean () { local IFS="${AP_VAR_DELIM}"; echo "${*}"; }
+
+  #-- Default variable to act against is 'PATH'.
+  [ -z "${AP_VAR_NAME}" ] && AP_VAR_NAME="PATH"
+  #-- Default delimiter is ':'.
+  [ -z "${AP_VAR_DELIM}" ] && AP_VAR_DELIM=":"
+
+  #-- We can't use associative arrays (hashes) in BaSH versions < 4.x).
+  (( "${BASH_VERSINFO}" >= 4 )) && {
+    #-- Read PATH into an associative array (automatically removes duplicates).
+    declare -A CPATHS
+    local OI="${IFS}"; local IFS="${AP_VAR_DELIM}"; local C=0
+    eval "for P in \${${AP_VAR_NAME}}; do \
+          CPATHS[\${P}]=\${C}; C=\$((\${C} + 1)); done"
+    local IFS="${OI}"
+  } || {
+    #-- We get here if BaSH version < 4.
+    __addpath_verb "Warning: Using an old BaSH version (${BASH_VERSINFO}). "
+    __addpath_verb "Some features are disabled."
+    if [ "${PPOS}" = "first" ]; then
+      eval "${AP_VAR_NAME}=\"${NEW}${AP_VAR_DELIM}$(eval "echo \${${AP_VAR_NAME}}")\""
+      __addpath_verb "Added ${NEW} to beginning of ${AP_VAR_NAME}"
+    elif [ "${PPOS}" = "remove" ]; then
+      __addpath_verb "Running old BaSH version. Skipping removal of '${NEW}'."
+    else
+      eval "${AP_VAR_NAME}=\"$(eval "echo \${${AP_VAR_NAME}}")${AP_VAR_DELIM}${NEW}\""
+      __addpath_verb "Added ${NEW} to end of ${AP_VAR_NAME}"
+    fi
+    export ${AP_VAR_NAME}
+    unset AP_VAR_NAME;  return
+  }
+
+  #-- Remove trailing '/', if it exists.
+  [[ "${NEW}" =~ (.+)\/$ ]] && NEW="${BASH_REMATCH[1]}"
+  #-- Make sure the directory exists, and that it wasn't
+  # already added to PATH.
+  [ ! -d ${NEW} ] && {
+    __addpath_verb "${NEW} does not exist or is not a directory"
+    if [ "${PPOS}" = "remove" ]; then
+      __addpath_verb "Removal of ${NEW} requested. Continuing with task."
+    else
+      unset AP_VAR_NAME;  return
+    fi
+  }
+
+  local PATHDIRS=()
+  for P in "${!CPATHS[@]}"; do
+    local POS="${CPATHS[${P}]}"
+    if [ "${P}" = "${NEW}" ]; then
+      __addpath_verb "${NEW} already in ${AP_VAR_NAME}."
+      if [ "${PPOS}" = "remove" ]; then
+        __addpath_verb "Removal of ${NEW} requested. Continuing with task."
+      else
+        __addpath_verb "Not continuing."
+        unset AP_VAR_NAME;  return
+      fi
+    else
+      PATHDIRS[${POS}]="${P}"
+    fi
+  done
+
+  if [ "${PPOS}" = "first" ]; then
+    PATHDIRS=(${NEW} ${PATHDIRS[@]})
+    eval "${AP_VAR_NAME}=\"$(__addpath_join ${PATHDIRS[@]})\""
+    __addpath_verb "Added ${NEW} to beginning of ${AP_VAR_NAME}"
+  elif [ "${PPOS}" = "remove" ]; then
+    __addpath_verb "Removal of ${NEW} requested. Not re-adding to ${AP_VAR_NAME}."
+    eval "${AP_VAR_NAME}=\"$(__addpath_join ${PATHDIRS[@]})\""
+  else
+    PATHDIRS=(${PATHDIRS[@]} ${NEW})
+    eval "${AP_VAR_NAME}=\"$(__addpath_join ${PATHDIRS[@]})\""
+    __addpath_verb "Added ${NEW} to end of ${AP_VAR_NAME}"
+  fi
+  export ${AP_VAR_NAME}
+  unset AP_VAR_NAME
+}
+# Function to run upon exit of shell
+function _exit() {
+	# Show who logged out
+	local COLOR="\033[1;31m"     # Light Red
+	local HIGHLIGHT="\033[1;34m" # Light Blue
+	local NOCOLOR="\033[0m"
+	echo -e "${COLOR}User ${HIGHLIGHT}$(echo $USER)${COLOR} has logged out of ${HIGHLIGHT}$(echo $HOSTNAME)${COLOR}.${NOCOLOR}"
+}
+trap _exit EXIT
+
+# See what command you are using the most (this parses the history command)
+function mostused() {
+	history \
+	| awk ' { a[$4]++ } END { for ( i in a ) print a[i], i | "sort -rn | head -n10"}' \
+	| awk '$1 > max{ max=$1} { bar=""; i=s=10*$1/max;while(i-->0)bar=bar"#"; printf "%25s %15d %s %s", $2, $1,bar, "\n"; }'
+}
+
+# Start a program but immediately disown it and detach it from the terminal
+function runfree() {
+	"$@" > /dev/null 2>&1 & disown
+}
+
+# View a comma delimited (.CSV) file
+function csvview() {
+	cat "${@}" | sed 's/,/ ,/g' | column -t -s, | less -S
+}
+
+# Send file(s) to the trash
+# Example: trash file1.ext file2.ext
+function trash() {
+	if [[ -x "$(command -v trash-put)" ]]; then
+		trash-put "${@}"
+	elif [[ -d $HOME/.local/share/Trash/files ]]; then
+		mv "${@}" $HOME/.local/share/Trash/files/
+	elif [[ -d $HOME/.local/share/trash/files ]]; then
+		mv "${@}" $HOME/.local/share/trash/files/
+	elif [[ -d $HOME/.Trash ]]; then
+		mv "${@}" $HOME/.Trash/
+	elif [[ -d $HOME/.trash ]]; then
+		mv "${@}" $HOME/.trash/
+	else
+		mkdir $HOME/.trash
+		mv "${@}" $HOME/.trash/
+	fi
+}
+
+# Display the contents of the trash
+function trashlist() {
+	if [[ -x "$(command -v trash-list)" ]]; then
+		trash-list
+	elif [[ -d $HOME/.local/share/Trash/files ]]; then
+		ll $HOME/.local/share/Trash/files/
+	elif [[ -d $HOME/.local/share/trash/files ]]; then
+		ll "${@}" $HOME/.local/share/trash/files/
+	elif [[ -d $HOME/.Trash ]]; then
+		ll "${@}" $HOME/.Trash/
+	elif [[ -d $HOME/.trash ]]; then
+		ll "${@}" $HOME/.trash/
+	else
+		echo "No trash folder exists."
+	fi
+}
+
+# Empty and permanently delete all the files in the trash
+function trashempty() {
+	if [[ -x "$(command -v trash-empty)" ]]; then
+		trash-empty
+	elif [[ -d $HOME/.local/share/Trash/files ]]; then
+		rm -rf ~/.local/share/Trash/files/{..?*,.[!.]*,*} 2>/dev/null
+	elif [[ -d $HOME/.local/share/trash/files ]]; then
+		rm -rf ~/.local/share/trash/files/{..?*,.[!.]*,*} 2>/dev/null
+	elif [[ -d $HOME/.Trash ]]; then
+		rm -rf ~/.Trash/{..?*,.[!.]*,*} 2>/dev/null
+	elif [[ -d $HOME/.trash ]]; then
+		rm -rf ~/.trash/{..?*,.[!.]*,*} 2>/dev/null
+	fi
+}
+
+# Check the sha256 checksum of a downloaded file using a checksum file like sha256sum.txt
+function checksha256() {
+	if [[ "$#" -lt 2 ]] || [[ $1 = "--help" ]] || [[ $1 = "-h" ]]; then
+		echo -e "\033[1;33mSyntax:\033[0m"
+		echo -e "checksha256 \033[0;36m[downloaded file]\033[0m \033[0;36m[checksum file]\033[0m"
+		return 1
+	fi
+	if [[ -x "$(command -v sha256sum)" ]]; then
+		if [[ $(sha256sum "${1}" | cut -d' ' -f 1) == $(grep -Po '\b[a-zA-Z0-9]{64}\b' "${2}") ]]; then
+			echo -e "\033[0;32mGood"
+		else
+			echo -e "\033[0;31mBad"
+		fi
+	else
+		echo -e "\033[1;31mError:\033[0m The application sha256sum is not installed."
+	fi
+}
+
+# Copy file with a progress bar
+function cpp() {
+	if [[ -x "$(command -v rsync)" ]]; then
+		# rsync -avh --progress "${1}" "${2}"
+		rsync -ah --info=progress2 "${1}" "${2}"
+	else
+		set -e
+		strace -q -ewrite cp -- "${1}" "${2}" 2>&1 \
+		| awk '{
+		count += $NF
+		if (count % 10 == 0) {
+			percent = count / total_size * 100
+			printf "%3d%% [", percent
+			for (i=0;i<=percent;i++)
+				printf "="
+				printf ">"
+				for (i=percent;i<100;i++)
+					printf " "
+					printf "]\r"
+				}
+			}
+		END { print "" }' total_size=$(stat -c '%s' "${1}") count=0
+	fi
+}
+
+# Copy and go to the directory
+function cpg() {
+	if [[ -d "$2" ]];then
+		cp "$1" "$2" && cd "$2"
+	else
+		cp "$1" "$2"
+	fi
+}
+
+# Move and go to the directory
+function mvg() {
+	if [[ -d "$2" ]];then
+		mv "$1" "$2" && cd "$2"
+	else
+		mv "$1" "$2"
+	fi
+}
+
+# Create and go to the directory
+function mkdirg() {
+	mkdir -p "$@"
+	cd "$@"
+}
+
+# Repeat a command n times
+function repeat() {
+	local i max
+	max=$1; shift;
+	for ((i=1; i <= max ; i++)); do  # --> C-like syntax
+		eval "$@";
+	done
+}
+
+# Print a list of colors
+function colors() {
+	local fgc bgc vals seq0
+
+	printf "Color escapes are %s\n" '\e[${value};...;${value}m'
+	printf "Values 30..37 are \e[33mforeground colors\e[m\n"
+	printf "Values 40..47 are \e[43mbackground colors\e[m\n"
+	printf "Value  1 gives a  \e[1mbold-faced look\e[m\n\n"
+
+	# foreground colors
+	for fgc in {30..37}; do
+		# background colors
+		for bgc in {40..47}; do
+			fgc=${fgc#37} # white
+			bgc=${bgc#40} # black
+
+			vals="${fgc:+$fgc;}${bgc}"
+			vals=${vals%%;}
+
+			seq0="${vals:+\e[${vals}m}"
+			printf "  %-9s" "${seq0:-(default)}"
+			printf " ${seq0}TEXT\e[m"
+			printf " \e[${vals:+${vals+$vals;}}1mBOLD\e[m"
+		done
+		echo; echo
+	done
+}
+
+# Print a list of 256 colors
+function colors256() {
+	for i in {0..255} ; do
+		printf "\x1b[38;5;${i}mcolour${i}\n"
+	done
+}
+
+# Test for 24bit true color in the terminal
+function colors24bit() {
+	echo 'If the gradients are smooth, you are displaying 24bit true color.'
+	awk 'BEGIN{
+		s='1234567890';
+		s=s s s s s s s s s s s s s s s s s s s s s s s;
+		for (colnum = 0; colnum<256; colnum++) {
+			r = 255-(colnum*255/255);
+			g = (colnum*510/255);
+			b = (colnum*255/255);
+			if (g>255) g = 510-g;
+			printf "\033[48;2;%d;%d;%dm", r,g,b;
+			printf "\033[38;2;%d;%d;%dm", 255-r,255-g,255-b;
+			printf "%s\033[0m", substr(s,colnum+1,1);
+		}
+		printf "\n";
+	}'
+}
+
+# Confirm/Ask a question - See 'killps' for example of use
+# General-purpose function to ask Yes/No questions in Bash,
+# either with or without a default answer.
+# It keeps repeating the question until it gets a valid answer.
+# Link: https://gist.github.com/davejamesmiller/1965569
+# Example Usage:
+#   if ask "Do you want to do such-and-such?"; then
+# Default to Yes if the user presses enter without giving an answer:
+#   if ask "Do you want to do such-and-such?" Y; then
+# Default to No if the user presses enter without giving an answer:
+#   if ask "Do you want to do such-and-such?" N; then
+# Or if you prefer the shorter version:
+#   ask "Do you want to do such-and-such?" && said_yes
+#   ask "Do you want to do such-and-such?" || said_no
+function ask() {
+	local prompt default reply
+
+	if [[ ${2:-} = 'Y' ]]; then
+		prompt='Y/n'
+		default='Y'
+	elif [[ ${2:-} = 'N' ]]; then
+		prompt='y/N'
+		default='N'
+	else
+		prompt='y/n'
+		default=''
+	fi
+
+	while true; do
+		# Ask the question (not using "read -p" as it uses stderr not stdout)
+		echo -ne "$1 [$prompt] "
+
+		# Read the answer (use /dev/tty in case stdin is redirected from somewhere else)
+		read -r reply </dev/tty
+
+		# Default?
+		if [[ -z $reply ]]; then
+			reply=$default
+		fi
+
+		# Check if the reply is valid
+		case "$reply" in
+			Y*|y*) return 0 ;;
+			N*|n*) return 1 ;;
+		esac
+	done
+}
+
+# A full chmod calculator on command line (type chmodcalc for usage and examples)
+function chmodcalc() {
+	# Define colors
+	local BLUE="\033[0;34m"
+	local CYAN="\033[0;36m"
+	local GREEN="\033[0;32m"
+	local MAGENTA="\033[0;35m"
+	local RED="\033[0;31m"
+	local YELLOW="\033[0;33m"
+	local ERROR="\033[1;31m"
+	local NOCOLOR="\033[0m"
+
+	# Define local variables
+	local text=""
+	local output=""
+	local example=""
+	local i=0
+	local n=0
+	local formatted=""
+
+	if [ "$#" -eq 1 ]; then
+		if [ "${#1}" -ge 4 ]; then
+			echo -e "${RED}Error: Invalid octal.${NOCOLOR}";
+			return 128;
+		fi
+		text="$1"
+		output=""
+		example=""
+		i=0
+		while (( i++ < ${#text} ))
+		do
+			char=$(expr substr "${text}" "${i}" 1)
+			case $char in
+			0)
+				part[${i}]="---"
+				;;
+			1)
+				part[${i}]="--x"
+				;;
+			2)
+				part[${i}]="-w-"
+				;;
+			3)
+				part[${i}]="-wx"
+				;;
+			4)
+				part[${i}]="r--"
+				;;
+			5)
+				part[${i}]="r-x"
+				;;
+			6)
+				part[${i}]="rw-"
+				;;
+			7)
+				part[${i}]="rwx"
+				;;
+			*)
+				part[${i}]="Error: Invalid octal."
+				break
+				;;
+			esac
+			example[${i}]="${part[${i}]//-}"
+		done
+		echo -e "${GREEN}${part[1]}${NOCOLOR} ${YELLOW}${part[2]}${NOCOLOR} ${RED}${part[3]}${NOCOLOR}"
+		echo ""
+		echo "Examples:"
+		echo -e "${CYAN}chmod${NOCOLOR} ${CYAN}-R${NOCOLOR} ${MAGENTA}${text}${NOCOLOR} ${BLUE}./*${NOCOLOR}"
+		echo -e "${CYAN}chmod${NOCOLOR} ${CYAN}-R${NOCOLOR} ${CYAN}u=${GREEN}${example[1]}${NOCOLOR}${CYAN},g=${YELLOW}${example[2]}${NOCOLOR}${CYAN},o=${RED}${example[3]}${NOCOLOR} ${BLUE}./*${NOCOLOR}"
+		echo ""
+	elif [ "$#" -eq 3 ]; then
+		formatted=""
+		for p
+		do
+			n=0
+			[[ $p =~ .*r.* ]] && (( n+=4 ))
+			[[ $p =~ .*w.* ]] && (( n+=2 ))
+			[[ $p =~ .*x.* ]] && (( n+=1 ))
+			formatted=${formatted}$(printf "${n}")
+			# printf $n
+		done
+		echo -e "${CYAN}${formatted}${NOCOLOR}"
+		chmodcalc "${formatted}"
+	else
+		echo -e "${ERROR}Error: 1 or 3 parameters required.${NOCOLOR}"
+		echo ""
+		echo -e "Syntax: ${CYAN}chmodcalc${NOCOLOR} ${GREEN}[owner]${NOCOLOR} ${YELLOW}[group]${NOCOLOR} ${RED}[other]${NOCOLOR}"
+		echo -e "Example: ${GREEN}chmodcalc${NOCOLOR} ${GREEN}rwx${NOCOLOR} ${YELLOW}rw${NOCOLOR} ${RED}r${NOCOLOR}"
+		echo ""
+		echo -e "Syntax: ${CYAN}chmodcalc [octal]${NOCOLOR}"
+		echo -e "Example: ${GREEN}chmodcalc 777${NOCOLOR}"
+		echo ""
+		echo -e "You can also use symbols instead of numeric values with chmod"
+		echo -e "${BLUE}chmod u=rwx,g=rw,o=r filename.ext${NOCOLOR}"
+		echo ""
+		echo -e "To calculate octals: ${BLUE}read${NOCOLOR} is ${CYAN}4${NOCOLOR}, ${BLUE}write${NOCOLOR} is ${CYAN}2${NOCOLOR}, and ${BLUE}execute${NOCOLOR} is ${CYAN}1${NOCOLOR}"
+		echo ""
+	fi
+}
+
+# Function to recursively set permissions for only files
+function chmodfiles() {
+	# If the second parameter is not passed, set to the current working directory using $PWD
+	local _directory="${2:-${PWD}}"
+	local _permission="$1"
+
+	# Exit if the directory does not exist
+	if [ -z "$_permission" ]; then
+		echo "Sets permissions for files recursively"
+		echo "Syntax:";
+		echo "  chmodfiles [mode] [optional folder]";
+		echo "Example:";
+		echo "  chmodfiles 664";
+		echo "  chmodfiles +x /some/path";
+		return 1;
+	fi
+
+	# Exit if the directory does not exist
+	if [ ! -d "$_directory" ]; then
+		echo "Error: Directory $_directory not found.";
+		return 2;
+	fi
+
+	# Get confirmation
+	echo "This will recursively change all permissions to $_permission for the files in the directory:"
+	echo "$_directory"
+
+	if ask "Are you sure?" N; then
+		find "$_directory" -type f -exec chmod $_permission {} \;
+		echo "Done."
+	fi
+}
+
+# Function to recursively set permissions for only directories
+alias chmodfolders='chmoddirs'
+function chmoddirs() {
+	# If the second parameter is not passed, set to the current working directory using $PWD
+	local _directory="${2:-${PWD}}"
+	local _permission="$1"
+
+	# Exit if the directory does not exist
+	if [ -z "$_permission" ]; then
+		echo "Sets permissions for directories recursively"
+		echo "Syntax:";
+		echo "  chmoddirs [mode] [optional folder]";
+		echo "Example:";
+		echo "  chmoddirs 775";
+		echo "  chmoddirs +x /some/path";
+		return 1;
+	fi
+
+	# Exit if the directory does not exist
+	if [ ! -d "$_directory" ]; then
+		echo "Error: Directory $_directory not found.";
+		return 2;
+	fi
+
+	# Get confirmation
+	echo "This will recursively change all permissions to $_permission for the directories:"
+	echo "$_directory"
+
+	if ask "Are you sure?" N; then
+		find "$_directory" -type d -name \* -exec chmod $_permission {} \;
+		echo "Done."
+	fi
+}
+
+# Recursively set permissions of code files and directories
+# WARNING: Will remove executable permissions on script files
+function chfix() {
+	# Directory and file permissions
+	local _dir_permissions="0775"  # rwx rwx rx
+	local _file_permissions="0664" # rw  rw  r
+
+	# Permissions for user and group
+	#local _user="www-data"
+	#local _group="www-data"
+
+	## If $1 is not passed, set to the current working dir using $PWD
+	local _directory="${1:-${PWD}}"
+
+	## Exit if the directory does not exist
+	if [ ! -d "$_directory" ]; then
+		echo "Error: Directory $_directory not found.";
+		return 1;
+	fi
+
+	## Make sure we are not inside a protected folder
+	if [[ "$_directory" = "/" ||
+		"$_directory" = "/root" ||
+		"$_directory" = "/bin" ||
+		"$_directory" = "/boot" ||
+		"$_directory" = "/etc" ||
+		"$_directory" = "/home" ||
+		"$_directory" = "/lib" ||
+		"$_directory" = "/lib64" ||
+		"$_directory" = "/mnt" ||
+		"$_directory" = "/opt" ||
+		"$_directory" = "/proc" ||
+		"$_directory" = "/sbin" ||
+		"$_directory" = "/usr/bin" ||
+		"$_directory" = "/usr/lib" ||
+		"$_directory" = "/usr/lib64" ||
+		"$_directory" = "/usr/sbin" ||
+		"$_directory" = "/srv" ||
+		"$_directory" = "/usr" ||
+		"$_directory" = "/var" ||
+		"$_directory" = "/var/www" ]]; then
+		echo "Error: Cannot change $_dir because it is a protected directory.";
+		return 2;
+	fi
+
+	## Get confirmation
+	echo "This will change all permissions for the webserver directories and files and change ownership in:"
+	echo "$_directory"
+
+	if ask "Are you sure?" N; then
+		#sudo chown -R ${_user}:${_group} "$_directory"
+		sudo find "$_directory" -type f -exec chmod $_file_permissions {} \;
+		sudo find "$_directory" -type d -name \* -exec chmod $_dir_permissions {} \;
+		echo "Done."
+	fi
+}
+
+# Alias to copy/clone file permissions
+function chmodcopy() {
+	if [ $# -lt 2 ]; then
+	    echo "Usage: chmodcopy [source_file] [destination_file]"
+	    return 1
+	fi
+	chmod --reference="${@}"
+}
+
+# Fixes permissions in a user's home folder
+# If no user is specified, the current user is selected
+function fixuserhome() {
+	# If no parameter was specified...
+	if [[ -z "${@}" ]]; then
+		# Use the current user
+		local _username="$(whoami)"
+	else
+		# Use the passed in parameter
+		local _username="${@}"
+	fi
+
+	# If the home folder doesn't exist...
+	if [ ! -d "/home/${_username}" ]; then
+		echo "Error: User ${_username} does not have a home folder."
+		return 1
+	fi
+
+	# Set the hourglass and checkmark characters
+	local hourglass="\033[0;33m⌛\033[0m"
+	local checkmark="\r\033[1;32m✓\033[0m"
+
+	# Confirm
+	if ask "\033[1;31mWARNING:\033[0m Change all permissions for user \033[0;36m${_username}\033[0m's home folder?" N; then
+		sudo true # Prompt now instead of later and mess up the progress display
+
+		if ask "Reset group ownership permissions to \033[0;36m${_username}\033[0m?" Y; then
+			echo -ne "${hourglass} Set the owner and group as ${_username}"
+			sudo chown -R ${_username}:${_username} /home/${_username}
+		else
+			echo -ne "${hourglass} Set the owner as ${_username}"
+			sudo chown -R ${_username} /home/${_username}
+		fi
+		echo -e "${checkmark}"
+
+		echo -ne "${hourglass} Make sure we have read and write access to all files"
+		chmod -R u+rw /home/${_username}
+		echo -e "${checkmark}"
+
+		echo -ne "${hourglass} Remove write access from group"
+		chmod -R g-w /home/${_username}
+		echo -e "${checkmark}"
+
+		echo -ne "${hourglass} Remove all access from others"
+		chmod -R o-rwx /home/${_username}
+		echo -e "${checkmark}"
+
+		echo -ne "${hourglass} Make .sh shell script files executable"
+		#chmod ug+x /home/${_username}/{.,}*.sh # Only in the home folder root
+		find /home/${_username} -type f \( -name "*.sh" -o -name ".*.sh" \) -exec chmod ug+x {} \;
+		echo -e "${checkmark}"
+
+		echo -ne "${hourglass} Make sure all directories have execute permissions"
+		# The X (capital X, NOT small x) is ignored for files but is used for directories
+		chmod -R ug+X /home/${_username}
+		echo -e "${checkmark}"
+
+		echo -ne "${hourglass} Remove group permissions for directories without group read"
+		find /home/${_username} -type d ! -perm -g+r -execdir chmod g-wx {} \;
+		echo -e "${checkmark}"
+
+		# If there is a ~/.local/share/kwalletd directory...
+		if [[ -d "/home/${_username}/.local/share/kwalletd" ]]; then
+			echo -ne "${hourglass} User only access to KDE Wallet keyring"
+			chmod -R go-rwx /home/${_username}/.local/share/kwalletd
+			echo -e "${checkmark}"
+		fi
+
+		# If there is a ~/.local/share/keyrings directory...
+		if [[ -d "/home/${_username}/.local/share/keyrings" ]]; then
+			echo -ne "${hourglass} User only access to GNOME keyring"
+			chmod -R go-rwx /home/${_username}/.local/share/keyrings
+			echo -e "${checkmark}"
+		fi
+
+		# If there is an .ssh directory...
+		if [[ -d "/home/${_username}/.ssh" ]]; then
+			echo -ne "${hourglass} User only access to .ssh and private keys"
+			chmod -R go-rwx /home/${_username}/.ssh
+			echo -e "${checkmark}"
+		fi
+
+		# If there is a .putty directory...
+		if [[ -d "/home/${_username}/.putty" ]]; then
+			echo -ne "${hourglass} User only access to .putty and ssh keys"
+			chmod -R go-rwx /home/${_username}/.putty
+			echo -e "${checkmark}"
+		fi
+
+		# If there is a .pki directory...
+		if [[ -d "/home/${_username}/.pki" ]]; then
+			echo -ne "${hourglass} User only access to .pki keys and certificates"
+			chmod -R go-rwx /home/${_username}/.pki
+			echo -e "${checkmark}"
+		fi
+
+		# If there is a .gnupg directory...
+		if [[ -d "/home/${_username}/.gnupg" ]]; then
+			echo -ne "${hourglass} User only access to .gnupg and private keys"
+			chmod -R go-rwx /home/${_username}/.gnupg
+			echo -e "${checkmark}"
+		fi
+
+		# If KeePassXC/KeePass/KeeWeb is installed...
+		if [[ -x "$(command -v keepassxc)" ]] || [[ -x "$(command -v keepass)" ]] || [[ -x "$(command -v keeweb)" ]]; then
+			echo -ne "${hourglass} User only access to KeePassXC/KeePass/KeeWeb .kdbx files"
+			find /home/${_username} -type f \( -name "*.kdbx" -o -name ".*.kdbx" \) -exec chmod go-rwx {} \;
+			echo -e "${checkmark}"
+		fi
+
+		# If there is a pass directory...
+		if [[ -d "/home/${_username}/.password-store" ]]; then
+			echo -ne "${hourglass} User only access to pass data"
+			chmod -R go-rwx /home/${_username}/.password-store
+			echo -e "${checkmark}"
+		fi
+
+		# If there is a Bitwarden directory...
+		if [[ -d "/home/${_username}/.config/Bitwarden" ]]; then
+			echo -ne "${hourglass} User only access to Bitwarden data"
+			chmod -R go-rwx /home/${_username}/.config/Bitwarden
+			echo -e "${checkmark}"
+		fi
+		if [[ -d "/home/${_username}/.var/app/com.bitwarden.desktop" ]]; then
+			echo -ne "${hourglass} User only access to Bitwarden data (Flatpak)"
+			chmod -R go-rwx /home/${_username}/.var/app/com.bitwarden.desktop
+			echo -e "${checkmark}"
+		fi
+
+		# Check for Tor settings
+		if [[ -d "/home/${_username}/.local/share/torbrowser" ]]; then
+			echo -ne "${hourglass} User only access to Tor browser data"
+			chmod -R go-rwx /home/${_username}/.local/share/torbrowser
+			echo -e "${checkmark}"
+		fi
+		if [[ -d "/home/${_username}/.var/app/com.github.micahflee.torbrowser-launcher" ]]; then
+			echo -ne "${hourglass} User only access to Tor browser data (Flatpak)"
+			chmod -R go-rwx /home/${_username}/.var/app/com.github.micahflee.torbrowser-launcher
+			echo -e "${checkmark}"
+		fi
+
+		# Check for Brave settings
+		if [[ -d "/home/${_username}/.config/BraveSoftware" ]]; then
+			echo -ne "${hourglass} User only access to Brave browser data"
+			chmod -R go-rwx /home/${_username}/.config/BraveSoftware
+			echo -e "${checkmark}"
+		fi
+		if [[ -d "/home/${_username}/.var/app/com.brave.Browser" ]]; then
+			echo -ne "${hourglass} User only access to Brave browser data (Flatpak)"
+			chmod -R go-rwx /home/${_username}/.var/app/com.brave.Browser
+			echo -e "${checkmark}"
+		fi
+
+		# Check for Chrome settings
+		if [[ -d "/home/${_username}/.config/google-chrome" ]]; then
+			echo -ne "${hourglass} User only access to Chrome browser data"
+			chmod -R go-rwx /home/${_username}/.config/google-chrome
+			echo -e "${checkmark}"
+		fi
+		if [[ -d "/home/${_username}/.var/app/com.google.Chrome" ]]; then
+			echo -ne "${hourglass} User only access to Chrome browser data (Flatpak)"
+			chmod -R go-rwx /home/${_username}/.var/app/com.google.Chrome
+			echo -e "${checkmark}"
+		fi
+
+		# Check for Chromium settings
+		if [[ -d "/home/${_username}/.config/chromium" ]]; then
+			echo -ne "${hourglass} User only access to Chromium browser data"
+			chmod -R go-rwx /home/${_username}/.config/chromium
+			echo -e "${checkmark}"
+		fi
+		if [[ -d "/home/${_username}/.var/app/org.chromium.Chromium" ]]; then
+			echo -ne "${hourglass} User only access to Chromium browser data (Flatpak)"
+			chmod -R go-rwx /home/${_username}/.var/app/org.chromium.Chromium
+			echo -e "${checkmark}"
+		fi
+		if [[ -d "/home/${_username}/.var/app/net.sourceforge.chromium-bsu" ]]; then
+			echo -ne "${hourglass} User only access to Ungoogled Chromium browser data (Flatpak)"
+			chmod -R go-rwx /home/${_username}/.var/app/net.sourceforge.chromium-bsu
+			echo -e "${checkmark}"
+		fi
+
+		# Check for Firefox settings
+		if [[ -d "/home/${_username}/.mozilla" ]]; then
+			echo -ne "${hourglass} User only access to Firefox browser data"
+			chmod -R go-rwx /home/${_username}/.mozilla
+			echo -e "${checkmark}"
+		fi
+		if [[ -d "/home/${_username}/.var/app/org.mozilla.firefox" ]]; then
+			echo -ne "${hourglass} User only access to Firefox browser data (Flatpak)"
+			chmod -R go-rwx /home/${_username}/.var/app/org.mozilla.firefox
+			echo -e "${checkmark}"
+		fi
+
+		# Check for LibreWolf settings
+		if [[ -d "/home/${_username}/.librewolf" ]]; then
+			echo -ne "${hourglass} User only access to LibreWolf browser data"
+			chmod -R go-rwx /home/${_username}/.librewolf
+			echo -e "${checkmark}"
+		fi
+		if [[ -d "/home/${_username}/.var/app/io.gitlab.librewolf-community" ]]; then
+			echo -ne "${hourglass} User only access to LibreWolf browser data (Flatpak)"
+			chmod -R go-rwx /home/${_username}/.var/app/io.gitlab.librewolf-community
+			echo -e "${checkmark}"
+		fi
+
+		# Check for Opera settings
+		if [[ -d "/home/${_username}/.config/opera" ]]; then
+			echo -ne "${hourglass} User only access to Opera browser data"
+			chmod -R go-rwx /home/${_username}/.config/opera
+			echo -e "${checkmark}"
+		fi
+
+		# Check for Vivaldi settings
+		if [[ -d "/home/${_username}/.config/vivaldi" ]]; then
+			echo -ne "${hourglass} User only access to Vivaldi browser data"
+			chmod -R go-rwx /home/${_username}/.config/vivaldi
+			echo -e "${checkmark}"
+		fi
+
+		# Check for Evolution settings
+		if [[ -d "/home/${_username}/.config/evolution" ]]; then
+			echo -ne "${hourglass} User only access to Evolution email data"
+			chmod -R go-rwx /home/${_username}/.config/evolution
+			echo -e "${checkmark}"
+		fi
+		if [[ -d "/home/${_username}/.var/app/org.gnome.Evolution" ]]; then
+			echo -ne "${hourglass} User only access to Evolution email data (Flatpak)"
+			chmod -R go-rwx /home/${_username}/.var/app/org.gnome.Evolution
+			echo -e "${checkmark}"
+		fi
+
+		# Check for Geary settings
+		if [[ -d "/home/${_username}/.local/share/geary" ]]; then
+			echo -ne "${hourglass} User only access to Geary email data"
+			chmod -R go-rwx /home/${_username}/.local/share/geary
+			echo -e "${checkmark}"
+		fi
+		if [[ -d "/home/${_username}/.var/app/org.gnome.Geary" ]]; then
+			echo -ne "${hourglass} User only access to Geary email data (Flatpak)"
+			chmod -R go-rwx /home/${_username}/.var/app/org.gnome.Geary
+			echo -e "${checkmark}"
+		fi
+
+		# Check for Thunderbird settings
+		if [[ -d "/home/${_username}/.thunderbird" ]]; then
+			echo -ne "${hourglass} User only access to Thunderbird email data"
+			chmod -R go-rwx /home/${_username}/.thunderbird
+			echo -e "${checkmark}"
+		fi
+		if [[ -d "/home/${_username}/.var/app/org.mozilla.Thunderbird" ]]; then
+			echo -ne "${hourglass} User only access to Thunderbird email data (Flatpak)"
+			chmod -R go-rwx /home/${_username}/.var/app/org.mozilla.Thunderbird
+			echo -e "${checkmark}"
+		fi
+
+		# Check for Element settings
+		if [[ -d "/home/${_username}/.config/Element" ]]; then
+			echo -ne "${hourglass} User only access to Element chat data"
+			chmod -R go-rwx /home/${_username}/.config/Element
+			echo -e "${checkmark}"
+		fi
+		if [[ -d "/home/${_username}/.var/app/im.riot.Riot" ]]; then
+			echo -ne "${hourglass} User only access to Element chat data (Flatpak)"
+			chmod -R go-rwx /home/${_username}/.var/app/im.riot.Riot
+			echo -e "${checkmark}"
+		fi
+
+		# Check for Signal settings
+		if [[ -d "/home/${_username}/.config/Signal" ]]; then
+			echo -ne "${hourglass} User only access to Signal chat data"
+			chmod -R go-rwx /home/${_username}/.config/Signal
+			echo -e "${checkmark}"
+		fi
+		if [[ -d "/home/${_username}/.var/app/org.signal.Signal" ]]; then
+			echo -ne "${hourglass} User only access to Signal chat data (Flatpak)"
+			chmod -R go-rwx /home/${_username}/.var/app/org.signal.Signal
+			echo -e "${checkmark}"
+		fi
+
+		if [[ -f "/home/${_username}/.config/birthdays.csv" ]]; then
+			echo -ne "${hourglass} User only access to birthday/anniversary reminder data"
+			chmod 600 /home/${_username}/.config/birthdays.csv
+			echo -e "${checkmark}"
+		elif [[ -f "${_BDAY_FILE}" ]]; then
+			echo -ne "${hourglass} User only access to birthday/anniversary reminder data"
+			chmod 600 "${_BDAY_FILE}"
+			echo -e "${checkmark}"
+		fi
+
+		# [OPTIONAL] Copy group permissions to other
+		#echo -ne "${hourglass} Copy group permissions to other"
+		#chmod -R o=g /home/${_username}
+		#echo -e "${checkmark}"
+
+		# [OPTIONAL] Copy user permissions to group
+		#echo -ne "${hourglass} Copy user permissions to group"
+		#chmod -R g=u /home/${_username}
+		#echo -e "${checkmark}"
+
+		# Set the setgid bit, so that files/folder under the directory
+		# will be created with the same group as <directory>
+		echo -ne "${hourglass} Set the setgid bit to inherit folder permissions"
+		chmod g+s /home/${_username}
+		echo -e "${checkmark}"
+
+		# If Access Control Lists (ACL) is installed...
+		# To "activate" ACL, you have to remount the drive with the "acl" option
+		# NOTE: Btrfs and Xfs filesystem use the ACL mount option by default
+		# Example /etc/fstab Entry:
+		# UUID=abc123def456 / ext4 defaults,acl 0 1
+		# Type "man acl" for more information
+		if [[ -x "$(command -v setfacl)" ]]; then
+			# Use getfacl [directory] to check ACL for these directories
+			echo -ne "${hourglass} Modify default ACL entries"
+			setfacl -d -m u::rwx /home/${_username}
+			setfacl -d -m g::rx /home/${_username}
+			setfacl -d -m o::X /home/${_username}
+			echo -e "${checkmark}"
+		fi
+
+		echo "Done!"
+	else
+		return 0
+	fi
+}
+# Copy over configuration settings from one account to root/default/another
+function configcopy() {
+	if [ -z "${1}" ] || [ -z "${2}" ]; then
+		echo -e "Usage: \033[1;32mcopyconfig [from_user] [to_user]\033[0m"
+		echo -ne "Users can be \033[1;36mroot\033[0m, \033[1;36mdefault\033[0m (/etc/skel), or users \033[1;36m"
+		cut -d: -f1,3 /etc/passwd | egrep ':[0-9]{4}$' | cut -d: -f1 | tr '\n' ' ' | tr -d '[:space:]'
+		echo -e "\033[0m."
+		return
+	elif [ "${1}" == "${2}" ]; then
+		echo -e "\033[1;31mError:\033[0m The from and to user parameters cannot be the same."
+		return 2
+	elif [ ! -d "/home/${1}" ] && [ "${1}" != "root" ] && [ "${1}" != "default" ]; then
+		echo -e "\033[1;31mError:\033[0m User ${1} does not exist."
+		return 1
+	elif [ ! -d "/home/${2}" ] && [ "${2}" != "root" ] && [ "${2}" != "default" ]; then
+		echo -e "\033[1;31mError:\033[0m User ${2} does not exist."
+		return 1
+	elif [ "${1}" == "default" ] && [ "${2}" == "root" ]; then
+		dirfrom=/etc/skel/
+		dirto=/root/
+		owner=root
+	elif [ "${1}" == "default" ]; then
+		dirfrom=/etc/skel/
+		dirto=/home/"${2}"/
+		owner="${2}"
+	elif [ "${2}" == "default" ] && [ "${1}" == "root" ]; then
+		dirfrom=/root/
+		dirto=/etc/skel/
+		owner=root
+	elif [ "${2}" == "default" ]; then
+		dirfrom=/home/"${1}"/
+		dirto=/etc/skel/
+		owner=root
+	elif [ "${1}" == "root" ]; then
+		dirfrom=/root/
+		dirto=/home/"${2}"/
+		owner="${2}"
+	elif [ "${2}" == "root" ]; then
+		dirfrom=/home/"${1}"/
+		dirto=/root/
+		owner=root
+	else
+		dirfrom=/home/"${1}"/
+		dirto=/home/"${2}"/
+		owner="${2}"
+	fi
+
+	# Ask for confirmation
+	if ! ask "Are you sure? This will overwrite configuration files in ${dirto%/}" N; then
+		return
+	fi
+
+	# Add any additional files here
+	declare -a files
+	[ -f "${dirfrom}.bash_logout" ]  && files+=(".bash_logout")
+	[ -f "${dirfrom}.bash_profile" ] && files+=(".bash_profile")
+	[ -f "${dirfrom}.bashrc" ]       && files+=(".bashrc")
+	[ -f "${dirfrom}.bashrc_help" ]  && files+=(".bashrc_help")
+	[ -f "${dirfrom}.inputrc" ]      && files+=(".inputrc")
+	[ -f "${dirfrom}.nanorc" ]       && files+=(".nanorc")
+	[ -f "${dirfrom}.p10k.zsh" ]     && files+=(".p10k.zsh")
+	[ -f "${dirfrom}.screenrc" ]     && files+=(".screenrc")
+	[ -f "${dirfrom}.vimrc" ]        && files+=(".vimrc")
+	[ -f "${dirfrom}.Xauthority" ]   && files+=(".Xauthority")
+	[ -f "${dirfrom}.zshrc" ]        && files+=(".zshrc")
+
+	# Loop through and copy the files over
+	for file in "${files[@]}"; do
+		sudo \cp "${dirfrom}""${file}" "${dirto}" 2>/dev/null || :
+		sudo chown "${owner}":"${owner}" "${dirto}""${file}"
+		echo -e "\033[1;32m✓\033[0m Copied file: \033[1;36m${file}\033[0m"
+	done
+
+	# Copy other Extreme Ultimate bashrc settings
+	if [[ -d "${dirfrom}".config/bashrc ]]; then
+		sudo mkdir -p ${dirto}.config
+		sudo \cp -R "${dirfrom}".config/bashrc "${dirto}".config/ 2>/dev/null
+		echo -e "\033[1;32m✓\033[0m Copied files: \033[1;36mBashrc Config\033[0m"
+	fi
+
+	# Fish
+	if [[ -d "${dirfrom}".config/fish ]]; then
+		sudo mkdir -p ${dirto}.config
+		sudo \cp -R "${dirfrom}".config/fish "${dirto}".config/ 2>/dev/null
+		echo -e "\033[1;32m✓\033[0m Copied files: \033[1;36mFish\033[0m"
+	fi
+
+	# Micro (skip backups and buffers directories)
+	if [[ -f "${dirfrom}".config/micro/settings.json ]]; then
+		sudo mkdir -p ${dirto}.config/micro
+		sudo \cp "${dirfrom}".config/micro/settings.json "${dirto}".config/micro/settings.json 2>/dev/null
+		sudo \cp "${dirfrom}".config/micro/bindings.json "${dirto}".config/micro/bindings.json 2>/dev/null
+		sudo \cp -R "${dirfrom}".config/micro/plug "${dirto}".config/micro/ 2>/dev/null
+		echo -e "\033[1;32m✓\033[0m Copied files: \033[1;36mMicro\033[0m"
+	fi
+
+	# Tmux
+	sudo \cp -R "${dirfrom}".tmux* "${dirto}" 2>/dev/null
+	if [[ -e "${dirto}".tmux.conf ]]; then
+		sudo chown "${owner}":"${owner}" "${dirto}".tmux.conf
+		echo -e "\033[1;32m✓\033[0m Copied files: \033[1;36mTmux\033[0m"
+	fi
+	if [[ -d "${dirto}".tmux ]]; then
+		sudo chown -R "${owner}":"${owner}" "${dirto}".tmux
+	fi
+
+	# We are done
+	echo -e "Owner set to: \033[1;35m${owner}\033[0m"
+	echo -e "\033[1;33mFinished\033[0m copying configuation files from \033[1;34m${dirfrom%/}\033[0m to \033[1;34m${dirto%/}\033[0m"
+	return
+}
+
+# Trim leading and trailing spaces
+function trim() {
+	local var=$@
+	var="${var#"${var%%[![:space:]]*}"}"  # remove leading whitespace characters
+	var="${var%"${var##*[![:space:]]}"}"  # remove trailing whitespace characters
+	echo -n "$var"
+}

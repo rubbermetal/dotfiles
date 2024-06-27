@@ -1,0 +1,224 @@
+conky.config = {
+-- .bashrc							                                Conky Config Script            
+-- ----------------------------------------------------------------------------------------------- 
+-- Fonts used:                                                                                                                          
+-- ConkySymbols              Droid Sans                                                                          
+-- Noto Sans                 PWSmallIcons                                                                   
+-- Digital Camera Symbols    Technology                                                                        
+-- arial                     Camouflage Snow                                                            
+-- ----------------------------------------------------------------------------------------------- 
+-- Required Scripts                                                                                                                
+-- weather.sh
+-- battery_status.py
+-- freemem.py
+-- freeswap.py
+-- totalmem.py
+-- usedmem.py
+-- totalswap.py
+-- usedswap.py
+-- interfacedownspeed.py
+-- interfaceupspeed.py
+-- lan.py
+-- wan.py
+-- curl                                                                                                                                        
+-- ----------------------------------------------------------------------------------------------- 
+-- Description                                                                                                                         
+-- I modeled this after the simple system monitor applet on KDE. I used this   
+-- for a long time and built a conky around it. I decided to put it all into a         
+-- conky for simplification and efficiency purposes.                                                 
+-- ----------------------------------------------------------------------------------------------- 
+
+	background = true,
+	font = 'Droid Sans:size=8',
+	use_xft = true,
+	xftalpha = 0.5,
+	update_interval = .5,
+	total_run_times = 0,
+
+	own_window = true,
+	own_window_transparent = true,
+	own_window_argb_visual = true,
+	own_window_type = 'normal',
+	own_window_class = 'conky-semi',
+	own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+
+	double_buffer = true,
+	draw_shades = true,
+	draw_outline = false,
+	draw_borders = false,
+	draw_graph_borders = false,
+	minimum_width = 408,
+	maximum_width = 1050,
+	default_color = '#ffffff',
+	default_shade_color = '#000000',
+	draw_outline = true,
+	alignment = 'top_left',
+	gap_x = 20,
+	gap_y = 50,
+	no_buffers = true,
+	cpu_avg_samples = 2,
+	override_utf8_locale = true,
+	uppercase = false,
+	use_spacer = 'none',
+	format_human_readable = true,
+	temperature_unit = 'fahrenheit',
+	lua_load = '/home/madhatter/.Conky/conkyx/config/set_variables.lua',
+	xinerama_head = 1,  -- Set this to the monitor index you want Conky to appear on
+};
+
+conky.text = [[
+# ----------------------------------------------------------------------------------------------- #
+# Show our distro's logo
+# ----------------------------------------------------------------------------------------------- #
+${voffset -1}  ${font ConkySymbols:size=75}${color blue}t${font}
+# ----------------------------------------------------------------------------------------------- #
+# List our current kernel version
+# ----------------------------------------------------------------------------------------------- #
+${voffset 1}${font arial:size=10:bold}     ${color white}${kernel}${font}
+# ----------------------------------------------------------------------------------------------- #
+# List our distro
+# ----------------------------------------------------------------------------------------------- #
+${voffset 1}${font arial:size=10:bold}     ${color white}${distribution}${font}
+# ----------------------------------------------------------------------------------------------- #
+# Load CPU icons,graph and bars for 4 cores
+# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 800}${voffset -145}${color orange}${font ConkySymbols:size=16}F${font}${voffset -5} ${font arial:size=10:bold}${color orange}${cpubar cpu0 10,100}${font}
+${alignr 2}${goto 800}${color orange}${font ConkySymbols:size=16}F${font}${voffset -5} ${font arial:size=10:bold}${color orange}${cpubar cpu1 10,100}${font}
+${alignr 2}${goto 800}${color orange}${font ConkySymbols:size=16}F${font}${voffset -5} ${font arial:size=10:bold}${color orange}${cpubar cpu2 10,100}${font}
+${alignr 2}${goto 800}${color orange}${font ConkySymbols:size=16}F${font}${voffset -5} ${font arial:size=10:bold}${color orange}${cpubar cpu3 10,100}${font}
+${alignr 2}${goto 800}${color orange}${font ConkySymbols:size=16}F${font}${voffset -5} ${font arial:size=10:bold}${color orange}${cpubar cpu4 10,100}${font}
+${alignr 2}${goto 800}${color orange}${font ConkySymbols:size=16}F${font}${voffset -5} ${font arial:size=10:bold}${color orange}${cpubar cpu5 10,100}${font}
+${alignr 2}${goto 800}${color orange}${font ConkySymbols:size=16}F${font}${voffset -5} ${font arial:size=10:bold}${color orange}${cpubar cpu6 10,100}${font}
+${alignr 2}${goto 800}${color orange}${font ConkySymbols:size=16}F${font}${voffset -5} ${font arial:size=10:bold}${color orange}${cpubar cpu7 10,100}${font}
+# ----------------------------------------------------------------------------------------------- #
+# Print the cpu usage in percents for 4 cores
+# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 840}${voffset -187}         ${font arial:size=8:bold}${color white}${cpu cpu0}%${font}
+${alignr 2}${goto 840}${voffset 8}         ${font arial:size=8:bold}${color white}${cpu cpu1}%${font}
+${alignr 2}${goto 840}${voffset 8}         ${font arial:size=8:bold}${color white}${cpu cpu2}%${font}
+${alignr 2}${goto 840}${voffset 8}         ${font arial:size=8:bold}${color white}${cpu cpu3}%${font}
+${alignr 2}${goto 840}${voffset 8}         ${font arial:size=8:bold}${color white}${cpu cpu4}%${font}
+${alignr 2}${goto 840}${voffset 8}         ${font arial:size=8:bold}${color white}${cpu cpu5}%${font}
+${alignr 2}${goto 840}${voffset 8}         ${font arial:size=8:bold}${color white}${cpu cpu6}%${font}
+${alignr 2}${goto 840}${voffset 8}         ${font arial:size=8:bold}${color white}${cpu cpu7}%${font}
+# ----------------------------------------------------------------------------------------------- #
+# Load the cpu core temps. Prints current core temps.
+# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 920}${voffset -185}    ${cpugraph cpu0 10,120 66FFA500 99ffff00 -l}
+${alignr 2}${goto 920}${voffset 8}    ${cpugraph cpu0 10,120 66FFA500 99ffff00 -l}
+${alignr 2}${goto 920}${voffset 8}    ${cpugraph cpu0 10,120 66FFA500 99ffff00 -l}
+${alignr 2}${goto 920}${voffset 8}    ${cpugraph cpu0 10,120 66FFA500 99ffff00 -l}
+${alignr 2}${goto 920}${voffset 8}    ${cpugraph cpu0 10,120 66FFA500 99ffff00 -l}
+${alignr 2}${goto 920}${voffset 8}    ${cpugraph cpu0 10,120 66FFA500 99ffff00 -l}
+${alignr 2}${goto 920}${voffset 8}    ${cpugraph cpu0 10,120 66FFA500 99ffff00 -l}
+${alignr 2}${goto 920}${voffset 8}    ${cpugraph cpu0 10,120 66FFA500 99ffff00 -l}
+
+# ----------------------------------------------------------------------------------------------- #
+# Print the name of the current day
+# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 300}${voffset -125}${font Camouflage Snow:size=46:bold}${color orange}${time %A}${font}
+# ----------------------------------------------------------------------------------------------- #
+# Print the current date
+# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 400}${voffset 7}${font Camouflage Snow:size=14:bold}${color orange}${time %m/%d/%Y}${font}
+# ----------------------------------------------------------------------------------------------- #
+# Print the current time
+# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 420}${voffset 7}${font Technology:size=16:bold}${color orange}${time %I:%M:%S}${font}
+# ----------------------------------------------------------------------------------------------- #
+# Print whether its am or pm
+# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 480}${voffset -20}${font Technology:size=16:bold}${color orange}${time %P}${font}
+# ----------------------------------------------------------------------------------------------- #
+# Load the weather script. Prints current conditions
+# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 413}${voffset 1}${font arial:size=10:bold}${color white}   ${execi  300 ~/.Conky/conkyx/scripts/C/weather 48178}${font}
+# ----------------------------------------------------------------------------------------------- #
+# Show the ESSID and strength (dBm) of the Wifi we are connected to.
+# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 1}${voffset 15}${font arial:size=10:bold}${color orange}${font ConkySymbols:size=16}G${font} ${font arial:size=10:bold}${color orange}${execi 120 ~/.Conky/conkyx/scripts/C/wireless-essid}${font}
+# ----------------------------------------------------------------------------------------------- #
+# Shows if connected to a vpn. Green lock for yes, red lock for no
+# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 1}${font arial:size=10:bold}         ${color orange}VPN:${font} ${if_up tun0}${font PWSmallIcons:size=18}${color green}b${font}${else}${font PWSmallIcons:size=18}${color red}c${font}${endif}
+# ----------------------------------------------------------------------------------------------- #
+# Get our external IP address
+# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 2}${font ConkySymbols:size=16}${color orange}I${font} ${font arial:size=10:bold}${color orange} ${execi 120 ~/.Conky/conkyx/scripts/wan.py}${font}
+# ----------------------------------------------------------------------------------------------- #
+# Get our local IP address
+# ----------------------------------------------------------------------------------------------- # 
+${alignr 2}${goto 3} ${font arial:size=10:bold}${color orange}       ${execi 120 ~/.Conky/conkyx/scripts/C/lan}${font}
+# ----------------------------------------------------------------------------------------------- #
+# Show the current upload and download speed for wifi
+# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 2}        ${font ConkySymbols:size=10}e${font}${font arial:size=10:bold}${color white} ${exec ~/.Conky/conkyx/scripts/interfacedownspeed.py}${font}
+${alignr 2}${goto 2}        ${font ConkySymbols:size=10}${color orange}d${font}${font arial:size=10:bold}${color white} ${exec ~/.Conky/conkyx/scripts/interfaceupspeed.py}${font}
+# ----------------------------------------------------------------------------------------------- #
+# Load the battery bar
+# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 2}${voffset 10}${font Digital Camera Symbols:size=11}${color orange}d${font}${font arial:size=10:bold}${color orange}  ${battery_bar 15,100 BAT1}${font}
+# ----------------------------------------------------------------------------------------------- #
+# Show the battery health left in percentage
+# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 2}${voffset -18}${offset 21}${font arial:size=8:bold}${color white}   ${execi 60 /home/madhatter/.Conky/conkyx/scripts/C/battery_status}${font}
+${alignr 2}${goto 2}${voffset 3}${offset 21}${font arial:size=8:bold}${color white}  ${execi 60 /home/madhatter/.Conky/conkyx/scripts/C/batter_condition} Health${font}
+# ----------------------------------------------------------------------------------------------- #
+# Show the hard disk 1 read and write rates
+# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 800}${voffset -60}${font ConkySymbols:size=36}${color orange}k${font}${voffset -35}${font arial:size=10:bold}${color white}@home${font}
+${alignr 2}${goto 850}${color orange}${fs_bar_free 15,180 /home}
+${alignr 2}${goto 849}${voffset -4}${font arial:size=10:bold}${color orange}Read ${color white}${diskio_read sdc}${font}
+${alignr 2}${goto 940}${voffset -19}${font arial:size=10:bold}${color orange}Write ${color white}${diskio_write sdc}${font}
+# ----------------------------------------------------------------------------------------------- #
+# Show the hard disk 2 read and write rates
+# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 800}${voffset 12}${font ConkySymbols:size=36}${color orange}k${font}${voffset -35}${font arial:size=10:bold}${color white}@pkg${font}
+${alignr 2}${goto 850}${color orange}${fs_bar_free 15,180 /var/cache/pacman/pkg}
+${alignr 2}${goto 849}${voffset -4}${font arial:size=10:bold}${color orange}Read ${color white}${diskio_read sdc2}${font}
+${alignr 2}${goto 940}${voffset -19}${font arial:size=10:bold}${color orange}Write ${color white}${diskio_write sdc2}${font}
+# ----------------------------------------------------------------------------------------------- #
+# Show the hard disk 3 read and write rates
+# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 800}${voffset 12}${font ConkySymbols:size=36}${color orange}k${font}${voffset -35}${font arial:size=10:bold}${color white}@.snapshots${font}
+${alignr 2}${goto 850}${color orange}${fs_bar_free 15,180 /.snapshots}
+${alignr 2}${goto 849}${voffset -4}${font arial:size=10:bold}${color orange}Read ${color white}${diskio_read sdc2}${font}
+${alignr 2}${goto 940}${voffset -19}${font arial:size=10:bold}${color orange}Write ${color white}${diskio_write sdc2}${font}
+# ----------------------------------------------------------------------------------------------- #
+# Show the hard disk 4 read and write rates
+# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 800}${voffset 12}${font ConkySymbols:size=36}${color orange}k${font}${voffset -35}${font arial:size=10:bold}${color white}@log${font}
+${alignr 2}${goto 850}${color orange}${fs_bar_free 15,180 /var/log}
+${alignr 2}${goto 849}${voffset -4}${font arial:size=10:bold}${color orange}Read ${color white}${diskio_read sdc2}${font}
+${alignr 2}${goto 940}${voffset -19}${font arial:size=10:bold}${color orange}Write ${color white}${diskio_write sdc2}${font}
+# ----------------------------------------------------------------------------------------------- #
+# Load the Diskiographs
+# ----------------------------------------------------------------------------------------------- #
+${alignr 40}${goto 850}${voffset 2}${diskiograph /dev/sdc 15,140 66FFA500 99ffff00 -t -l}
+# ----------------------------------------------------------------------------------------------- #
+# Lod the ram icon for memory
+# ----------------------------------------------------------------------------------------------- #
+${goto 2}${voffset -120}${font ConkySymbols:size=26}${color orange}j${font}
+# ----------------------------------------------------------------------------------------------- #
+# Show the used and free memory and load the memory bar
+# ----------------------------------------------------------------------------------------------- #
+${voffset -40}${goto 27}${font arial:size=13:bold}   ${color orange}Mem: ${color white}${execi 60 ~/.Conky/conkyx/scripts/C/totalmem}${font}
+${voffset -6}${goto 27}${font arial:size=8:bold}    ${color red}Used:${color white}${execi 60 ~/.Conky/conkyx/scripts/C/usedmem} ${color green}Free:${color white} ${execi 60 ~/.Conky/conkyx/scripts/C/freemem}${font}
+${voffset 1}${goto 7}${font arial:size=13:bold}${color orange}${membar 15,180}${font}
+# ----------------------------------------------------------------------------------------------- #
+# Show the amount of used and free swap space and load the swap bar
+# ----------------------------------------------------------------------------------------------- #
+${goto 2}${voffset 11}${font ConkySymbols:size=26}${color orange}j${font}
+${voffset -40}${goto 27}${font arial:size=13:bold}   ${color orange}Swap: ${color white}${execi 60 ~/.Conky/conkyx/scripts/C/totalswap}${font}
+${voffset -6}${goto 27}${font arial:size=8:bold}     ${color red}Used:${color white}${execi 60 ~/.Conky/conkyx/scripts/C/usedswap} ${color green}Free:${color white} ${execi 60 ~/.Conky/conkyx/scripts/C/freeswap}${font}
+${voffset 1}${goto 7}${font arial:size=13:bold}${color orange}${swapbar 15,180}${font}
+
+# ----------------------------------------------------------------------------------------------- #
+# Load the available update. Prints number of available updates and list the first 10
+# ----------------------------------------------------------------------------------------------- #
+${voffset 1}${goto 2}${font ConkySymbols:size=26}${color orange}T${font}
+${voffset -25}${goto 1}${font arial:size=13:bold}        Updates: ${color white}${execi 45 python3 ~/.Conky/conkyx/scripts/check_updates.py}${font}
+${voffset 1}${font arial:size=10:bold}${execi  60 python3 ~/.Conky/conkyx/scripts/list_updates.py 10}${font}
+${voffset 25}${head /home/madhatter/.Conky/conkyx/docs/nvim_help.txt 30 30}
+${voffset -15}${tail /home/madhatter/.Conky/conkyx/docs/nvim_help.txt 30 30}
+]];

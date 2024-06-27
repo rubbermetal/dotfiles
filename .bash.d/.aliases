@@ -1,0 +1,124 @@
+# File management
+alias mkdir='mkdir -vp'
+alias chmod='chmod -v'
+alias mx='chmod a+x'
+alias chown='chown --preserve-root'
+alias chmod='chmod --preserve-root'
+alias chgrp='chgrp --preserve-root'
+alias cd='z'
+
+# Conversions
+alias convert='ffmpeg -i'
+
+
+# Listing files with exa
+alias ls='exa -lhF --group-directories-first --color=always --icons'
+alias ll='exa -alF --group-directories-first --color=always --icons'
+alias la='exa -A --group-directories-first --color=always --icons'
+alias l='exa -CF --group-directories-first --color=always --icons'
+
+# File type count
+alias ftc='exa | rev | cut -d"." -f1 | rev | sort | uniq -c'
+
+# Additional useful exa aliases
+alias lt='exa --tree --icons'
+alias lt2='exa --tree -L 2 --icons' # Tree view limited to depth 2
+alias lg='exa -l --git --icons' # Detailed view with Git status
+
+# File comparison
+alias diff='diff --suppress-common-lines'
+
+# File copying and moving
+alias mv='mv -vi'
+alias cp='cp -vip'
+alias ln='ln -i'
+alias rm='rm -Iv --preserve-root'
+alias rmd='\rm --recursive --force --verbose'
+alias shred='shred --force --remove --verbose'
+
+# Mounting and unmounting
+alias mount='mount | column -t'
+alias m='mount'
+alias um='umount'
+
+# Date and time
+alias now='date +"%T"'
+alias today='date +"%Y-%m-%d"'
+
+# Text editors
+alias edit="nano"
+alias nano='nano --smarthome --multibuffer --const --autoindent'
+alias visudo='EDITOR=nano visudo'
+alias vim='nvim'
+
+# Downloading
+alias dl="wget -P ~/Downloads"
+
+# System monitoring
+alias top="htop"
+alias du="du -h"
+alias df="df -h"
+alias whereis="which"
+alias grep="grep -n --color=auto"
+alias egrep="grep -n --color=auto"
+alias fgrep="grep -n --color=auto"
+
+# Pacman
+alias pacman="sudo pacman"
+alias install="pacman -S"
+alias install-file="pacman -U"
+alias uninstall="pacman -Rcs"
+alias update="pacman -Syyu --ignore=linux,linux-lts, hplip"
+alias upgrade="pacman -Syu linux linux-lts"
+alias pkglist='pacman -Qe'
+alias pkglistmore='pacman -Q'
+alias pkgsearch='pacman -Ss'
+alias remove-orphans="pacman -Qtdq | pacman -Rns -"
+alias list-orphans="pacman -Qdt"
+alias convert-deb="debtap"
+alias makepkg="makepkg -srciC"
+alias clearcache="pacman -Sc"
+
+
+# Scripts
+alias dnsquery="perl ~/Scripts/dnsquery $1"
+alias calc="perl ~/Scripts/calc.pl"
+alias passgen="perl ~/Scripts/passgen.pl"
+alias diagnostic="sh ~/Scripts/level-2.sh"
+alias mail="mutt"
+
+# Notifications
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# dmesg
+alias dmesg='dmesg --color'
+
+# Networking
+alias wget='wget -c'
+alias ping='ping -c 5'
+alias fastping='ping -c 100 -i.2'
+alias ports='netstat -tulanp'
+
+# Clear cache
+alias cls="clear"
+alias flushcache="sudo free -h && sudo su -c \"echo 3 >'/proc/sys/vm/drop_caches' && swapoff -a && swapon -a && printf '\n\033[1;33m%s\033[0m\n\n' 'Ram-cache and Swap Cleared'\" root&& free -h"
+
+# Grub
+alias grubedit='sudoedit /etc/default/grub'
+alias grubsave='sudo update-grub'
+
+# hstr
+alias hh='hstr'
+
+# multitail
+if [[ -x "$(command -v multitail)" ]]; then
+	alias multitail='multitail -c'
+fi
+
+# jp2a
+if [[ -x "$(command -v jp2a)" ]]; then
+	alias jp2a='jp2a --color'
+fi
+
+alias computer="\"~/Python Scripts/davinci.py\""
+alias morse="python \"/home/madhatter/Python Scripts/Morse Code/txt-morse.py\""

@@ -1,0 +1,20 @@
+2024/06/20-10:48:55.101 4 Reusing MANIFEST /home/madhatter/.config/chromium/Default/Local Storage/leveldb/MANIFEST-000001
+2024/06/20-10:48:55.129 4 Recovering log #371
+2024/06/20-10:48:55.130 4 Level-0 table #374: started
+2024/06/20-10:48:55.145 4 Level-0 table #374: 21820 bytes OK
+2024/06/20-10:48:55.151 4 Delete type=0 #371
+2024/06/20-12:01:37.469 4 Level-0 table #377: started
+2024/06/20-12:01:37.479 4 Level-0 table #377: 32561 bytes OK
+2024/06/20-12:01:37.487 4 Delete type=0 #375
+2024/06/21-08:25:50.476 4 Level-0 table #379: started
+2024/06/21-08:25:50.488 4 Level-0 table #379: 36952 bytes OK
+2024/06/21-08:25:50.495 4 Delete type=0 #376
+2024/06/21-08:25:50.497 6 Compacting 4@0 + 1@1 files
+2024/06/21-08:25:50.541 6 Generated table #380@0: 1544 keys, 997404 bytes
+2024/06/21-08:25:50.541 6 Compacted 4@0 + 1@1 files => 997404 bytes
+2024/06/21-08:25:50.546 6 compacted to: files[ 0 1 1 0 0 0 0 ]
+2024/06/21-08:25:50.549 6 Delete type=2 #370
+2024/06/21-08:25:50.549 6 Delete type=2 #372
+2024/06/21-08:25:50.549 6 Delete type=2 #374
+2024/06/21-08:25:50.549 6 Delete type=2 #377
+2024/06/21-08:25:50.549 6 Delete type=2 #379

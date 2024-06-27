@@ -1,0 +1,67 @@
+Useful Shortcuts for Neovim
+
+Basic Navigation				Insert Mode
+
+    h : Move left					i : Enter insert mode before cursor
+    j : Move down				      a : Enter insert mode after cursor
+    k : Move up					I : Enter insert mode at the beginning of the line
+    l : Move right					A : Enter insert mode at the end of the line
+								o : Insert a new line below and enter insert mode
+Editing						  O : Insert a new line above and enter insert mode
+
+    x : Delete character under cursor		Search
+    dw : Delete word				    /pattern : Search for pattern
+    dd : Delete line					n : Repeat search forward
+    u : Undo						    N : Repeat search backward
+    Ctrl-r : Redo					    :%s/old/new/g : Replace all occurrences of 'old' with 'new'
+    y : Yank (copy)
+    p : Paste 						Saving and Exiting
+    							       :w : Save
+Visual Mode   						:q : Quit
+    							       :wq : Save and quit
+    v : Start visual mode				:q! : Quit without saving
+    V : Start visual line mode
+    Ctrl-v : Start visual block mode		Buffers
+    y : Yank selected text
+    d : Delete selected text				:bnext : Next buffer
+    							:bprev : Previous buffer
+Windows							:bd : Delete buffer
+
+    Ctrl-w v : Split window vertically
+    Ctrl-w s : Split window horizontally
+    Ctrl-w w : Switch between windows
+    Ctrl-w q : Quit window
+
+Tabs
+
+    :tabnew : Open new tab
+    :tabnext : Next tab
+    :tabprev : Previous tab
+    :tabclose : Close tab
+
+
+
+    
+    
+    
+    
+
+
+
+
+
+
+    
+    
+    
+    
+
+
+
+    
+    
+    
+
+
+
+

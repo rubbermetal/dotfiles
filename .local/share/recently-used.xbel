@@ -1,0 +1,1861 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xbel version="1.0"
+      xmlns:bookmark="http://www.freedesktop.org/standards/desktop-bookmarks"
+      xmlns:mime="http://www.freedesktop.org/standards/shared-mime-info"
+>
+  <bookmark href="file:///home/madhatter" added="2024-05-29T20:38:41.691731Z" modified="2024-06-01T23:05:24.533333Z" visited="2024-05-29T20:38:41.691733Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-01T23:05:24.533332Z" count="29"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Desktop" added="2024-05-29T20:38:46.413415Z" modified="2024-05-30T00:16:57.687034Z" visited="2024-05-29T20:38:46.413416Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T00:16:57.687029Z" count="3"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///" added="2024-05-29T20:38:47.361781Z" modified="2024-05-30T22:10:05.738290Z" visited="2024-05-29T20:38:47.361782Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T22:10:05.738288Z" count="5"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home" added="2024-05-29T20:38:49.739324Z" modified="2024-05-29T20:38:49.739333Z" visited="2024-05-29T20:38:49.739326Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-29T20:38:49.739328Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Shell%20Scripts/wifi.sh" added="2024-05-29T21:08:22.131274Z" modified="2024-06-07T18:22:10.942776Z" visited="2024-05-29T21:08:22.131275Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 59:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="xfce4-session-settings" exec="&apos;xfce4-session-settings %u&apos;" modified="2024-05-29T21:08:22.131276Z" count="1"/>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-07T17:44:50.935223Z" count="3"/>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-06-07T18:22:10.942775Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Azure-Dark-Icons.tar.gz" added="2024-05-29T23:22:43.952520Z" modified="2024-05-29T23:22:55.583496Z" visited="2024-05-29T23:22:43.952522Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-compressed-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-29T23:22:43.952528Z" count="1"/>
+          <bookmark:application name="xfce4-appearance-settings" exec="&apos;xfce4-appearance-settings %u&apos;" modified="2024-05-29T23:22:55.583493Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads" added="2024-05-29T23:24:57.135356Z" modified="2024-06-01T23:01:54.936274Z" visited="2024-05-29T23:24:57.135356Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-01T23:01:54.936273Z" count="12"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Breeze-Round-Chameleon-Dark-Icons.tar.gz" added="2024-05-29T23:25:20.112697Z" modified="2024-05-29T23:25:32.407106Z" visited="2024-05-29T23:25:20.112728Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-compressed-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-29T23:25:20.112738Z" count="1"/>
+          <bookmark:application name="xfce4-appearance-settings" exec="&apos;xfce4-appearance-settings %u&apos;" modified="2024-05-29T23:25:32.407103Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Azure-Glassy-Dark-Icons.tar.gz" added="2024-05-29T23:26:44.496086Z" modified="2024-05-29T23:26:50.214416Z" visited="2024-05-29T23:26:44.496089Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-compressed-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-29T23:26:44.496102Z" count="1"/>
+          <bookmark:application name="xfce4-appearance-settings" exec="&apos;xfce4-appearance-settings %u&apos;" modified="2024-05-29T23:26:50.214410Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Breeze-Gently.tar.gz" added="2024-05-29T23:28:16.797550Z" modified="2024-05-29T23:28:27.250768Z" visited="2024-05-29T23:28:16.797552Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-compressed-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-29T23:28:16.797557Z" count="1"/>
+          <bookmark:application name="xfce4-appearance-settings" exec="&apos;xfce4-appearance-settings %u&apos;" modified="2024-05-29T23:28:27.250763Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Colorful-Dark-Icons.tar.gz" added="2024-05-29T23:30:10.134751Z" modified="2024-05-29T23:30:19.921651Z" visited="2024-05-29T23:30:10.134753Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-compressed-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-29T23:30:10.134761Z" count="1"/>
+          <bookmark:application name="xfce4-appearance-settings" exec="&apos;xfce4-appearance-settings %u&apos;" modified="2024-05-29T23:30:19.921645Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/FlatSparrow-Pack.7z" added="2024-05-29T23:32:20.947477Z" modified="2024-06-11T20:54:29.482905Z" visited="2024-05-29T23:32:20.947478Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-7z-compressed"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-29T23:32:20.947481Z" count="1"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:54:29.482901Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/PRO-dark-XFCE-4.14.tar.xz" added="2024-05-29T23:35:34.253220Z" modified="2024-05-29T23:43:00.133150Z" visited="2024-05-29T23:35:34.253221Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-xz-compressed-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-29T23:35:34.253224Z" count="1"/>
+          <bookmark:application name="xfce4-appearance-settings" exec="&apos;xfce4-appearance-settings %u&apos;" modified="2024-05-29T23:36:23.279077Z" count="1"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-05-29T23:43:00.133148Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/PRO-dark-XFCE-edition%20II-1.tar.tar" added="2024-05-29T23:35:49.872892Z" modified="2024-05-29T23:43:22.708327Z" visited="2024-05-29T23:35:49.872893Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-29T23:35:49.872896Z" count="1"/>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-29T23:42:49.763802Z" count="2"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-05-29T23:43:22.708326Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/XFCE-D-PRO-1.6.tar.tar" added="2024-05-29T23:36:00.032152Z" modified="2024-05-29T23:43:35.187798Z" visited="2024-05-29T23:36:00.032153Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-29T23:36:00.032156Z" count="1"/>
+          <bookmark:application name="xfce4-appearance-settings" exec="&apos;xfce4-appearance-settings %u&apos;" modified="2024-05-29T23:36:31.758485Z" count="2"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-05-29T23:43:35.187797Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Themes" added="2024-05-29T23:43:48.741850Z" modified="2024-05-29T23:44:55.679386Z" visited="2024-05-29T23:43:48.741851Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-29T23:44:55.679382Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/McOS-XFCE-Edition-II-1.tar.tar" added="2024-05-29T23:47:13.425037Z" modified="2024-05-29T23:47:48.424154Z" visited="2024-05-29T23:47:13.425039Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-29T23:47:13.425047Z" count="1"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-05-29T23:47:48.424152Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Gn-OSX-XFCE-Edition-1.2.tar.tar" added="2024-05-29T23:47:24.805550Z" modified="2024-05-29T23:48:13.385329Z" visited="2024-05-29T23:47:24.805552Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-29T23:47:24.805557Z" count="1"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-05-29T23:48:13.385327Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/FlatSparrow-Pack" added="2024-05-29T23:50:39.831742Z" modified="2024-05-29T23:51:59.586604Z" visited="2024-05-29T23:50:39.831743Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-29T23:50:39.831746Z" count="1"/>
+          <bookmark:application name="xfce4-appearance-settings" exec="&apos;xfce4-appearance-settings %u&apos;" modified="2024-05-29T23:51:59.586600Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.themes" added="2024-05-29T23:50:54.610265Z" modified="2024-05-29T23:50:54.610274Z" visited="2024-05-29T23:50:54.610266Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-29T23:50:54.610269Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/candy-icons.tar.xz" added="2024-05-29T23:53:49.926882Z" modified="2024-05-29T23:56:05.994234Z" visited="2024-05-29T23:53:49.926885Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-xz-compressed-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-29T23:53:49.926890Z" count="1"/>
+          <bookmark:application name="xfce4-appearance-settings" exec="&apos;xfce4-appearance-settings %u&apos;" modified="2024-05-29T23:56:05.994231Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Blueberry-Numix-2021_1.9.3.zip" added="2024-05-29T23:55:57.837107Z" modified="2024-05-29T23:56:18.870110Z" visited="2024-05-29T23:55:57.837109Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-29T23:55:57.837113Z" count="1"/>
+          <bookmark:application name="xfce4-appearance-settings" exec="&apos;xfce4-appearance-settings %u&apos;" modified="2024-05-29T23:56:18.870108Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Templates" added="2024-05-30T00:05:54.369303Z" modified="2024-05-30T00:05:54.369313Z" visited="2024-05-30T00:05:54.369305Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T00:05:54.369308Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Templates/.py" added="2024-05-30T00:07:09.172801Z" modified="2024-05-30T00:07:58.683639Z" visited="2024-05-30T00:07:09.172802Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 5:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T00:07:09.172804Z" count="1"/>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T00:07:58.683635Z" count="4"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Templates/.pl" added="2024-05-30T00:07:38.744231Z" modified="2024-05-30T00:07:44.249820Z" visited="2024-05-30T00:07:38.744232Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 2:13;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T00:07:44.249816Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Templates/.php" added="2024-05-30T00:08:03.961476Z" modified="2024-05-30T00:08:32.460100Z" visited="2024-05-30T00:08:03.961477Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 1:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T00:08:32.460095Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Templates/.html" added="2024-05-30T00:08:43.778331Z" modified="2024-05-30T00:08:54.122759Z" visited="2024-05-30T00:08:43.778332Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 11:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T00:08:54.122755Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Templates/.sh" added="2024-05-30T00:09:03.269035Z" modified="2024-05-30T00:09:32.562042Z" visited="2024-05-30T00:09:03.269036Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 0:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T00:09:32.562038Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.config" added="2024-05-30T00:15:07.780059Z" modified="2024-06-07T17:43:42.497555Z" visited="2024-05-30T00:15:07.780060Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-07T17:43:42.497553Z" count="5"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.bash_history" added="2024-05-30T00:15:38.372807Z" modified="2024-05-30T00:15:47.045047Z" visited="2024-05-30T00:15:38.372807Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 0:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T00:15:47.045042Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.dmrc" added="2024-05-30T00:15:59.896212Z" modified="2024-05-30T00:16:02.437689Z" visited="2024-05-30T00:15:59.896213Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 0:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T00:16:02.437685Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/We10XOS-cursors.tar.gz" added="2024-05-30T00:20:59.444787Z" modified="2024-05-30T00:21:55.106964Z" visited="2024-05-30T00:20:59.444788Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-compressed-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-30T00:20:59.444792Z" count="1"/>
+          <bookmark:application name="xfce4-appearance-settings" exec="&apos;xfce4-appearance-settings %u&apos;" modified="2024-05-30T00:21:55.106961Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.wallpaper/arch-1.webp" added="2024-05-30T00:29:59.206824Z" modified="2024-05-30T00:29:59.941977Z" visited="2024-05-30T00:29:59.206827Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/webp"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-30T00:29:59.941973Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.wallpaper" added="2024-05-30T00:30:34.681881Z" modified="2024-05-30T00:37:57.530102Z" visited="2024-05-30T00:30:34.681882Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="xfdesktop-settings" exec="&apos;xfdesktop-settings %u&apos;" modified="2024-05-30T00:37:57.530100Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.wallpaper/Arch%20Linux%20Wallpapers%20(1).jpg" added="2024-05-30T00:31:22.240764Z" modified="2024-05-30T00:31:22.591945Z" visited="2024-05-30T00:31:22.240768Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/jpeg"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-30T00:31:22.591941Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.wallpaper/Arch-Linux-Wallpaper.png" added="2024-05-30T00:33:07.146621Z" modified="2024-05-30T00:33:07.519093Z" visited="2024-05-30T00:33:07.146623Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-30T00:33:07.519088Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.wallpaper/Arch%20Linux%20Wallpapers%20(4).jpg" added="2024-05-30T00:33:28.961155Z" modified="2024-05-30T00:33:29.309873Z" visited="2024-05-30T00:33:28.961158Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/jpeg"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-30T00:33:29.309869Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.wallpaper/4537029.png" added="2024-05-30T00:34:02.585036Z" modified="2024-05-30T00:34:02.917802Z" visited="2024-05-30T00:34:02.585038Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-30T00:34:02.917798Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.wallpaper/com0585.jpg" added="2024-05-30T00:34:49.732522Z" modified="2024-05-30T00:34:50.094775Z" visited="2024-05-30T00:34:49.732525Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/jpeg"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-30T00:34:50.094771Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///lib" added="2024-05-30T12:37:05.913452Z" modified="2024-05-30T12:37:05.913457Z" visited="2024-05-30T12:37:05.913453Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T12:37:05.913455Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///lib64" added="2024-05-30T12:37:16.607861Z" modified="2024-05-30T12:37:16.607866Z" visited="2024-05-30T12:37:16.607862Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T12:37:16.607863Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///bin" added="2024-05-30T12:37:34.158898Z" modified="2024-05-30T12:37:34.158903Z" visited="2024-05-30T12:37:34.158899Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T12:37:34.158901Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///.snapshots" added="2024-05-30T12:42:34.701111Z" modified="2024-05-30T12:42:34.701116Z" visited="2024-05-30T12:42:34.701112Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T12:42:34.701113Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///.snapshots/home_20240530-084208" added="2024-05-30T12:42:38.542609Z" modified="2024-05-30T12:42:38.542614Z" visited="2024-05-30T12:42:38.542610Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T12:42:38.542611Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///.snapshots/home_20240530-084208/madhatter" added="2024-05-30T12:42:39.804922Z" modified="2024-05-30T12:42:39.804926Z" visited="2024-05-30T12:42:39.804923Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T12:42:39.804924Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Shell%20Scripts" added="2024-05-30T14:12:18.445842Z" modified="2024-06-07T17:44:20.994203Z" visited="2024-05-30T14:12:18.445842Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-07T17:44:20.994202Z" count="6"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Shell%20Scripts/snapshot.sh" added="2024-05-30T14:12:22.462207Z" modified="2024-05-30T14:12:33.628137Z" visited="2024-05-30T14:12:22.462208Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 0:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T14:12:22.462209Z" count="1"/>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T14:12:33.628135Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/bash.d-20240530T141338Z-001.zip" added="2024-05-30T14:13:44.636709Z" modified="2024-05-30T14:14:08.718496Z" visited="2024-05-30T14:13:44.636709Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-30T14:13:44.636711Z" count="1"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-05-30T14:14:08.718495Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/bashrc" added="2024-05-30T14:13:50.457396Z" modified="2024-05-30T14:13:50.457402Z" visited="2024-05-30T14:13:50.457396Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/octet-stream"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-30T14:13:50.457399Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.bashrc" added="2024-05-30T14:16:40.683733Z" modified="2024-05-31T14:27:30.320460Z" visited="2024-05-30T14:16:40.683734Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 280:32;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-31T14:26:48.645978Z" count="2"/>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-31T14:27:30.320458Z" count="7"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.bash.d" added="2024-05-30T14:19:49.766978Z" modified="2024-05-30T14:19:49.766983Z" visited="2024-05-30T14:19:49.766979Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T14:19:49.766981Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Data%20Logger-20240530T143110Z-001.zip" added="2024-05-30T14:32:13.528661Z" modified="2024-05-30T14:39:48.926997Z" visited="2024-05-30T14:32:13.528663Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-30T14:32:13.528665Z" count="1"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-05-30T14:39:48.926996Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.bash.d/payday-calculator.py" added="2024-05-30T14:32:31.074189Z" modified="2024-05-30T14:32:31.074194Z" visited="2024-05-30T14:32:31.074190Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 0:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T14:32:31.074192Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Python%20Scripts" added="2024-05-30T14:40:24.264722Z" modified="2024-05-30T14:41:20.954363Z" visited="2024-05-30T14:40:24.264723Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T14:41:20.954361Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Morse%20Code-20240530T144042Z-001.zip" added="2024-05-30T14:40:48.867068Z" modified="2024-05-30T14:41:03.970460Z" visited="2024-05-30T14:40:48.867070Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-30T14:40:48.867072Z" count="1"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-05-30T14:41:03.970459Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Conky-20240530T144244Z-001.zip" added="2024-05-30T14:43:28.304337Z" modified="2024-05-30T14:43:37.708455Z" visited="2024-05-30T14:43:28.304338Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-30T14:43:28.304340Z" count="1"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-05-30T14:43:37.708453Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky" added="2024-05-30T14:44:00.426156Z" modified="2024-05-31T01:23:10.414016Z" visited="2024-05-30T14:44:00.426157Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-31T01:23:10.414014Z" count="6"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx" added="2024-05-30T14:44:03.004324Z" modified="2024-05-31T01:23:11.887655Z" visited="2024-05-30T14:44:03.004325Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-31T01:23:11.887651Z" count="6"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/scripts" added="2024-05-30T14:44:12.355492Z" modified="2024-05-30T16:06:46.822003Z" visited="2024-05-30T14:44:12.355493Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T16:06:46.822000Z" count="5"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/scripts/C" added="2024-05-30T14:44:17.645134Z" modified="2024-05-30T20:45:12.852807Z" visited="2024-05-30T14:44:17.645134Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T20:45:12.852805Z" count="6"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/bin" added="2024-05-30T14:46:12.494707Z" modified="2024-05-30T14:46:12.494715Z" visited="2024-05-30T14:46:12.494708Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T14:46:12.494711Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/config" added="2024-05-30T14:51:11.843952Z" modified="2024-05-31T01:23:12.962642Z" visited="2024-05-30T14:51:11.843953Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-31T01:23:12.962640Z" count="3"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/config/conkyrc" added="2024-05-30T14:51:15.633030Z" modified="2024-05-31T01:39:55.052135Z" visited="2024-05-30T14:51:15.633031Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 222:13;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-31T01:39:55.052130Z" count="4"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/config/bottom_left_conkyrc" added="2024-05-30T14:54:57.914019Z" modified="2024-05-30T15:50:08.621081Z" visited="2024-05-30T14:54:57.914020Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 0:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T15:50:08.621080Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/fonts" added="2024-05-30T15:02:12.662809Z" modified="2024-05-30T15:02:12.662813Z" visited="2024-05-30T15:02:12.662810Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T15:02:12.662811Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/fonts/conky_symbols" added="2024-05-30T15:02:15.034367Z" modified="2024-05-30T15:02:32.442003Z" visited="2024-05-30T15:02:15.034368Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T15:02:32.442000Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/fonts/digital_camera_symbols" added="2024-05-30T15:02:28.423588Z" modified="2024-05-30T15:02:28.423597Z" visited="2024-05-30T15:02:28.423589Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T15:02:28.423592Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/ConkySymbols.ttf.tar.gz" added="2024-05-30T15:04:54.727866Z" modified="2024-05-30T15:05:11.764028Z" visited="2024-05-30T15:04:54.727867Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-compressed-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-30T15:04:54.727869Z" count="1"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-05-30T15:05:11.764027Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.fonts" added="2024-05-30T15:07:30.393061Z" modified="2024-06-01T23:05:26.580417Z" visited="2024-05-30T15:07:30.393062Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-01T23:05:26.580415Z" count="4"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/scripts/C/wireless-essid" added="2024-05-30T15:44:22.595867Z" modified="2024-05-30T15:44:36.223167Z" visited="2024-05-30T15:44:22.595868Z">
+    <desc>Language: ; Encoding: ISO-8859-1; Cursor: 0:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T15:44:22.595869Z" count="1"/>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T15:44:36.223165Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/scripts/C/Source" added="2024-05-30T15:44:41.399592Z" modified="2024-05-30T20:45:13.787173Z" visited="2024-05-30T15:44:41.399593Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T20:45:13.787171Z" count="4"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///tmp" added="2024-05-30T15:46:51.361783Z" modified="2024-05-30T15:46:51.361787Z" visited="2024-05-30T15:46:51.361784Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T15:46:51.361785Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/wireless-essid.c" added="2024-05-30T15:48:11.067932Z" modified="2024-05-30T15:48:11.067939Z" visited="2024-05-30T15:48:11.067933Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/x-csrc"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-30T15:48:11.067936Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/scripts/C/Source/wireless-essid.c" added="2024-05-30T15:48:39.310950Z" modified="2024-05-30T15:49:58.833209Z" visited="2024-05-30T15:48:39.310951Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 47:35;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T15:49:58.833206Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/scripts/C/Source/wan.c" added="2024-05-30T15:52:08.565376Z" modified="2024-05-30T15:53:30.695769Z" visited="2024-05-30T15:52:08.565377Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 0:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T15:53:30.695767Z" count="4"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/config/set_variables.lua" added="2024-05-30T16:00:52.110849Z" modified="2024-05-31T00:13:50.217308Z" visited="2024-05-30T16:00:52.110850Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 39:3;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-31T00:13:50.217306Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/scripts/interfaceupspeed.py" added="2024-05-30T16:08:20.293086Z" modified="2024-05-30T16:08:40.521670Z" visited="2024-05-30T16:08:20.293087Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 43:23;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T16:08:40.521668Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/scripts/interfacedownspeed.py" added="2024-05-30T16:08:45.220166Z" modified="2024-05-30T16:09:01.738313Z" visited="2024-05-30T16:08:45.220167Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 43:23;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T16:09:01.738311Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/scripts/check_updates.py" added="2024-05-30T18:06:36.535763Z" modified="2024-05-31T01:20:54.143672Z" visited="2024-05-30T18:06:36.535764Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 0:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-31T01:20:54.143671Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/scripts/list_updates.py" added="2024-05-30T18:10:53.294778Z" modified="2024-05-30T18:10:57.814915Z" visited="2024-05-30T18:10:53.294778Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 0:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T18:10:57.814913Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/scripts/major_updates.py" added="2024-05-30T18:11:02.699148Z" modified="2024-05-30T18:11:06.954436Z" visited="2024-05-30T18:11:02.699149Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 0:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T18:11:06.954434Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/scripts/cpu_temp.py" added="2024-05-30T20:43:11.842233Z" modified="2024-05-30T20:45:24.783025Z" visited="2024-05-30T20:43:11.842233Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 0:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T20:45:24.783022Z" count="4"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/scripts/C/Source/core_temps.c" added="2024-05-30T20:45:21.317723Z" modified="2024-05-30T21:13:24.440736Z" visited="2024-05-30T20:45:21.317723Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 0:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T21:13:24.440734Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/scripts/C/Source/battery_status.c" added="2024-05-30T20:46:39.997808Z" modified="2024-05-30T20:46:45.423586Z" visited="2024-05-30T20:46:39.997809Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 0:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-30T20:46:45.423584Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Git" added="2024-05-30T23:21:13.974368Z" modified="2024-05-31T00:35:13.339924Z" visited="2024-05-30T23:21:13.974369Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-31T00:35:13.339922Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Git/python-pptx" added="2024-05-30T23:21:15.154964Z" modified="2024-05-31T00:35:14.905230Z" visited="2024-05-30T23:21:15.154965Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-31T00:35:14.905228Z" count="3"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Git/python-pptx/PKGBUILD" added="2024-05-30T23:21:17.640925Z" modified="2024-05-31T01:20:54.142120Z" visited="2024-05-30T23:21:17.640926Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 13:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-31T01:20:54.142118Z" count="6"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Git/python-pptx/.git" added="2024-05-30T23:31:55.782822Z" modified="2024-05-30T23:31:55.782826Z" visited="2024-05-30T23:31:55.782823Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-30T23:31:55.782824Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Shell%20Scripts/update_aur.sh" added="2024-05-31T00:04:22.941861Z" modified="2024-05-31T01:20:54.138957Z" visited="2024-05-31T00:04:22.941862Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 78:1;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-31T01:20:54.138956Z" count="4"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.local" added="2024-05-31T00:06:19.521249Z" modified="2024-06-06T13:23:02.337773Z" visited="2024-05-31T00:06:19.521250Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-06T13:23:02.337771Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.local/bin" added="2024-05-31T00:06:27.706030Z" modified="2024-05-31T00:06:27.706034Z" visited="2024-05-31T00:06:27.706031Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-31T00:06:27.706031Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/docs/nvim_help.txt" added="2024-05-31T01:18:27.599940Z" modified="2024-05-31T01:39:55.059204Z" visited="2024-05-31T01:18:27.599942Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 20:60;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-31T01:39:55.059201Z" count="5"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Conky/conkyx/docs" added="2024-05-31T01:19:46.649885Z" modified="2024-05-31T01:19:46.649890Z" visited="2024-05-31T01:19:46.649886Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-31T01:19:46.649888Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/conkyrc_snippets" added="2024-05-31T01:21:15.319646Z" modified="2024-05-31T01:21:15.611463Z" visited="2024-05-31T01:21:15.319647Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 63:115;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-05-31T01:21:15.611463Z" count="3"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/0xProto.zip" added="2024-05-31T16:20:43.586326Z" modified="2024-05-31T16:21:03.319095Z" visited="2024-05-31T16:20:43.586327Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-05-31T16:20:43.586329Z" count="1"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-05-31T16:21:03.319094Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.tmux" added="2024-05-31T16:44:00.145551Z" modified="2024-05-31T16:44:00.145555Z" visited="2024-05-31T16:44:00.145552Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-31T16:44:00.145553Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.tmux/plugins" added="2024-05-31T16:44:01.164202Z" modified="2024-05-31T16:44:01.164209Z" visited="2024-05-31T16:44:01.164204Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-05-31T16:44:01.164205Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/chirp-20240531-py3-none-any.whl" added="2024-06-01T21:34:32.175625Z" modified="2024-06-01T21:34:32.175633Z" visited="2024-06-01T21:34:32.175627Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/octet-stream"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-06-01T21:34:32.175629Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/JetBrainsMono.zip" added="2024-06-01T23:01:54.280804Z" modified="2024-06-01T23:02:10.374157Z" visited="2024-06-01T23:01:54.280805Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-06-01T23:01:54.280807Z" count="1"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-01T23:02:10.374155Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/JetBrainsMono" added="2024-06-01T23:02:15.502081Z" modified="2024-06-01T23:02:15.502085Z" visited="2024-06-01T23:02:15.502081Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-01T23:02:15.502082Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.fonts/JetBrainsMono" added="2024-06-01T23:02:35.260661Z" modified="2024-06-01T23:02:35.260666Z" visited="2024-06-01T23:02:35.260662Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-01T23:02:35.260664Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/MartianMono.zip" added="2024-06-01T23:04:26.571551Z" modified="2024-06-01T23:05:16.154579Z" visited="2024-06-01T23:04:26.571552Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2024-06-01T23:04:26.571555Z" count="1"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-01T23:05:16.154577Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.fonts/MartianMono" added="2024-06-01T23:05:32.614457Z" modified="2024-06-01T23:05:32.614461Z" visited="2024-06-01T23:05:32.614458Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-01T23:05:32.614459Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.config/nvim" added="2024-06-06T10:35:40.060351Z" modified="2024-06-06T13:15:27.995454Z" visited="2024-06-06T10:35:40.060352Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-06T13:15:27.995452Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.config/nvim/lua" added="2024-06-06T10:35:47.300237Z" modified="2024-06-06T13:15:30.125241Z" visited="2024-06-06T10:35:47.300238Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-06T13:15:30.125239Z" count="3"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.config/nvim/lua/nvconfig.lua" added="2024-06-06T10:36:41.927048Z" modified="2024-06-06T10:38:14.610305Z" visited="2024-06-06T10:36:41.927049Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 0:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-06T10:36:41.927050Z" count="1"/>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-06-06T10:38:14.610304Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.config/nvim/init.lua" added="2024-06-06T10:37:02.522253Z" modified="2024-06-06T10:40:19.095728Z" visited="2024-06-06T10:37:02.522254Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 38:4;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-06-06T10:40:19.095727Z" count="5"/>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-06T10:40:11.321601Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.config/nvim/lua/nvchad" added="2024-06-06T10:38:18.168689Z" modified="2024-06-06T13:15:38.074687Z" visited="2024-06-06T10:38:18.168690Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-06T13:15:38.074685Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.config/nvim/.git" added="2024-06-06T10:38:28.931720Z" modified="2024-06-06T10:38:28.931727Z" visited="2024-06-06T10:38:28.931721Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-06T10:38:28.931723Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.config/nvim/lua/configs" added="2024-06-06T10:42:29.704214Z" modified="2024-06-06T13:15:32.648490Z" visited="2024-06-06T10:42:29.704215Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-06T13:15:32.648488Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.config/nvim/lua/configs/conform.lua" added="2024-06-06T10:43:25.282360Z" modified="2024-06-06T10:43:32.099949Z" visited="2024-06-06T10:43:25.282361Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 14:33;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-06-06T10:43:32.099947Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.config/nvim/lua/configs/lazy.lua" added="2024-06-06T10:43:45.130247Z" modified="2024-06-06T10:43:50.900285Z" visited="2024-06-06T10:43:45.130248Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 46:1;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-06-06T10:43:50.900281Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.config/nvim/lua/configs/lspconfig.lua" added="2024-06-06T10:44:06.384953Z" modified="2024-06-06T10:44:11.738764Z" visited="2024-06-06T10:44:06.384954Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 22:1;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-06T10:44:06.384955Z" count="1"/>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-06-06T10:44:11.738760Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.config/nvim/lua/nvchad/plugins" added="2024-06-06T13:15:41.136655Z" modified="2024-06-06T13:15:41.136661Z" visited="2024-06-06T13:15:41.136656Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-06T13:15:41.136658Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.config/nvim/lua/nvchad/configs" added="2024-06-06T13:15:44.476596Z" modified="2024-06-06T13:15:44.476603Z" visited="2024-06-06T13:15:44.476597Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-06T13:15:44.476599Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.config/nvim/nvchad" added="2024-06-06T13:22:48.442984Z" modified="2024-06-06T13:22:48.442988Z" visited="2024-06-06T13:22:48.442984Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-06T13:22:48.442985Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.local/share" added="2024-06-06T13:23:04.052617Z" modified="2024-06-06T13:23:04.052621Z" visited="2024-06-06T13:23:04.052618Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-06T13:23:04.052619Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.local/share/nvim" added="2024-06-06T13:23:32.479646Z" modified="2024-06-06T13:23:32.479656Z" visited="2024-06-06T13:23:32.479647Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-06T13:23:32.479651Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.local/share/nvim/nvchad" added="2024-06-06T13:23:55.904255Z" modified="2024-06-06T13:23:55.904258Z" visited="2024-06-06T13:23:55.904255Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-06T13:23:55.904256Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.local/share/nvim/nvchad/base46" added="2024-06-06T13:23:57.243751Z" modified="2024-06-06T13:23:57.243756Z" visited="2024-06-06T13:23:57.243752Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-06T13:23:57.243753Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.config/init.vim" added="2024-06-06T17:59:44.002195Z" modified="2024-06-06T18:02:01.234045Z" visited="2024-06-06T17:59:44.002195Z">
+    <desc>Language: ; Encoding: UTF-8; Cursor: 3:0;</desc>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>Mousepad</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="Mousepad" exec="&apos;mousepad %u&apos;" modified="2024-06-06T18:02:01.234041Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.config/autostart" added="2024-06-07T17:43:43.820312Z" modified="2024-06-07T17:43:43.820318Z" visited="2024-06-07T17:43:43.820313Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-07T17:43:43.820315Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/.Xauthority" added="2024-06-09T23:52:53.073340Z" modified="2024-06-09T23:53:01.805757Z" visited="2024-06-09T23:52:53.073343Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/octet-stream"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-09T23:53:01.805753Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///usr/share/xsessions" added="2024-06-10T01:01:59.033608Z" modified="2024-06-10T01:01:59.033612Z" visited="2024-06-10T01:01:59.033609Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Thunar" exec="&apos;Thunar %u&apos;" modified="2024-06-10T01:01:59.033610Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Git/suckless/dwm/config.h" added="2024-06-10T12:55:04.264352Z" modified="2024-06-10T12:55:04.264357Z" visited="2024-06-10T12:55:04.264353Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/x-chdr"/>
+        <bookmark:applications>
+          <bookmark:application name="chromium" exec="&apos;chromium %u&apos;" modified="2024-06-10T12:55:04.264354Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/ComicShannsMono.zip" added="2024-06-11T20:48:01.546758Z" modified="2024-06-11T20:48:01.546761Z" visited="2024-06-11T20:48:01.546758Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:48:01.546760Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/CommitMono.zip" added="2024-06-11T20:48:38.910097Z" modified="2024-06-11T20:48:38.910102Z" visited="2024-06-11T20:48:38.910098Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:48:38.910100Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Cousine.zip" added="2024-06-11T20:49:37.326244Z" modified="2024-06-11T20:49:37.326248Z" visited="2024-06-11T20:49:37.326244Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:49:37.326246Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/D2Coding.zip" added="2024-06-11T20:50:41.727842Z" modified="2024-06-11T20:50:41.727846Z" visited="2024-06-11T20:50:41.727843Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:50:41.727844Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/DaddyTimeMono.zip" added="2024-06-11T20:51:02.918287Z" modified="2024-06-11T20:51:02.918292Z" visited="2024-06-11T20:51:02.918288Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:51:02.918290Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/DejaVuSansMono.zip" added="2024-06-11T20:51:22.886952Z" modified="2024-06-11T20:51:22.886956Z" visited="2024-06-11T20:51:22.886953Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:51:22.886954Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/DroidSansMono.zip" added="2024-06-11T20:52:05.436641Z" modified="2024-06-11T20:52:05.436645Z" visited="2024-06-11T20:52:05.436642Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:52:05.436643Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/EnvyCodeR.zip" added="2024-06-11T20:52:23.374707Z" modified="2024-06-11T20:52:23.374711Z" visited="2024-06-11T20:52:23.374708Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:52:23.374709Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/FantasqueSansMono.zip" added="2024-06-11T20:52:39.596413Z" modified="2024-06-11T20:52:39.596418Z" visited="2024-06-11T20:52:39.596414Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:52:39.596416Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/FiraCode.zip" added="2024-06-11T20:53:03.689013Z" modified="2024-06-11T20:53:03.689018Z" visited="2024-06-11T20:53:03.689014Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:53:03.689016Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/FiraMono.zip" added="2024-06-11T20:53:19.549104Z" modified="2024-06-11T20:53:19.549109Z" visited="2024-06-11T20:53:19.549105Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:53:19.549107Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/GeistMono.zip" added="2024-06-11T20:54:43.904315Z" modified="2024-06-11T20:54:43.904319Z" visited="2024-06-11T20:54:43.904316Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:54:43.904317Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Go-Mono.zip" added="2024-06-11T20:55:02.352932Z" modified="2024-06-11T20:55:02.352937Z" visited="2024-06-11T20:55:02.352933Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:55:02.352935Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Gohu.zip" added="2024-06-11T20:55:30.619126Z" modified="2024-06-11T20:55:30.619131Z" visited="2024-06-11T20:55:30.619127Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:55:30.619129Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Hack.zip" added="2024-06-11T20:55:48.998513Z" modified="2024-06-11T20:55:48.998517Z" visited="2024-06-11T20:55:48.998514Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:55:48.998515Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Hasklig.zip" added="2024-06-11T20:56:04.790965Z" modified="2024-06-11T20:56:04.790969Z" visited="2024-06-11T20:56:04.790966Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:56:04.790967Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/HeavyData.zip" added="2024-06-11T20:56:19.768495Z" modified="2024-06-11T20:56:19.768500Z" visited="2024-06-11T20:56:19.768496Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:56:19.768498Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Hermit.zip" added="2024-06-11T20:56:34.152548Z" modified="2024-06-11T20:56:34.152552Z" visited="2024-06-11T20:56:34.152549Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:56:34.152550Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/iA-Writer.zip" added="2024-06-11T20:56:48.794742Z" modified="2024-06-11T20:56:48.794746Z" visited="2024-06-11T20:56:48.794743Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:56:48.794744Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/IBMPlexMono.zip" added="2024-06-11T20:57:08.550051Z" modified="2024-06-11T20:57:08.550055Z" visited="2024-06-11T20:57:08.550052Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:57:08.550054Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Inconsolata.zip" added="2024-06-11T20:57:27.631359Z" modified="2024-06-11T20:57:27.631363Z" visited="2024-06-11T20:57:27.631360Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:57:27.631361Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/InconsolataGo.zip" added="2024-06-11T20:57:41.253376Z" modified="2024-06-11T20:57:41.253380Z" visited="2024-06-11T20:57:41.253377Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:57:41.253378Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/InconsolataLGC.zip" added="2024-06-11T20:58:02.799719Z" modified="2024-06-11T20:58:02.799723Z" visited="2024-06-11T20:58:02.799720Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:58:02.799722Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/IntelOneMono.zip" added="2024-06-11T20:58:19.103883Z" modified="2024-06-11T20:58:19.103887Z" visited="2024-06-11T20:58:19.103884Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:58:19.103886Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Iosevka.zip" added="2024-06-11T20:58:37.079527Z" modified="2024-06-11T20:58:37.079532Z" visited="2024-06-11T20:58:37.079528Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:58:37.079530Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/IosevkaTerm.zip" added="2024-06-11T20:59:03.438928Z" modified="2024-06-11T20:59:03.438932Z" visited="2024-06-11T20:59:03.438929Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:59:03.438930Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/IosevkaTermSlab.zip" added="2024-06-11T20:59:30.762346Z" modified="2024-06-11T20:59:30.762350Z" visited="2024-06-11T20:59:30.762347Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T20:59:30.762349Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Lekton.zip" added="2024-06-11T21:00:03.269891Z" modified="2024-06-11T21:00:03.269895Z" visited="2024-06-11T21:00:03.269892Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T21:00:03.269893Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/LiberationMono.zip" added="2024-06-11T21:00:18.946180Z" modified="2024-06-11T21:00:18.946185Z" visited="2024-06-11T21:00:18.946181Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T21:00:18.946183Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Lilex.zip" added="2024-06-11T21:00:35.447763Z" modified="2024-06-11T21:00:35.447767Z" visited="2024-06-11T21:00:35.447764Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T21:00:35.447765Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Meslo.zip" added="2024-06-11T21:01:22.738959Z" modified="2024-06-11T21:01:22.738963Z" visited="2024-06-11T21:01:22.738960Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T21:01:22.738962Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Monaspace.zip" added="2024-06-11T21:01:38.879858Z" modified="2024-06-11T21:01:38.879863Z" visited="2024-06-11T21:01:38.879859Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T21:01:38.879860Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Monofur.zip" added="2024-06-11T21:02:00.307358Z" modified="2024-06-11T21:02:00.307363Z" visited="2024-06-11T21:02:00.307359Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T21:02:00.307361Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Mononoki.zip" added="2024-06-11T21:02:17.133059Z" modified="2024-06-11T21:02:17.133067Z" visited="2024-06-11T21:02:17.133060Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T21:02:17.133065Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/SpaceMono.zip" added="2024-06-11T21:02:32.618147Z" modified="2024-06-11T21:02:32.618152Z" visited="2024-06-11T21:02:32.618148Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T21:02:32.618150Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/Ubuntu.zip" added="2024-06-11T21:02:46.028537Z" modified="2024-06-11T21:02:46.028541Z" visited="2024-06-11T21:02:46.028538Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T21:02:46.028539Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/UbuntuMono.zip" added="2024-06-11T21:03:03.307120Z" modified="2024-06-11T21:03:03.307124Z" visited="2024-06-11T21:03:03.307121Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T21:03:03.307122Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/UbuntuSans.zip" added="2024-06-11T21:03:16.483166Z" modified="2024-06-11T21:03:16.483171Z" visited="2024-06-11T21:03:16.483167Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T21:03:16.483169Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/VictorMono.zip" added="2024-06-11T21:03:33.789323Z" modified="2024-06-11T21:03:33.789327Z" visited="2024-06-11T21:03:33.789324Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T21:03:33.789326Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Downloads/ZedMono.zip" added="2024-06-11T21:03:48.725174Z" modified="2024-06-11T21:03:48.725179Z" visited="2024-06-11T21:03:48.725176Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/zip"/>
+        <bookmark:applications>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2024-06-11T21:03:48.725177Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Python%20Scripts/Morse%20Code/source/txt-morse.py" added="2024-06-14T12:58:19.078929Z" modified="2024-06-14T13:17:24.002246Z" visited="2024-06-14T12:58:19.078930Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/x-python"/>
+        <bookmark:applications>
+          <bookmark:application name="chromium" exec="&apos;chromium %u&apos;" modified="2024-06-14T13:17:24.002243Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Python%20Scripts/Morse%20Code/tests/results.txt" added="2024-06-14T14:24:52.609188Z" modified="2024-06-14T14:54:03.215668Z" visited="2024-06-14T14:24:52.609190Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:applications>
+          <bookmark:application name="chromium" exec="&apos;chromium %u&apos;" modified="2024-06-14T14:54:03.215664Z" count="7"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/madhatter/Python%20Scripts/Morse%20Code/tests/test_main.py" added="2024-06-14T14:32:03.052683Z" modified="2024-06-14T14:32:03.052688Z" visited="2024-06-14T14:32:03.052684Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/x-python"/>
+        <bookmark:applications>
+          <bookmark:application name="chromium" exec="&apos;chromium %u&apos;" modified="2024-06-14T14:32:03.052685Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+</xbel>

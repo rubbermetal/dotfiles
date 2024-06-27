@@ -1,0 +1,51 @@
+#!/bin/bash
+#-----------------------------------------------------
+# Comprehensive Help file for .bashrc that lists specified shell
+# commands.
+#
+# rubbermetal@yahoo.com 4/12/2021
+
+function help ( ) {
+sep=${bg_navy}"------------------------------------------------------"${attrib_restore};
+header=${fg_navy}${bg_gray}${bold};
+content=${fg_forest}${bg_white}${bold};
+
+echo $header"#-----------------------------------------------------"${clr_restore};
+echo $header"# Comprehensive Help File 4/11/2021                   "${clr_restore};
+echo $header"# Gives commands and usages                           "${clr_restore};
+echo $header"#-----------------------------------------------------"${clr_restore};
+
+echo $header"# Git Commands                                        "${clr_restore};
+echo $content"git clone http://url.tld                              "${attrib_restore};
+echo $content"git pull                                              "${attrib_restore};
+echo $content"git checkout <branch-name>                            "${attrib_restore};
+echo $sep;
+
+echo $header"# System Commands                                     "${clr_restore};
+echo $content"makepkg -srciC                                        "${attrib_restore};
+echo $content"pacman -U path/to/file.zsc                            "${attrib_restore};
+echo $content"dd if=popos.iso of=/dev/sdb bs=1M status=progress     "${attrib_restore};
+echo $content"df -h                                                 "${attrib_restore};
+echo $content"du -h                                                 "${attrib_restore};
+echo $sep;
+
+echo $header"# Permissions                                         "${attrib_restore};
+echo $content"chmod /path/to/file 644                               "${attrib_restore};
+echo $content"chown user:group /path/to/file                        "${attrib_restore};
+echo $sep;
+
+echo $header"# Network Commands                                    "${attrib_restore};
+echo $content"ping www.example.com                                  "${attrib_restore};
+echo $content"ifconfig                                              "${attrib_restore};
+echo $content"netstat                                               "${attrib_restore};
+echo $content"ssh user@hostname                                     "${attrib_restore};
+echo $sep;
+
+echo $header"# Docker Commands                                     "${clr_restore};
+echo $content"docker run image_name                                 "${attrib_restore};
+echo $content"docker ps                                             "${attrib_restore};
+echo $content"docker stop container_id                              "${attrib_restore};
+echo $content"docker rm container_id                                "${attrib_restore};
+
+echo $sep;
+}

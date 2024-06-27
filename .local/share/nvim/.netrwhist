@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =6
+let g:netrw_dirhist_6='/home/madhatter/Shell Scripts'
+let g:netrw_dirhist_5='/home/madhatter'
+let g:netrw_dirhist_4='/home/madhatter/.config/autostart'
+let g:netrw_dirhist_3='/home/madhatter/.config'
+let g:netrw_dirhist_2='/home/madhatter'
+let g:netrw_dirhist_1='/home/madhatter/.config/autostart'
+let g:netrw_dirhist_0='/home/madhatter/.config'
+let g:netrw_dirhist_9='/home/madhatter'
+let g:netrw_dirhist_8='/home/madhatter/Git/suckless/slstatus'
+let g:netrw_dirhist_7='/home/madhatter/Git/suckless'

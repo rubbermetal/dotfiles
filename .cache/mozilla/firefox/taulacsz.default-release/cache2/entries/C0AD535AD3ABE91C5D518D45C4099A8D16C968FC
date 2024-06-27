@@ -1,0 +1,500 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html class="gl-light ui-blue with-header with-top-bar " lang="en">
+<head prefix="og: http://ogp.me/ns#">
+<meta charset="utf-8">
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta content="width=device-width, initial-scale=1" name="viewport">
+<title>Utilities / Ark Â· GitLab</title>
+<script nonce="wCFoLyfEjI52uqousmo98g==">
+//<![CDATA[
+window.gon={};gon.api_version="v4";gon.default_avatar_url="https://invent.kde.org/assets/no_avatar-849f9c04a3a0d0cea2424ae97b27447dc64a7dbfae83c036c45b403392f0e8ba.png";gon.max_file_size=10;gon.asset_host=null;gon.webpack_public_path="/assets/webpack/";gon.relative_url_root="";gon.user_color_mode="gl-light";gon.user_color_scheme="white";gon.markdown_surround_selection=null;gon.markdown_automatic_lists=null;gon.math_rendering_limits_enabled=true;gon.recaptcha_api_server_url="https://www.recaptcha.net/recaptcha/api.js";gon.recaptcha_sitekey=null;gon.gitlab_url="https://invent.kde.org";gon.organization_http_header_name="HTTP_GITLAB_ORGANIZATION_ID";gon.revision="a11c01214fe";gon.feature_category="groups_and_projects";gon.gitlab_logo="/assets/gitlab_logo-2957169c8ef64c58616a1ac3f4fc626e8a35ce4eb3ed31bb0d873712f2a041a0.png";gon.secure=true;gon.sprite_icons="/assets/icons-0b41337f52be73f7bbf9d59b841eb98a6e790dfa1a844644f120a80ce3cc18ba.svg";gon.sprite_file_icons="/assets/file_icons/file_icons-7cd3d6c3b29a6d972895f36472978a4b5adb4b37f9b5d0716a380e82389f7e0e.svg";gon.emoji_sprites_css_path="/assets/emoji_sprites-d746ae2450a3e9c626d338d77a101b84ff33a47c0c281b676d75c4a6ed2948a4.css";gon.gridstack_css_path="/assets/lazy_bundles/gridstack-5fcfd4ffbea1db04eaf7f16521bcab19ae3af042c8b4afe8d16781eda5a70799.css";gon.test_env=false;gon.disable_animations=null;gon.suggested_label_colors={"#cc338b":"Magenta-pink","#dc143c":"Crimson","#c21e56":"Rose red","#cd5b45":"Dark coral","#ed9121":"Carrot orange","#eee600":"Titanium yellow","#009966":"Green-cyan","#8fbc8f":"Dark sea green","#6699cc":"Blue-gray","#e6e6fa":"Lavender","#9400d3":"Dark violet","#330066":"Deep violet","#36454f":"Charcoal grey","#808080":"Gray"};gon.first_day_of_week=0;gon.time_display_relative=true;gon.time_display_format=0;gon.ee=false;gon.jh=false;gon.dot_com=false;gon.uf_error_prefix="UF";gon.pat_prefix="glpat-";gon.keyboard_shortcuts_enabled=true;gon.diagramsnet_url="https://embed.diagrams.net";gon.features={"sourceEditorToolbar":false,"vscodeWebIde":true,"uiForOrganizations":false,"organizationSwitching":false,"removeMonitorMetrics":true,"vuePageBreadcrumbs":false,"explainCodeChat":false,"issueEmailParticipants":true,"serviceDeskTicketsConfidentiality":false,"editBranchRules":false,"pageSpecificStyles":false,"workItems":true,"workItemsBeta":false,"workItemsMvc2":false};
+//]]>
+</script>
+
+<script nonce="wCFoLyfEjI52uqousmo98g==">
+//<![CDATA[
+var gl = window.gl || {};
+gl.startup_calls = {"/utilities/ark/-/refs/master/logs_tree/?format=json\u0026offset=0\u0026ref_type=heads":{},"/utilities/ark/-/blob/master/README.md?format=json\u0026viewer=rich":{}};
+gl.startup_graphql_calls = [{"query":"query pathLastCommit($projectPath: ID!, $path: String, $ref: String!, $refType: RefType) {\n  project(fullPath: $projectPath) {\n    __typename\n    id\n    repository {\n      __typename\n      paginatedTree(path: $path, ref: $ref, refType: $refType) {\n        __typename\n        nodes {\n          __typename\n          lastCommit {\n            __typename\n            id\n            sha\n            title\n            titleHtml\n            descriptionHtml\n            message\n            webPath\n            authoredDate\n            authorName\n            authorGravatar\n            author {\n              __typename\n              id\n              name\n              avatarUrl\n              webPath\n            }\n            signature {\n              __typename\n              ... on GpgSignature {\n                gpgKeyPrimaryKeyid\n                verificationStatus\n              }\n              ... on X509Signature {\n                verificationStatus\n                x509Certificate {\n                  id\n                  subject\n                  subjectKeyIdentifier\n                  x509Issuer {\n                    id\n                    subject\n                    subjectKeyIdentifier\n                  }\n                }\n              }\n              ... on SshSignature {\n                verificationStatus\n                keyFingerprintSha256\n              }\n            }\n            pipelines(ref: $ref, first: 1) {\n              __typename\n              edges {\n                __typename\n                node {\n                  __typename\n                  id\n                  detailedStatus {\n                    __typename\n                    id\n                    detailsPath\n                    icon\n                    tooltip\n                    text\n                    group\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n","variables":{"projectPath":"utilities/ark","ref":"master","path":""}}];
+
+if (gl.startup_calls && window.fetch) {
+  Object.keys(gl.startup_calls).forEach(apiCall => {
+   gl.startup_calls[apiCall] = {
+      fetchCall: fetch(apiCall, {
+        // Emulate XHR for Rails AJAX request checks
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        // fetch wonâ€™t send cookies in older browsers, unless you set the credentials init option.
+        // We set to `same-origin` which is default value in modern browsers.
+        // See https://github.com/whatwg/fetch/pull/585 for more information.
+        credentials: 'same-origin'
+      })
+    };
+  });
+}
+if (gl.startup_graphql_calls && window.fetch) {
+  const headers = {"X-CSRF-Token":"0r8nArd_geXTAGFHoaDpa96-j6NCx-S_f8-xWzwJ9LOAlzNfmcEetfElqivtqNuV7phb7YpXPVnkRUcpUmfz2A","x-gitlab-feature-category":"groups_and_projects"};
+  const url = `https://invent.kde.org/api/graphql`
+
+  const opts = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...headers,
+    }
+  };
+
+  gl.startup_graphql_calls = gl.startup_graphql_calls.map(call => ({
+    ...call,
+    fetchCall: fetch(url, {
+      ...opts,
+      credentials: 'same-origin',
+      body: JSON.stringify(call)
+    })
+  }))
+}
+
+
+//]]>
+</script>
+
+
+
+<link rel="stylesheet" href="/assets/application-f26176d736b2c98959127f2c53a94ba4c3c060368eb6797ad06dd923012b53bd.css" media="all" />
+<link rel="stylesheet" href="/assets/page_bundles/project-9264738885a02be386176dc85c96b550fae5ce8d174fba9508a843966d6c4213.css" media="all" /><link rel="stylesheet" href="/assets/page_bundles/tree-4d25647d03722854e14fe89644330ef783d9e6e79f75ae79c5755c11825ddfc8.css" media="all" /><link rel="stylesheet" href="/assets/page_bundles/commit_description-b1dab9b10010cbb9c3738689b18ce46a4f58b98a8d483226fdff8a776a45caf0.css" media="all" /><link rel="stylesheet" href="/assets/page_bundles/projects-5b110dab09b20b77c1dc0d46d525a29cff171240bb81bd04b42a842b8d3d93ce.css" media="all" />
+<link rel="stylesheet" href="/assets/application_utilities-4ce46b0d1744a75b5e0b7104e935413dc41b09b34002dc2832a687dd8e7f0569.css" media="all" />
+<link rel="stylesheet" href="/assets/tailwind-9d223567537fa1293ee42f2d94337b4f7c8f62b341f4b7a1d57934adb34d47ff.css" media="all" />
+
+
+<link rel="stylesheet" href="/assets/fonts-fae5d3f79948bd85f18b6513a025f863b19636e85b09a1492907eb4b1bb0557b.css" media="all" />
+<link rel="stylesheet" href="/assets/highlight/themes/white-e08c45a78f4446ec6c4226adb581d4482911bd7c85b47b7e7c003112b0c26274.css" media="all" />
+
+
+<link rel="preload" href="/assets/application_utilities-4ce46b0d1744a75b5e0b7104e935413dc41b09b34002dc2832a687dd8e7f0569.css" as="style" type="text/css" nonce="3ozMXYaNRD3Nzgcwq/W0qQ==">
+<link rel="preload" href="/assets/application-f26176d736b2c98959127f2c53a94ba4c3c060368eb6797ad06dd923012b53bd.css" as="style" type="text/css" nonce="3ozMXYaNRD3Nzgcwq/W0qQ==">
+<link rel="preload" href="/assets/highlight/themes/white-e08c45a78f4446ec6c4226adb581d4482911bd7c85b47b7e7c003112b0c26274.css" as="style" type="text/css" nonce="3ozMXYaNRD3Nzgcwq/W0qQ==">
+
+
+
+
+
+<script src="/assets/webpack/runtime.bad33c1a.bundle.js" defer="defer" nonce="wCFoLyfEjI52uqousmo98g=="></script>
+<script src="/assets/webpack/main.d432e8f3.chunk.js" defer="defer" nonce="wCFoLyfEjI52uqousmo98g=="></script>
+<script src="/assets/webpack/graphql.e1f11a07.chunk.js" defer="defer" nonce="wCFoLyfEjI52uqousmo98g=="></script>
+<script src="/assets/webpack/commons-pages.groups.new-pages.import.gitlab_projects.new-pages.import.manifest.new-pages.projects.n-44c6c18e.590b40cf.chunk.js" defer="defer" nonce="wCFoLyfEjI52uqousmo98g=="></script>
+<script src="/assets/webpack/commons-pages.search.show-super_sidebar.6459914a.chunk.js" defer="defer" nonce="wCFoLyfEjI52uqousmo98g=="></script>
+<script src="/assets/webpack/super_sidebar.d2a1eb80.chunk.js" defer="defer" nonce="wCFoLyfEjI52uqousmo98g=="></script>
+<script src="/assets/webpack/commons-jira_connect_app-pages.abuse_reports-pages.admin.abuse_reports.show-pages.admin.application_-ee8e4f03.7972a619.chunk.js" defer="defer" nonce="wCFoLyfEjI52uqousmo98g=="></script>
+<script src="/assets/webpack/commons-pages.admin.abuse_reports-pages.admin.abuse_reports.show-pages.admin.application_settings.re-46d8dabb.693563dd.chunk.js" defer="defer" nonce="wCFoLyfEjI52uqousmo98g=="></script>
+<script src="/assets/webpack/commons-pages.admin.runners.show-pages.clusters.agents.dashboard-pages.explore.catalog-pages.explore-e410e9e9.aaf2306e.chunk.js" defer="defer" nonce="wCFoLyfEjI52uqousmo98g=="></script>
+<script src="/assets/webpack/commons-pages.projects.blob.show-pages.projects.branches.new-pages.projects.commits.show-pages.proje-81161c0b.c5b465d4.chunk.js" defer="defer" nonce="wCFoLyfEjI52uqousmo98g=="></script>
+<script src="/assets/webpack/commons-pages.projects.blob.show-pages.projects.show-pages.projects.snippets.show-pages.projects.tre-c684fcf6.edd5eee9.chunk.js" defer="defer" nonce="wCFoLyfEjI52uqousmo98g=="></script>
+<script src="/assets/webpack/commons-pages.groups.details-pages.groups.show-pages.profiles.notifications.show-pages.projects.home-289c4da9.813cffaf.chunk.js" defer="defer" nonce="wCFoLyfEjI52uqousmo98g=="></script>
+<script src="/assets/webpack/commons-pages.projects.blame.show-pages.projects.blame.streaming-pages.projects.blob.show-pages.proj-9f3d272f.4acc41ff.chunk.js" defer="defer" nonce="wCFoLyfEjI52uqousmo98g=="></script>
+<script src="/assets/webpack/commons-pages.projects.blob.show-pages.projects.forks.new-pages.projects.show-pages.projects.tree.show.da01edd6.chunk.js" defer="defer" nonce="wCFoLyfEjI52uqousmo98g=="></script>
+<script src="/assets/webpack/commons-pages.projects.blob.show-pages.projects.show-pages.projects.tree.show.a206b882.chunk.js" defer="defer" nonce="wCFoLyfEjI52uqousmo98g=="></script>
+<script src="/assets/webpack/commons-pages.groups.show-pages.projects.home_panel-pages.projects.show.9a5389a1.chunk.js" defer="defer" nonce="wCFoLyfEjI52uqousmo98g=="></script>
+<script src="/assets/webpack/commons-pages.projects.show-pages.projects.tree.show.37982ac3.chunk.js" defer="defer" nonce="wCFoLyfEjI52uqousmo98g=="></script>
+<script src="/assets/webpack/pages.projects.show.5038747b.chunk.js" defer="defer" nonce="wCFoLyfEjI52uqousmo98g=="></script>
+<meta content="object" property="og:type">
+<meta content="GitLab" property="og:site_name">
+<meta content="Utilities / Ark Â· GitLab" property="og:title">
+<meta content="File archiver by KDE" property="og:description">
+<meta content="https://invent.kde.org/utilities/ark/-/avatar" property="og:image">
+<meta content="64" property="og:image:width">
+<meta content="64" property="og:image:height">
+<meta content="https://invent.kde.org/utilities/ark" property="og:url">
+<meta content="summary" property="twitter:card">
+<meta content="Utilities / Ark Â· GitLab" property="twitter:title">
+<meta content="File archiver by KDE" property="twitter:description">
+<meta content="https://invent.kde.org/utilities/ark/-/avatar" property="twitter:image">
+
+<meta name="csrf-param" content="authenticity_token" />
+<meta name="csrf-token" content="7ReZCez-oEM6me_ZF_NxMWJRBuxxINryaR5ycIALLVC_P41UwkA_Exi8JLVb-0PPUnfSormwAxTylIQC7mUqOw" />
+<meta name="csp-nonce" content="wCFoLyfEjI52uqousmo98g==" />
+<meta name="action-cable-url" content="/-/cable" />
+<link href="/-/manifest.json" rel="manifest">
+<link rel="icon" type="image/png" href="/uploads/-/system/appearance/favicon/1/kde-logo-white-blue-128x128.png" id="favicon" data-original-href="/uploads/-/system/appearance/favicon/1/kde-logo-white-blue-128x128.png" />
+<link rel="apple-touch-icon" type="image/x-icon" href="/assets/apple-touch-icon-b049d4bc0dd9626f31db825d61880737befc7835982586d015bded10b4435460.png" />
+<link href="/search/opensearch.xml" rel="search" title="Search GitLab" type="application/opensearchdescription+xml">
+<link rel="alternate" type="application/atom+xml" title="Ark activity" href="/utilities/ark.atom" />
+
+
+<!-- Matomo -->
+<script nonce="wCFoLyfEjI52uqousmo98g==">
+//<![CDATA[
+var _paq = window._paq = window._paq || [];
+_paq.push(['trackPageView']);
+_paq.push(['enableLinkTracking']);
+;
+(function() {
+  var u="//stats.kde.org/";
+  _paq.push(['setTrackerUrl', u+'matomo.php']);
+  _paq.push(['setSiteId', "28"]);
+  var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+  g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+})();
+
+
+//]]>
+</script><noscript><p><img src="//stats.kde.org/matomo.php?idsite=28" style="border:0;" alt="" /></p></noscript>
+<!-- End Matomo Code -->
+
+
+<meta content="File archiver by KDE" name="description">
+<meta content="#0b2640" name="theme-color">
+</head>
+
+<body class="tab-width-8 gl-browser-firefox gl-platform-linux " data-find-file="/utilities/ark/-/find_file/master?ref_type=heads" data-group="utilities" data-group-full-path="utilities" data-namespace-id="1556" data-page="projects:show" data-page-type-id="ark" data-project="ark" data-project-full-path="utilities/ark" data-project-id="2070">
+
+<script nonce="wCFoLyfEjI52uqousmo98g==">
+//<![CDATA[
+gl = window.gl || {};
+gl.client = {"isFirefox":true,"isLinux":true};
+
+
+//]]>
+</script>
+
+
+<header class="header-logged-out" data-testid="navbar">
+<a class="gl-sr-only gl-accessibility" href="#content-body">Skip to content</a>
+<div class="container-fluid">
+<nav aria-label="Explore GitLab" class="header-logged-out-nav gl-display-flex gl-gap-3 gl-justify-content-space-between">
+<div class="gl-display-flex gl-align-items-center gl-gap-1">
+<span class="gl-sr-only">GitLab</span>
+<a title="Homepage" id="logo" class="header-logged-out-logo has-tooltip" aria-label="Homepage" href="/"><img class="brand-header-logo lazy" alt="" data-src="/uploads/-/system/appearance/header_logo/1/kde-logo-white-blue-24x24.png" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" />
+</a></div>
+<ul class="gl-list-none gl-p-0 gl-m-0 gl-display-flex gl-gap-3 gl-align-items-center gl-flex-grow-1">
+<li class="header-logged-out-nav-item">
+<a class="" href="/explore">Explore</a>
+</li>
+</ul>
+<ul class="gl-list-none gl-p-0 gl-m-0 gl-display-flex gl-gap-3 gl-align-items-center gl-justify-content-end">
+<li class="header-logged-out-nav-item">
+<a href="/users/sign_in?redirect_to_referer=yes">Sign in</a>
+</li>
+</ul>
+</nav>
+</div>
+</header>
+
+<div class="layout-page page-with-super-sidebar">
+<aside class="js-super-sidebar super-sidebar super-sidebar-loading" data-command-palette="{&quot;project_files_url&quot;:&quot;/utilities/ark/-/files/master?format=json&quot;,&quot;project_blob_url&quot;:&quot;/utilities/ark/-/blob/master&quot;}" data-force-desktop-expanded-sidebar="" data-root-path="/" data-sidebar="{&quot;is_logged_in&quot;:false,&quot;context_switcher_links&quot;:[{&quot;title&quot;:&quot;Explore&quot;,&quot;link&quot;:&quot;/explore&quot;,&quot;icon&quot;:&quot;compass&quot;}],&quot;current_menu_items&quot;:[{&quot;id&quot;:&quot;project_overview&quot;,&quot;title&quot;:&quot;Ark&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:&quot;https://invent.kde.org/utilities/ark/-/avatar&quot;,&quot;entity_id&quot;:2070,&quot;link&quot;:&quot;/utilities/ark&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:&quot;shortcuts-project&quot;,&quot;is_active&quot;:true},{&quot;id&quot;:&quot;manage_menu&quot;,&quot;title&quot;:&quot;Manage&quot;,&quot;icon&quot;:&quot;users&quot;,&quot;avatar&quot;:null,&quot;avatar_shape&quot;:&quot;rect&quot;,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/activity&quot;,&quot;is_active&quot;:false,&quot;pill_count&quot;:null,&quot;items&quot;:[{&quot;id&quot;:&quot;activity&quot;,&quot;title&quot;:&quot;Activity&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/activity&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:&quot;shortcuts-project-activity&quot;,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;members&quot;,&quot;title&quot;:&quot;Members&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/project_members&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:null,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;labels&quot;,&quot;title&quot;:&quot;Labels&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/labels&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:null,&quot;is_active&quot;:false}],&quot;separated&quot;:false},{&quot;id&quot;:&quot;plan_menu&quot;,&quot;title&quot;:&quot;Plan&quot;,&quot;icon&quot;:&quot;planning&quot;,&quot;avatar&quot;:null,&quot;avatar_shape&quot;:&quot;rect&quot;,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/issues&quot;,&quot;is_active&quot;:false,&quot;pill_count&quot;:null,&quot;items&quot;:[{&quot;id&quot;:&quot;project_issue_list&quot;,&quot;title&quot;:&quot;Issues&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/issues&quot;,&quot;pill_count&quot;:&quot;6&quot;,&quot;link_classes&quot;:&quot;shortcuts-issues has-sub-items&quot;,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;boards&quot;,&quot;title&quot;:&quot;Issue boards&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/boards&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:&quot;shortcuts-issue-boards&quot;,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;milestones&quot;,&quot;title&quot;:&quot;Milestones&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/milestones&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:null,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;project_wiki&quot;,&quot;title&quot;:&quot;Wiki&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/wikis/home&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:&quot;shortcuts-wiki&quot;,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;external_issue_tracker&quot;,&quot;title&quot;:&quot;Bugzilla&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;https://bugs.kde.org/buglist.cgi?product=ark\u0026resolution=---&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:&quot;shortcuts-external_tracker&quot;,&quot;is_active&quot;:false}],&quot;separated&quot;:false},{&quot;id&quot;:&quot;code_menu&quot;,&quot;title&quot;:&quot;Code&quot;,&quot;icon&quot;:&quot;code&quot;,&quot;avatar&quot;:null,&quot;avatar_shape&quot;:&quot;rect&quot;,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/merge_requests&quot;,&quot;is_active&quot;:false,&quot;pill_count&quot;:null,&quot;items&quot;:[{&quot;id&quot;:&quot;project_merge_request_list&quot;,&quot;title&quot;:&quot;Merge requests&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/merge_requests&quot;,&quot;pill_count&quot;:&quot;12&quot;,&quot;link_classes&quot;:&quot;shortcuts-merge_requests&quot;,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;files&quot;,&quot;title&quot;:&quot;Repository&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/tree/master&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:&quot;shortcuts-tree&quot;,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;branches&quot;,&quot;title&quot;:&quot;Branches&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/branches&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:null,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;commits&quot;,&quot;title&quot;:&quot;Commits&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/commits/master?ref_type=heads&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:&quot;shortcuts-commits&quot;,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;tags&quot;,&quot;title&quot;:&quot;Tags&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/tags&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:null,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;graphs&quot;,&quot;title&quot;:&quot;Repository graph&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/network/master?ref_type=heads&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:&quot;shortcuts-network&quot;,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;compare&quot;,&quot;title&quot;:&quot;Compare revisions&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/compare?from=master\u0026to=master&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:null,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;project_snippets&quot;,&quot;title&quot;:&quot;Snippets&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/snippets&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:&quot;shortcuts-snippets&quot;,&quot;is_active&quot;:false}],&quot;separated&quot;:false},{&quot;id&quot;:&quot;build_menu&quot;,&quot;title&quot;:&quot;Build&quot;,&quot;icon&quot;:&quot;rocket&quot;,&quot;avatar&quot;:null,&quot;avatar_shape&quot;:&quot;rect&quot;,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/pipelines&quot;,&quot;is_active&quot;:false,&quot;pill_count&quot;:null,&quot;items&quot;:[{&quot;id&quot;:&quot;pipelines&quot;,&quot;title&quot;:&quot;Pipelines&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/pipelines&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:&quot;shortcuts-pipelines&quot;,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;jobs&quot;,&quot;title&quot;:&quot;Jobs&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/jobs&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:&quot;shortcuts-builds&quot;,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;pipeline_schedules&quot;,&quot;title&quot;:&quot;Pipeline schedules&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/pipeline_schedules&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:&quot;shortcuts-builds&quot;,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;artifacts&quot;,&quot;title&quot;:&quot;Artifacts&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/artifacts&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:&quot;shortcuts-builds&quot;,&quot;is_active&quot;:false}],&quot;separated&quot;:false},{&quot;id&quot;:&quot;monitor_menu&quot;,&quot;title&quot;:&quot;Monitor&quot;,&quot;icon&quot;:&quot;monitor&quot;,&quot;avatar&quot;:null,&quot;avatar_shape&quot;:&quot;rect&quot;,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/issues/service_desk&quot;,&quot;is_active&quot;:false,&quot;pill_count&quot;:null,&quot;items&quot;:[{&quot;id&quot;:&quot;service_desk&quot;,&quot;title&quot;:&quot;Service Desk&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/issues/service_desk&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:null,&quot;is_active&quot;:false}],&quot;separated&quot;:false},{&quot;id&quot;:&quot;analyze_menu&quot;,&quot;title&quot;:&quot;Analyze&quot;,&quot;icon&quot;:&quot;chart&quot;,&quot;avatar&quot;:null,&quot;avatar_shape&quot;:&quot;rect&quot;,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/value_stream_analytics&quot;,&quot;is_active&quot;:false,&quot;pill_count&quot;:null,&quot;items&quot;:[{&quot;id&quot;:&quot;cycle_analytics&quot;,&quot;title&quot;:&quot;Value stream analytics&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/value_stream_analytics&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:&quot;shortcuts-project-cycle-analytics&quot;,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;contributors&quot;,&quot;title&quot;:&quot;Contributor analytics&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/graphs/master?ref_type=heads&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:null,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;ci_cd_analytics&quot;,&quot;title&quot;:&quot;CI/CD analytics&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/pipelines/charts&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:null,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;repository_analytics&quot;,&quot;title&quot;:&quot;Repository analytics&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/graphs/master/charts&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:&quot;shortcuts-repository-charts&quot;,&quot;is_active&quot;:false},{&quot;id&quot;:&quot;model_experiments&quot;,&quot;title&quot;:&quot;Model experiments&quot;,&quot;icon&quot;:null,&quot;avatar&quot;:null,&quot;entity_id&quot;:null,&quot;link&quot;:&quot;/utilities/ark/-/ml/experiments&quot;,&quot;pill_count&quot;:null,&quot;link_classes&quot;:null,&quot;is_active&quot;:false}],&quot;separated&quot;:false}],&quot;current_context_header&quot;:&quot;Project&quot;,&quot;support_path&quot;:&quot;https://about.gitlab.com/get-help/&quot;,&quot;docs_path&quot;:&quot;/help/docs&quot;,&quot;display_whats_new&quot;:false,&quot;whats_new_most_recent_release_items_count&quot;:2,&quot;whats_new_version_digest&quot;:&quot;8a1a6ad5cc3804f1e3aae3a2213f0525839dc46c71313fc2ee7a3fedbee820d3&quot;,&quot;show_version_check&quot;:null,&quot;gitlab_version&quot;:{&quot;major&quot;:17,&quot;minor&quot;:0,&quot;patch&quot;:1,&quot;suffix_s&quot;:&quot;&quot;},&quot;gitlab_version_check&quot;:null,&quot;search&quot;:{&quot;search_path&quot;:&quot;/search&quot;,&quot;issues_path&quot;:&quot;/dashboard/issues&quot;,&quot;mr_path&quot;:&quot;/dashboard/merge_requests&quot;,&quot;autocomplete_path&quot;:&quot;/search/autocomplete&quot;,&quot;search_context&quot;:{&quot;group&quot;:{&quot;id&quot;:1556,&quot;name&quot;:&quot;Utilities&quot;,&quot;full_name&quot;:&quot;Utilities&quot;},&quot;group_metadata&quot;:{&quot;issues_path&quot;:&quot;/groups/utilities/-/issues&quot;,&quot;mr_path&quot;:&quot;/groups/utilities/-/merge_requests&quot;},&quot;project&quot;:{&quot;id&quot;:2070,&quot;name&quot;:&quot;Ark&quot;},&quot;project_metadata&quot;:{&quot;mr_path&quot;:&quot;/utilities/ark/-/merge_requests&quot;,&quot;issues_path&quot;:&quot;/utilities/ark/-/issues&quot;},&quot;code_search&quot;:true,&quot;ref&quot;:&quot;master&quot;,&quot;scope&quot;:null,&quot;for_snippets&quot;:null}},&quot;panel_type&quot;:&quot;project&quot;,&quot;shortcut_links&quot;:[{&quot;title&quot;:&quot;Snippets&quot;,&quot;href&quot;:&quot;/explore/snippets&quot;,&quot;css_class&quot;:&quot;dashboard-shortcuts-snippets&quot;},{&quot;title&quot;:&quot;Groups&quot;,&quot;href&quot;:&quot;/explore/groups&quot;,&quot;css_class&quot;:&quot;dashboard-shortcuts-groups&quot;},{&quot;title&quot;:&quot;Projects&quot;,&quot;href&quot;:&quot;/explore/projects/starred&quot;,&quot;css_class&quot;:&quot;dashboard-shortcuts-projects&quot;}]}"></aside>
+
+<div class="content-wrapper">
+<div class="mobile-overlay"></div>
+
+<div class="alert-wrapper gl-force-block-formatting-context">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="top-bar-fixed container-fluid" data-testid="top-bar">
+<div class="top-bar-container gl-display-flex gl-align-items-center gl-gap-2">
+<button class="gl-button btn btn-icon btn-md btn-default btn-default-tertiary js-super-sidebar-toggle-expand super-sidebar-toggle gl-ml-n3" aria-controls="super-sidebar" aria-expanded="false" aria-label="Primary navigation sidebar" type="button"><svg class="s16 gl-icon gl-button-icon " data-testid="sidebar-icon"><use href="/assets/icons-0b41337f52be73f7bbf9d59b841eb98a6e790dfa1a844644f120a80ce3cc18ba.svg#sidebar"></use></svg>
+
+</button>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Utilities","item":"https://invent.kde.org/utilities"},{"@type":"ListItem","position":2,"name":"Ark","item":"https://invent.kde.org/utilities/ark"}]}
+
+
+</script>
+<nav aria-label="Breadcrumbs" class="breadcrumbs gl-breadcrumbs tmp-breadcrumbs-fix" data-testid="breadcrumb-links">
+<ul class="breadcrumb gl-breadcrumb-list js-breadcrumbs-list gl-flex-grow-1">
+<li class="gl-breadcrumb-item gl-display-inline-flex"><a class="group-path js-breadcrumb-item-text " href="/utilities"><img srcset="/uploads/-/system/group/avatar/1556/avatar.png?width=16 1x, /uploads/-/system/group/avatar/1556/avatar.png?width=32 2x" alt="Utilities" class="gl-avatar gl-avatar-s16 avatar-tile gl-rounded-base!" height="16" width="16" loading="lazy" src="/uploads/-/system/group/avatar/1556/avatar.png?width=16" />
+Utilities</a></li> <li class="gl-breadcrumb-item gl-display-inline-flex"><a class="gl-display-inline-flex!" href="/utilities/ark"><img srcset="https://invent.kde.org/utilities/ark/-/avatar?width=16 1x, https://invent.kde.org/utilities/ark/-/avatar?width=32 2x" alt="Ark" class="gl-avatar gl-avatar-s16 avatar-tile gl-rounded-base!" height="16" width="16" loading="lazy" src="https://invent.kde.org/utilities/ark/-/avatar?width=16" />
+<span class="js-breadcrumb-item-text">Ark</span></a></li>
+
+</ul>
+</nav>
+
+
+
+</div>
+</div>
+
+</div>
+<div class="container-fluid container-limited project-highlight-puc">
+<main class="content" id="content-body" itemscope itemtype="http://schema.org/SoftwareSourceCode">
+<div class="flash-container flash-container-page sticky" data-testid="flash-container">
+<div id="js-global-alerts"></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<header class="project-home-panel js-show-on-project-root gl-mt-5">
+<div class="gl-display-flex gl-justify-content-space-between gl-flex-wrap gl-flex-direction-column gl-md-flex-direction-row gl-gap-5">
+<div class="home-panel-title-row gl-display-flex gl-align-items-center">
+<img srcset="https://invent.kde.org/utilities/ark/-/avatar?width=48 1x, https://invent.kde.org/utilities/ark/-/avatar?width=96 2x" alt="Ark" class="gl-avatar gl-avatar-s48 gl-align-self-start gl-flex-shrink-0 gl-mr-3 gl-rounded-base!" height="48" width="48" loading="lazy" itemprop="image" src="https://invent.kde.org/utilities/ark/-/avatar?width=48" />
+
+<h1 class="home-panel-title gl-heading-1 gl-mt-3 gl-display-flex gl-align-items-center gl-flex-wrap gl-gap-3 gl-word-break-word gl-mb-0!" data-testid="project-name-content" itemprop="name">
+Ark
+<span class="has-tooltip visibility-icon gl-display-inline-flex gl-text-secondary" data-container="body" data-placement="top" title="Public - The project can be accessed without any authentication."><svg class="s16 icon" data-testid="earth-icon"><use href="/assets/icons-0b41337f52be73f7bbf9d59b841eb98a6e790dfa1a844644f120a80ce3cc18ba.svg#earth"></use></svg></span>
+
+
+
+</h1>
+</div>
+<div data-can-read-project="true" data-id="2070" data-is-group="false" data-is-project-empty="false" data-project-id="2070" data-sign-in-path="/users/sign_in?redirect_to_referer=yes" data-star-count="14" data-starred="false" data-starrers-path="/utilities/ark/-/starrers" id="js-home-panel"></div>
+</div>
+
+</header>
+
+<div class="project-page-indicator js-show-on-project-root"></div>
+<div class="project-page-layout">
+<div class="project-page-layout-sidebar js-show-on-project-root gl-mt-5">
+<aside class="project-page-sidebar" data-testid="project-page-sidebar">
+<div class="project-page-sidebar-block home-panel-home-desc gl-py-4 gl-border-b gl-border-gray-50 gl-pt-2!">
+<h2 class="gl-font-base gl-font-weight-bold gl-reset-line-height gl-text-gray-900 gl-m-0 gl-mb-1">Project information</h2>
+<div class="home-panel-description text-break">
+<div class="home-panel-description-markdown read-more-container" data-read-more-height="320" itemprop="description">
+<div class="read-more-content read-more-content--has-scrim">
+<p data-sourcepos="1:1-1:20" dir="auto">File archiver by KDE</p>
+</div>
+<div class="js-read-more-trigger gl-display-none gl-w-full gl-h-8 gl-absolute gl-bottom-0 gl-z-2 gl-bg-white">
+<button aria-label="Expand project information" type="button" class="gl-button btn btn-md btn-link "><span class="gl-button-text">
+<svg class="s14" data-testid="chevron-down-icon"><use href="/assets/icons-0b41337f52be73f7bbf9d59b841eb98a6e790dfa1a844644f120a80ce3cc18ba.svg#chevron-down"></use></svg>
+Read more
+
+</span>
+
+</button></div>
+</div>
+</div>
+<div class="gl-mb-2">
+<div class="progress repository-languages-bar js-show-on-project-root"><div class="progress-bar has-tooltip" style="width: 88.37%; background-color:#f34b7d" data-html="true" title="&lt;span class=&quot;repository-language-bar-tooltip-language&quot;&gt;C++&lt;/span&gt;&amp;nbsp;&lt;span class=&quot;repository-language-bar-tooltip-share&quot;&gt;88.4%&lt;/span&gt;"></div><div class="progress-bar has-tooltip" style="width: 10.56%; background-color:#e7efda" data-html="true" title="&lt;span class=&quot;repository-language-bar-tooltip-language&quot;&gt;CMake&lt;/span&gt;&amp;nbsp;&lt;span class=&quot;repository-language-bar-tooltip-share&quot;&gt;10.6%&lt;/span&gt;"></div><div class="progress-bar has-tooltip" style="width: 1.02%; background-color:#555555" data-html="true" title="&lt;span class=&quot;repository-language-bar-tooltip-language&quot;&gt;C&lt;/span&gt;&amp;nbsp;&lt;span class=&quot;repository-language-bar-tooltip-share&quot;&gt;1.0%&lt;/span&gt;"></div><div class="progress-bar has-tooltip" style="width: 0.05%; background-color:#89e051" data-html="true" title="&lt;span class=&quot;repository-language-bar-tooltip-language&quot;&gt;Shell&lt;/span&gt;&amp;nbsp;&lt;span class=&quot;repository-language-bar-tooltip-share&quot;&gt;0.1%&lt;/span&gt;"></div></div>
+</div>
+</div>
+<div class="project-page-sidebar-block gl-py-4 gl-border-b gl-border-gray-50">
+<nav class="project-stats">
+<ul class="nav gl-row-gap-2 gl-gap-x-5">
+<li class="nav-item">
+<a class="nav-link gl-display-flex gl-align-items-center stat-link gl-px-0! gl-pb-2!" href="/utilities/ark/-/commits/master"><svg class="s16 icon gl-mr-3 gl-text-gray-500" data-testid="commit-icon"><use href="/assets/icons-0b41337f52be73f7bbf9d59b841eb98a6e790dfa1a844644f120a80ce3cc18ba.svg#commit"></use></svg><strong class="project-stat-value">5,446</strong> Commits</a>
+</li>
+<li class="nav-item">
+<a class="nav-link gl-display-flex gl-align-items-center stat-link gl-px-0! gl-pb-2!" href="/utilities/ark/-/branches"><svg class="s16 icon gl-mr-3 gl-text-gray-500" data-testid="branch-icon"><use href="/assets/icons-0b41337f52be73f7bbf9d59b841eb98a6e790dfa1a844644f120a80ce3cc18ba.svg#branch"></use></svg><strong class="project-stat-value">83</strong> Branches</a>
+</li>
+<li class="nav-item">
+<a class="nav-link gl-display-flex gl-align-items-center stat-link gl-px-0! gl-pb-2!" href="/utilities/ark/-/tags"><svg class="s16 icon gl-mr-3 gl-text-gray-500" data-testid="label-icon"><use href="/assets/icons-0b41337f52be73f7bbf9d59b841eb98a6e790dfa1a844644f120a80ce3cc18ba.svg#label"></use></svg><strong class="project-stat-value">379</strong> Tags</a>
+</li>
+</ul>
+
+</nav>
+</div>
+<div class="project-page-sidebar-block gl-py-4 gl-border-b gl-border-gray-50">
+<div class="project-buttons gl-mb-2 js-show-on-project-root" data-testid="project-buttons">
+<ul class="nav gl-row-gap-2 gl-gap-x-5">
+<li class="nav-item">
+<a class="nav-link gl-display-flex gl-align-items-center stat-link gl-px-0! gl-pb-2! btn-default" href="/utilities/ark/-/blob/master/README.md"><svg class="s16 icon gl-mr-3 gl-text-gray-500" data-testid="doc-text-icon"><use href="/assets/icons-0b41337f52be73f7bbf9d59b841eb98a6e790dfa1a844644f120a80ce3cc18ba.svg#doc-text"></use></svg>README</a>
+</li>
+<li class="nav-item">
+<a class="nav-link gl-display-flex gl-align-items-center stat-link gl-px-0! gl-pb-2! btn-default" itemprop="license" href="/utilities/ark/-/blob/master/COPYING.icons"><svg class="s16 icon gl-mr-3 gl-text-gray-500" data-testid="scale-icon"><use href="/assets/icons-0b41337f52be73f7bbf9d59b841eb98a6e790dfa1a844644f120a80ce3cc18ba.svg#scale"></use></svg><span class="project-stat-value">LICENSE</span></a>
+</li>
+<li class="nav-item">
+<a class="nav-link gl-display-flex gl-align-items-center stat-link gl-px-0! gl-pb-2! btn-default" href="/utilities/ark/-/blob/master/CONTRIBUTING.md"><svg class="s16 icon gl-mr-3 gl-text-gray-500" data-testid="doc-text-icon"><use href="/assets/icons-0b41337f52be73f7bbf9d59b841eb98a6e790dfa1a844644f120a80ce3cc18ba.svg#doc-text"></use></svg>CONTRIBUTING</a>
+</li>
+</ul>
+
+</div>
+</div>
+<div class="project-page-sidebar-block gl-py-4">
+<p class="gl-font-weight-bold gl-text-gray-900 gl-m-0 gl-mb-1">Created on</p>
+<span>May 16, 2020</span>
+</div>
+</aside>
+
+</div>
+<div class="project-page-layout-content">
+
+<div class="project-show-files">
+<div class="tree-holder clearfix js-per-page gl-mt-5" data-blame-per-page="1000" id="tree-holder">
+<div class="nav-block gl-display-flex gl-flex-direction-column gl-sm-flex-direction-row gl-align-items-stretch">
+<div class="tree-ref-container gl-display-flex gl-flex-wrap gl-gap-2 mb-2 mb-md-0">
+<div class="tree-ref-holder gl-max-w-26" data-testid="ref-dropdown-container">
+<div data-project-id="2070" data-project-root-path="/utilities/ark" data-ref-type="heads" id="js-tree-ref-switcher"></div>
+</div>
+<div data-can-collaborate="false" data-can-edit-tree="false" data-can-push-code="false" data-new-blob-path="/utilities/ark/-/new/master" data-new-branch-path="/utilities/ark/-/branches/new" data-new-dir-path="/utilities/ark/-/create_dir/master" data-new-tag-path="/utilities/ark/-/tags/new" data-upload-path="/utilities/ark/-/create/master" id="js-repo-breadcrumb"></div>
+</div>
+<div id="js-blob-controls"></div>
+<div class="tree-controls">
+<div class="gl-display-flex gl-flex-wrap gl-gap-3 gl-mb-3 gl-sm-mb-0">
+
+
+<div data-history-link="/utilities/ark/-/commits/master" id="js-tree-history-link"></div>
+<button class="gl-button btn btn-md btn-default has-tooltip shortcuts-find-file" title="Go to file, press &lt;kbd class=&#39;flat ml-1&#39; aria-hidden=true&gt;/~&lt;/kbd&gt; or &lt;kbd class=&#39;flat ml-1&#39; aria-hidden=true&gt;t&lt;/kbd&gt;" aria-keyshortcuts="/+~ t" data-html="true" type="button"><span class="gl-button-text">
+Find file
+
+</span>
+
+</button>
+<div class="gl-display-inline-block" data-css-classes="gl-w-full gl-sm-w-auto" data-options="{&quot;project_path&quot;:&quot;utilities/ark&quot;,&quot;ref&quot;:&quot;master&quot;,&quot;is_fork&quot;:false,&quot;needs_to_fork&quot;:true,&quot;gitpod_enabled&quot;:false,&quot;is_blob&quot;:false,&quot;show_edit_button&quot;:false,&quot;show_web_ide_button&quot;:false,&quot;show_gitpod_button&quot;:false,&quot;show_pipeline_editor_button&quot;:false,&quot;web_ide_url&quot;:&quot;/-/ide/project/utilities/ark/edit/master&quot;,&quot;edit_url&quot;:&quot;&quot;,&quot;pipeline_editor_url&quot;:&quot;/utilities/ark/-/ci/editor?branch_name=master&quot;,&quot;gitpod_url&quot;:&quot;&quot;,&quot;user_preferences_gitpod_path&quot;:&quot;/-/profile/preferences#user_gitpod_enabled&quot;,&quot;user_profile_enable_gitpod_path&quot;:&quot;/-/user_settings/profile?user%5Bgitpod_enabled%5D=true&quot;,&quot;fork_path&quot;:&quot;/utilities/ark/-/forks/new&quot;,&quot;fork_modal_id&quot;:null}" data-web-ide-promo-popover-img="/assets/web-ide-promo-popover-9e59939b3b450a7ea385a520971151abb09ddad46141c333d6dcc783b9b91522.svg" id="js-tree-web-ide-link"></div>
+
+<div class="project-code-holder gl-display-none gl-sm-display-inline-block">
+<div class="git-clone-holder js-git-clone-holder">
+<div data-directory-download-links="[{&quot;text&quot;:&quot;zip&quot;,&quot;path&quot;:&quot;/utilities/ark/-/archive/master/ark-master.zip&quot;},{&quot;text&quot;:&quot;tar.gz&quot;,&quot;path&quot;:&quot;/utilities/ark/-/archive/master/ark-master.tar.gz&quot;},{&quot;text&quot;:&quot;tar.bz2&quot;,&quot;path&quot;:&quot;/utilities/ark/-/archive/master/ark-master.tar.bz2&quot;},{&quot;text&quot;:&quot;tar&quot;,&quot;path&quot;:&quot;/utilities/ark/-/archive/master/ark-master.tar&quot;}]" data-http-url="https://invent.kde.org/utilities/ark.git" data-ssh-url="git@invent.kde.org:utilities/ark.git" data-xcode-url="" id="js-code-dropdown"></div>
+</div>
+
+</div>
+</div>
+<div class="project-code-holder gl-display-flex gl-gap-3 gl-sm-display-none!">
+<div class="js-source-code-dropdown" data-css-class="" data-download-artifacts="[]" data-download-links="[{&quot;text&quot;:&quot;zip&quot;,&quot;path&quot;:&quot;/utilities/ark/-/archive/master/ark-master.zip&quot;},{&quot;text&quot;:&quot;tar.gz&quot;,&quot;path&quot;:&quot;/utilities/ark/-/archive/master/ark-master.tar.gz&quot;},{&quot;text&quot;:&quot;tar.bz2&quot;,&quot;path&quot;:&quot;/utilities/ark/-/archive/master/ark-master.tar.bz2&quot;},{&quot;text&quot;:&quot;tar&quot;,&quot;path&quot;:&quot;/utilities/ark/-/archive/master/ark-master.tar&quot;}]"></div>
+
+<div class="btn-group mobile-git-clone js-mobile-git-clone btn-block">
+<button class="gl-button btn btn-md btn-confirm clone-dropdown-btn js-clone-dropdown-label" title="Copy" aria-label="Copy" aria-live="polite" data-toggle="tooltip" data-placement="bottom" data-container="body" data-html="true" data-button-text="Copy HTTPS clone URL" data-size="medium" data-category="primary" data-variant="confirm" data-hide-button-icon="true" data-clipboard-text="https://invent.kde.org/utilities/ark.git" type="button"><span class="gl-button-text">
+Copy HTTPS clone URL
+</span>
+
+</button>
+<button class="btn gl-button btn-confirm dropdown-toggle js-dropdown-toggle flex-grow-0 d-flex-center w-auto ml-0" data-toggle="dropdown" type="button">
+<svg class="s16 dropdown-btn-icon icon" data-testid="chevron-down-icon"><use href="/assets/icons-0b41337f52be73f7bbf9d59b841eb98a6e790dfa1a844644f120a80ce3cc18ba.svg#chevron-down"></use></svg>
+</button>
+<ul class="dropdown-menu dropdown-menu-selectable dropdown-menu-right clone-options-dropdown" data-dropdown>
+<li class="js-clone-links">
+<a class="copy ssh clone url-selector is-active" href="git@invent.kde.org:utilities/ark.git" data-clone-type="ssh"><strong class="dropdown-menu-inner-title">Copy SSH clone URL</strong><span class="dropdown-menu-inner-content">git@invent.kde.org:utilities/ark.git</span></a>
+</li>
+<li class="js-clone-links">
+<a class="copy https clone url-selector " href="https://invent.kde.org/utilities/ark.git" data-clone-type="http"><strong class="dropdown-menu-inner-title">Copy HTTPS clone URL</strong><span class="dropdown-menu-inner-content">https://invent.kde.org/utilities/ark.git</span></a>
+</li>
+
+</ul>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="info-well gl-display-none gl-sm-display-flex project-last-commit gl-flex-direction-column gl-mt-5">
+<div class="gl-m-auto" data-ref-type="heads" id="js-last-commit">
+<div class="gl-spinner-container" role="status"><span aria-label="Loading" class="gl-spinner gl-spinner-md gl-spinner-dark gl-vertical-align-text-bottom!"></span></div>
+</div>
+</div>
+<div data-escaped-ref="master" data-full-name="Utilities / Ark" data-project-path="utilities/ark" data-project-short-path="ark" data-ref="master" data-ref-type="heads" id="js-tree-list"></div>
+</div>
+
+</div>
+</div>
+</div>
+
+</main>
+</div>
+
+
+</div>
+</div>
+
+
+<script nonce="wCFoLyfEjI52uqousmo98g==">
+//<![CDATA[
+if ('loading' in HTMLImageElement.prototype) {
+  document.querySelectorAll('img.lazy').forEach(img => {
+    img.loading = 'lazy';
+    let imgUrl = img.dataset.src;
+    // Only adding width + height for avatars for now
+    if (imgUrl.indexOf('/avatar/') > -1 && imgUrl.indexOf('?') === -1) {
+      const targetWidth = img.getAttribute('width') || img.width;
+      imgUrl += `?width=${targetWidth}`;
+    }
+    img.src = imgUrl;
+    img.removeAttribute('data-src');
+    img.classList.remove('lazy');
+    img.classList.add('js-lazy-loaded');
+    img.dataset.testid = 'js-lazy-loaded-content';
+  });
+}
+
+//]]>
+</script>
+<script nonce="wCFoLyfEjI52uqousmo98g==">
+//<![CDATA[
+gl = window.gl || {};
+gl.experiments = {};
+
+
+//]]>
+</script>
+
+</body>
+</html>
+
+˜°fXî      fYåfY@Fñ6ÇfYæ   J    O^partitionKey=%28https%2Ckde.org%29,:https://invent.kde.org/utilities/ark strongly-framed 1 security-info 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 request-method GET response-head HTTP/2 200 
+server: nginx
+date: Fri, 31 May 2024 00:20:53 GMT
+content-type: text/html; charset=utf-8
+content-length: 45837
+cache-control: max-age=0, private, must-revalidate
+content-security-policy: connect-src 'self' https://stats.kde.org/; default-src 'self'; frame-ancestors 'self'; frame-src 'self' https://www.google.com/recaptcha/ https://www.recaptcha.net/ https://content.googleapis.com https://content-compute.googleapis.com https://content-cloudbilling.googleapis.com https://content-cloudresourcemanager.googleapis.com; img-src * data: blob:; object-src 'none'; script-src 'self' 'unsafe-eval' https://www.google.com/recaptcha/ https://www.recaptcha.net/ https://www.gstatic.com/recaptcha/ https://apis.google.com https://stats.kde.org/ https://cdn.kde.org/ 'nonce-wCFoLyfEjI52uqousmo98g=='; style-src 'self' 'unsafe-inline'; worker-src 'self' blob:
+etag: W/"5055b1b516d1e96d9c77c832cd111d60"
+permissions-policy: interest-cohort=()
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-download-options: noopen
+x-frame-options: SAMEORIGIN
+x-gitlab-meta: {"correlation_id":"01HZ60APGK9QGCGACGY48JC50M","version":"1"}
+x-permitted-cross-domain-policies: none
+x-request-id: 01HZ60APGK9QGCGACGY48JC50M
+x-runtime: 0.058624
+x-ua-compatible: IE=edge
+x-xss-protection: 1; mode=block
+strict-transport-security: max-age=63072000
+X-Firefox-Spdy: h2
+ original-response-headers server: nginx
+date: Fri, 31 May 2024 00:20:53 GMT
+content-type: text/html; charset=utf-8
+content-length: 45837
+cache-control: max-age=0, private, must-revalidate
+content-security-policy: connect-src 'self' https://stats.kde.org/; default-src 'self'; frame-ancestors 'self'; frame-src 'self' https://www.google.com/recaptcha/ https://www.recaptcha.net/ https://content.googleapis.com https://content-compute.googleapis.com https://content-cloudbilling.googleapis.com https://content-cloudresourcemanager.googleapis.com; img-src * data: blob:; object-src 'none'; script-src 'self' 'unsafe-eval' https://www.google.com/recaptcha/ https://www.recaptcha.net/ https://www.gstatic.com/recaptcha/ https://apis.google.com https://stats.kde.org/ https://cdn.kde.org/ 'nonce-wCFoLyfEjI52uqousmo98g=='; style-src 'self' 'unsafe-inline'; worker-src 'self' blob:
+etag: W/"5055b1b516d1e96d9c77c832cd111d60"
+permissions-policy: interest-cohort=()
+referrer-policy: strict-origin-when-cross-origin
+set-cookie: event_filter=all; path=/; Secure; SameSite=None
+set-cookie: _gitlab_session=56a619706a71b0a95a84254e8d1c3b5e; path=/; expires=Fri, 31 May 2024 02:20:53 GMT; secure; HttpOnly; SameSite=None
+x-content-type-options: nosniff
+x-download-options: noopen
+x-frame-options: SAMEORIGIN
+x-gitlab-meta: {"correlation_id":"01HZ60APGK9QGCGACGY48JC50M","version":"1"}
+x-permitted-cross-domain-policies: none
+x-request-id: 01HZ60APGK9QGCGACGY48JC50M
+x-runtime: 0.058624
+x-ua-compatible: IE=edge
+x-xss-protection: 1; mode=block
+strict-transport-security: max-age=63072000
+X-Firefox-Spdy: h2
+ ctid 1 uncompressed-len 0 net-response-time-onstart 841 net-response-time-onstop 4570   ³

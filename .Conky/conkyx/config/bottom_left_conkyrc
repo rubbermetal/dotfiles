@@ -1,0 +1,32 @@
+conky.config = {
+    update_interval = 5,
+    total_run_times = 0,
+    own_window = true,
+    own_window_type = 'desktop',
+    own_window_transparent = true,
+    own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+    own_window_colour = 'black',
+    alignment = 'bottom_left',
+    gap_x = 10,
+    gap_y = 10,
+    minimum_width = 500,  -- Adjust as needed
+    maximum_width = 500,  -- Adjust as needed
+    minimum_height = 200,  -- Adjust as needed
+    background = false,
+    double_buffer = true,
+    draw_shades = true,
+    draw_outline = false,
+    draw_borders = false,
+    draw_graph_borders = false,
+    default_color = 'white',
+    use_spacer = 'none',
+    font = 'Droid Sans:size=8',
+	font = 'Noto Sans:size=8',
+	use_xft = true,
+    format_human_readable = true,
+    lua_load = '/home/rubbermetal/.Conky/conkyx/config/set_variables.lua',
+};
+
+conky.text = [[
+${goto 0}${lua conky_get_journal}
+]];

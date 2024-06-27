@@ -1,0 +1,59 @@
+# .colors
+
+# Return to default foreground color
+clr_restore=$(echo -en '\033[0m') 
+
+#Foreground colors
+fg_black=$(echo -en '\033[00;30m') 
+fg_firebrick=$(echo -en '\033[0;31m') 
+fg_red=$(echo -en '\033[0;31m') 
+fg_forest=$(echo -en '\033[00;32m') 
+fg_green=$(echo -en '\033[01;32m') 
+fg_brown=$(echo -en '\033[00;33m') 
+fg_yellow=$(echo -en '\033[01;33m') 
+fg_navy=$(echo -en '\033[00;34m') 
+fg_blue=$(echo -en '\033[01;34m') 
+fg_purple=$(echo -en '\033[00;35m') 
+fg_magenta=$(echo -en '\033[01;35m') 
+fg_cadet=$(echo -en '\033[00;36m') 
+fg_cyan=$(echo -en '\033[01;36m') 
+fg_gray=$(echo -en '\033[00;37m')
+fg_white=$(echo -en '\033[01;37m')
+fg_std=$(echo -en "${fg_black}")
+end_color=$(echo -en '$(tput sgr0)')
+
+# Extended Foreground colors
+fg_bright_red=$(echo -en '\033[0;91m')
+fg_bright_green=$(echo -en '\033[0;92m')
+fg_bright_yellow=$(echo -en '\033[0;93m')
+fg_bright_blue=$(echo -en '\033[0;94m')
+fg_bright_magenta=$(echo -en '\033[0;95m')
+fg_bright_cyan=$(echo -en '\033[0;96m')
+fg_bright_white=$(echo -en '\033[0;97m')
+
+# Background colors
+bg_black=$(echo -en '\033[00;40m')
+bg_firebrick=$(echo -en '\033[00;41m')
+bg_red=$(echo -en '\033[01;41m')
+bg_forest=$(echo -en '\033[00;42m')
+bg_green=$(echo -en '\033[01;42m')
+bg_brown=$(echo -en '\033[00;43m')
+bg_yellow=$(echo -en '\033[01;43m')
+bg_navy=$(echo -en '\033[00;44m')
+bg_blue=$(echo -en '\033[01;44m')
+bg_purple=$(echo -en '\033[00;45m')
+bg_magenta=$(echo -en '\033[01;45m')
+bg_cadet=$(echo -en '\033[00;46m')
+bg_cyan=$(echo -en '\033[01;46m')
+bg_gray=$(echo -en '\033[00;47m')
+bg_white=$(echo -en '\033[01;47m')
+bg_std="${bg_white}"
+
+# Extended Background colors
+bg_bright_red=$(echo -en '\033[0;101m')
+bg_bright_green=$(echo -en '\033[0;102m')
+bg_bright_yellow=$(echo -en '\033[0;103m')
+bg_bright_blue=$(echo -en '\033[0;104m')
+bg_bright_magenta=$(echo -en '\033[0;105m')
+bg_bright_cyan=$(echo -en '\033[0;106m')
+bg_bright_white=$(echo -en '\033[0;107m')

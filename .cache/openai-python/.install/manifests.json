@@ -1,0 +1,9 @@
+{
+  "installPath": "/home/madhatter/.cache/openai-python/.install",
+  "binaries": {
+    "marzano": {
+      "name": "marzano",
+      "release": "e0d8b7e3-a00b-4c50-907a-107158fe4a40"
+    }
+  }
+}

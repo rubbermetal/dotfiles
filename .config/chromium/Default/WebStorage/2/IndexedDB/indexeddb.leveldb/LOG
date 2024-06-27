@@ -1,0 +1,15 @@
+2024/06/21-09:20:18.042 3b080b Reusing MANIFEST /home/madhatter/.config/chromium/Default/WebStorage/2/IndexedDB/indexeddb.leveldb/MANIFEST-000001
+2024/06/21-09:20:18.043 3b080b Recovering log #11
+2024/06/21-09:20:18.044 3b080b Reusing old log /home/madhatter/.config/chromium/Default/WebStorage/2/IndexedDB/indexeddb.leveldb/000011.log 
+2024/06/21-09:30:24.060 3b080c Level-0 table #16: started
+2024/06/21-09:30:24.065 3b080c Level-0 table #16: 26589 bytes OK
+2024/06/21-09:30:24.070 3b080c Delete type=0 #11
+2024/06/21-09:30:24.070 3b080c Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2024/06/21-09:30:24.071 3b080c Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x02\x01\x1f\x04\x03\x01\x06\x00Q\x00U\x00E\x00U\x00E\x00D\x03\x00\x00\x00\x00\x00\x00L@\x03\x00PYH\x96\x01yB\x00\x03\x00\x00\x00\x00\x00\xc0U@' @ 2768 : 1
+2024/06/21-09:30:24.071 3b080c Compacting 1@1 + 1@2 files
+2024/06/21-09:30:24.074 3b080c Generated table #17@1: 60 keys, 1440 bytes
+2024/06/21-09:30:24.075 3b080c Compacted 1@1 + 1@2 files => 1440 bytes
+2024/06/21-09:30:24.080 3b080c compacted to: files[ 0 0 1 0 0 0 0 ]
+2024/06/21-09:30:24.080 3b080c Delete type=2 #13
+2024/06/21-09:30:24.080 3b080c Delete type=2 #16
+2024/06/21-09:30:24.081 3b080c Manual compaction at level-1 from '\x00\x02\x01\x1f\x04\x03\x01\x06\x00Q\x00U\x00E\x00U\x00E\x00D\x03\x00\x00\x00\x00\x00\x00L@\x03\x00PYH\x96\x01yB\x00\x03\x00\x00\x00\x00\x00\xc0U@' @ 2768 : 1 .. (end); will stop at (end)

@@ -1,0 +1,113 @@
+#!/bin/bash
+
+# Define colors
+RESET='\033[0m'
+BOLD='\033[1m'
+UNDERLINE='\033[4m'
+RED='\033[31m'
+GREEN='\033[32m'
+YELLOW='\033[33m'
+BLUE='\033[34m'
+CYAN='\033[36m'
+WHITE='\033[37m'
+
+# Print header
+print_header() {
+  echo -e "${BOLD}${CYAN}=============================="
+  echo -e " PC Health Check Report"
+  echo -e "==============================${RESET}"
+}
+
+# Print section title
+print_section() {
+  echo -e "${BOLD}${BLUE}==> $1${RESET}"
+}
+
+# Check CPU usage
+check_cpu() {
+  print_section "CPU Usage"
+  local usage=$(top -bn1 | grep "Cpu(s)" | \
+                sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | \
+                awk '{print 100 - $1"%"}')
+  echo -e "${WHITE}CPU Usage: ${GREEN}$usage${RESET}"
+}
+
+# Check memory usage
+check_memory() {
+  print_section "Memory Usage"
+  local mem=$(free -m | awk 'NR==2{printf "Memory Usage: %s/%sMB (%.2f%%)\n", $3,$2,$3*100/$2 }')
+  echo -e "${WHITE}$mem${RESET}"
+}
+
+# Check disk usage
+check_disk() {
+  print_section "Disk Usage"
+  local disk=$(df -h | grep '^/dev/' | awk '{ print $5 " " $6 }')
+  echo -e "${WHITE}Disk Usage:${RESET}"
+  echo -e "${GREEN}$disk${RESET}"
+}
+
+# Check network status
+check_network() {
+  print_section "Network Status"
+  local ip=$(hostname -i)
+  local rx=$(cat /sys/class/net/*/statistics/rx_bytes | awk '{s+=$1} END {print s}')
+  local tx=$(cat /sys/class/net/*/statistics/tx_bytes | awk '{s+=$1} END {print s}')
+  echo -e "${WHITE}IP Address: ${GREEN}$ip${RESET}"
+  echo -e "${WHITE}Data Received: ${GREEN}$(numfmt --to=iec $rx)${RESET}"
+  echo -e "${WHITE}Data Transmitted: ${GREEN}$(numfmt --to=iec $tx)${RESET}"
+}
+
+# Check system uptime
+check_uptime() {
+  print_section "System Uptime"
+  local uptime=$(uptime -p)
+  echo -e "${WHITE}Uptime: ${GREEN}$uptime${RESET}"
+}
+
+# Check temperature
+check_temperature() {
+  print_section "Temperature"
+  local temp=$(sensors | grep 'temp1' | awk '{print $2}')
+  echo -e "${WHITE}CPU Temperature: ${GREEN}$temp${RESET}"
+}
+
+# Check battery status (if applicable)
+check_battery() {
+  if [ -d /sys/class/power_supply/BAT0 ]; then
+    print_section "Battery Status"
+    local status=$(cat /sys/class/power_supply/BAT0/status)
+    local capacity=$(cat /sys/class/power_supply/BAT0/capacity)
+    echo -e "${WHITE}Battery Status: ${GREEN}$status${RESET}"
+    echo -e "${WHITE}Battery Capacity: ${GREEN}$capacity%${RESET}"
+  fi
+}
+
+# Print footer
+print_footer() {
+  echo -e "${BOLD}${CYAN}==============================${RESET}"
+  echo
+}
+
+# Main function to run checks
+run_checks() {
+  print_header
+  check_cpu
+  echo
+  check_memory
+  echo
+  check_disk
+  echo
+  check_network
+  echo
+  check_uptime
+  echo
+  check_temperature
+  echo
+  check_battery
+  print_footer
+}
+
+# Run the checks
+run_checks
+

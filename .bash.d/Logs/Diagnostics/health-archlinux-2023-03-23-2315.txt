@@ -1,0 +1,111 @@
+
+#####################################################################
+    Health Check Report (CPU,Process,Disk Usage, Memory)
+#####################################################################
+
+
+Hostname         : archlinux
+Kernel Version   : 6.1.20-1-lts
+Uptime           : 3 days
+Last Reboot Time : 2023-03-20 12:59
+
+
+
+*********************************************************************
+CPU Load - > Threshold < 1 Normal > 1 Caution , > 2 Unhealthy 
+*********************************************************************
+
+
+CPU0 : 16.79
+CPU1 : 70.59
+CPU2 : 71.52
+CPU3 : 70.96
+
+Load Average   :  1.53
+
+Heath Status : Caution
+
+
+*********************************************************************
+                             Process
+*********************************************************************
+
+=> Top memory using processs/application
+
+PID %MEM RSS COMMAND
+2001 5.8 467808 /usr/lib/electron19/electron
+699 3.8 312424 /usr/bin/plasmashell
+940761 3.3 270064 /app/extra/chrome
+940602 3.3 266404 /app/extra/chrome
+2066 3.1 255732 /usr/lib/electron19/electron
+625 2.8 225620 /usr/bin/kwin_x11
+940695 2.7 224880 /app/extra/chrome
+1901 2.7 220832 /usr/lib/electron19/electron
+940741 2.4 197272 /app/extra/chrome
+60003 2.4 194204 /usr/lib/electron19/electron
+
+=> Top CPU using process/application
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+ 906796 rubberm+  20   0  998156  85536  51240 S  31.2   1.1  89:35.07 terminator
+ 913073 rubberm+  20   0   15944  11268   5924 S  31.2   0.1  96:53.45 python
+    625 rubberm+  20   0 2547044 225620 111376 S  18.8   2.8 141:29.51 kwin_x11
+    451 root      20   0  407580  72456  43232 S  12.5   0.9 161:11.57 Xorg
+    409 avahi     20   0    9476   5164   4052 S   6.2   0.1   0:42.13 avahi-daemon
+1108226 root      20   0       0      0      0 I   6.2   0.0   0:05.61 kworker/u8:32-events_unbound
+1115248 rubberm+  20   0   10756   4012   3428 R   6.2   0.0   0:00.02 top
+      1 root      20   0  167620  13092   9896 S   0.0   0.2   0:03.98 systemd
+      2 root      20   0       0      0      0 S   0.0   0.0   0:00.05 kthreadd
+      3 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_gp
+
+*********************************************************************
+Disk Usage - > Threshold < 90 Normal > 90% Caution > 95 Unhealthy
+*********************************************************************
+
+dev /dev 0% used 3.8G free space
+
+run /run 1% used 3.9G free space
+
+/dev/sda2 / 74% used 7.4G free space
+
+tmpfs /dev/shm 1% used 3.9G free space
+
+tmpfs /tmp 1% used 3.9G free space
+
+/dev/sda1 /boot/EFI 1% used 250G free space
+
+/dev/sda3 /home 13% used 534G free space
+
+tmpfs /run/user/1000 1% used 779M free space
+
+/dev/sdb1 /run/media/rubbermetal/3231-6639 10% used 333G free space
+
+
+
+Heath Status
+
+dev /dev 		 Normal
+run /run 		 Normal
+/dev/sda2 / 		 Normal
+tmpfs /dev/shm 		 Normal
+tmpfs /tmp 		 Normal
+/dev/sda1 /boot/EFI 		 Normal
+/dev/sda3 /home 		 Normal
+tmpfs /run/user/1000 		 Normal
+/dev/sdb1 /run/media/rubbermetal/3231-6639 		 Normal
+
+*********************************************************************
+		     Memory 
+*********************************************************************
+
+=> Physical Memory
+
+Total	Used	Free	%Free
+
+7.67GB	3.08GB 	0.98GB	12%
+
+=> Swap Memory
+
+Total	Used	Free	%Free
+
+1.99GB	0GB	1.99GB	100%
+

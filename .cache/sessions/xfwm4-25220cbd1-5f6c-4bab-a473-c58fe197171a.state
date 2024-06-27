@@ -1,0 +1,13 @@
+[CLIENT] 0x2600003
+  [CLIENT_ID] 2a4f80e41-99be-4541-95d6-c582a94ccd4a
+  [CLIENT_LEADER] 0x2600001
+  [WINDOW_ROLE] xfce4-terminal-1717866839-1191256300
+  [RES_NAME] xfce4-terminal
+  [RES_CLASS] Xfce4-terminal
+  [WM_NAME] Terminal - madhatter@arch:~
+  [WM_COMMAND] (1) "xfce4-terminal"
+  [GEOMETRY] (0,280,1080,1894)
+  [GEOMETRY-MAXIMIZED] (0,280,1080,1894)
+  [SCREEN] 0
+  [DESK] 0
+  [FLAGS] 0x10300

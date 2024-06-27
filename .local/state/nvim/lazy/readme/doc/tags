@@ -1,0 +1,33 @@
+!_TAG_FILE_ENCODING	utf-8	//
+cmp-path-cmp-path	cmp-path.md	/# cmp-path
+cmp-path-configuration	cmp-path.md	/## Configuration
+cmp-path-get-cwd-type-function	cmp-path.md	/### get_cwd (type: function)
+cmp-path-label-trailing-slash-type-boolean	cmp-path.md	/### label_trailing_slash (type: boolean)
+cmp-path-setup	cmp-path.md	/# Setup
+cmp-path-trailing-slash-type-boolean	cmp-path.md	/### trailing_slash (type: boolean)
+cmp_luasnip-cmp-luasnip	cmp_luasnip.md	/# cmp_luasnip
+mason-tool-installer.nvim-commands	mason-tool-installer.nvim.md	/## Commands
+mason-tool-installer.nvim-configuration	mason-tool-installer.nvim.md	/## Configuration
+mason-tool-installer.nvim-events	mason-tool-installer.nvim.md	/## Events
+mason-tool-installer.nvim-installation	mason-tool-installer.nvim.md	/## Installation
+mason-tool-installer.nvim-mason-tool-installer	mason-tool-installer.nvim.md	/# mason-tool-installer
+mason-tool-installer.nvim-requirements	mason-tool-installer.nvim.md	/## Requirements
+mason-tool-installer.nvim-suggestions-complaints-help	mason-tool-installer.nvim.md	/## Suggestions \/ Complaints \/ Help
+telescope-fzf-native.nvim-benchmark	telescope-fzf-native.nvim.md	/## Benchmark
+telescope-fzf-native.nvim-c-interface	telescope-fzf-native.nvim.md	/### C Interface
+telescope-fzf-native.nvim-cmake-windows-linux-macos	telescope-fzf-native.nvim.md	/### CMake (Windows, Linux, MacOS)
+telescope-fzf-native.nvim-credit	telescope-fzf-native.nvim.md	/## Credit
+telescope-fzf-native.nvim-developer-interface	telescope-fzf-native.nvim.md	/## Developer Interface
+telescope-fzf-native.nvim-disclaimer	telescope-fzf-native.nvim.md	/## Disclaimer
+telescope-fzf-native.nvim-installation	telescope-fzf-native.nvim.md	/## Installation
+telescope-fzf-native.nvim-lazy-nvim	telescope-fzf-native.nvim.md	/#### lazy.nvim
+telescope-fzf-native.nvim-lua-interface	telescope-fzf-native.nvim.md	/### Lua Interface
+telescope-fzf-native.nvim-make-linux-macos-windows-with-mingw	telescope-fzf-native.nvim.md	/### Make (Linux, MacOS, Windows with MinGW)
+telescope-fzf-native.nvim-packer-nvim	telescope-fzf-native.nvim.md	/#### packer.nvim
+telescope-fzf-native.nvim-telescope-fzf-native-nvim	telescope-fzf-native.nvim.md	/# telescope-fzf-native.nvim
+telescope-fzf-native.nvim-telescope-setup-and-configuration	telescope-fzf-native.nvim.md	/## Telescope Setup and Configuration:
+telescope-fzf-native.nvim-todo	telescope-fzf-native.nvim.md	/### TODO
+telescope-fzf-native.nvim-vim-plug	telescope-fzf-native.nvim.md	/#### vim-plug
+telescope-ui-select.nvim-installation	telescope-ui-select.nvim.md	/## Installation
+telescope-ui-select.nvim-telescope-setup-and-configuration	telescope-ui-select.nvim.md	/## Telescope Setup and Configuration:
+telescope-ui-select.nvim-telescope-ui-select-nvim	telescope-ui-select.nvim.md	/# telescope-ui-select.nvim

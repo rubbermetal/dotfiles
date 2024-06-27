@@ -1,0 +1,12 @@
+[189053.129] _XSERVTransSocketUNIXCreateListener: ...SocketCreateListener() failed
+[189053.129] _XSERVTransMakeAllCOTSServerListeners: server already running
+[189053.129] (EE) 
+Fatal server error:
+[189053.129] (EE) Cannot establish any listening sockets - Make sure an X server isn't already running(EE) 
+[189053.130] (EE) 
+Please consult the The X.Org Foundation support 
+	 at http://wiki.x.org
+ for help. 
+[189053.131] (EE) Please also check the log file at "/home/madhatter/.local/share/xorg/Xorg.0.log" for additional information.
+[189053.131] (EE) 
+[189053.131] (EE) Server terminated with error (1). Closing log file.
