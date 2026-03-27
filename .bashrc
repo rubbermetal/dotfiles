@@ -38,6 +38,7 @@ fi
 CONFIG_BASH_DIR="$HOME/.config/bash.d"
 FUNCTIONS_DIR="$CONFIG_BASH_DIR/functions"
 ALIASES_DIR="$CONFIG_BASH_DIR/aliases"
+COMPLETIONS_DIR="$CONFIG_BASH_DIR/completions"
 DATA_DIR="$CONFIG_BASH_DIR/data"
 HISTORY_FILE="$DATA_DIR/history"
 FACTS_FILE="$DATA_DIR/facts.txt"
@@ -116,27 +117,23 @@ for config_file in \
         [[ -f "$config_file" ]] && source "$config_file"
     done
 
-# Source any available function scripts
-if [[ -d "$FUNCTIONS_DIR" ]]; then
-    for func_file in "$FUNCTIONS_DIR"/*.sh; do
-        if [[ -r "$func_file" ]]; then
-            source "$func_file"
+# Source scripts from a directory (sorted, so numbered prefixes set order)
+# e.g., 00-core.sh loads before 50-fzf.sh before unprefixed files
+_source_dir() {
+    local dir="$1"
+    [[ -d "$dir" ]] || return
+    local f
+    for f in "$dir"/*.sh; do
+        if [[ -r "$f" ]]; then
+            source "$f"
         else
-            echo "Warning: Cannot read function file: $func_file" >&2
+            echo "Warning: Cannot read: $f" >&2
         fi
     done
-fi
+}
 
-# Source any available alias scripts
-if [[ -d "$ALIASES_DIR" ]]; then
-    for alias_file in "$ALIASES_DIR"/*.sh; do
-        if [[ -r "$alias_file" ]]; then
-            source "$alias_file"
-        else
-            echo "Warning: Cannot read alias file: $alias_file" >&2
-        fi
-    done
-fi
+_source_dir "$FUNCTIONS_DIR"
+_source_dir "$ALIASES_DIR"
 
 
 ###############################################################################
@@ -157,6 +154,9 @@ fi
 if [[ -f /usr/share/fzf/key-bindings.bash ]]; then
     source /usr/share/fzf/key-bindings.bash
 fi
+
+# Load custom completions (must come after functions are defined)
+_source_dir "$COMPLETIONS_DIR"
 
 ###############################################################################
 # 7. Display System/HUD (Optional)
