@@ -1,0 +1,17 @@
+# ~/.ssh/config — Copy this to ~/.ssh/config and edit for your hosts
+#
+# Usage: ssh arch, ssh plex, etc. (tab completion works automatically)
+
+Host arch
+    HostName 172.232.28.180
+    User madhatter
+
+Host plex
+    HostName 192.168.0.133
+    User pi
+
+# Default settings for all hosts
+Host *
+    ServerAliveInterval 60
+    ServerAliveCountDown 3
+    AddKeysToAgent yes

@@ -6,4 +6,11 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     exit 1
 fi
 
-alias ssh_plex='ssh -v pi@192.168.0.133'
+# SSH aliases — these rely on hosts defined in ~/.ssh/config
+# To set up, add entry:
+#
+#   Host plex
+#       HostName 192.168.0.133
+#       User pi
+
+alias ssh_plex='ssh plex'

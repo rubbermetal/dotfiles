@@ -6,4 +6,13 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     exit 1
 fi
 
-alias ssh_arch='ssh -v madhatter@172.232.28.180'
+# SSH aliases — these rely on hosts defined in ~/.ssh/config
+# To set up, add entries like:
+#
+#   Host arch
+#       HostName 172.232.28.180
+#       User madhatter
+#
+# Then: ssh arch (with tab completion, ProxyJump support, etc.)
+
+alias ssh_arch='ssh arch'

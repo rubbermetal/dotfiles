@@ -111,7 +111,11 @@ clone() {
 
     # Optional: Compare image file size with target drive size.
     local image_size drive_size
-    image_size=$(stat -c%s "$input_file" 2>/dev/null)
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+        image_size=$(stat -f%z "$input_file" 2>/dev/null)
+    else
+        image_size=$(stat -c%s "$input_file" 2>/dev/null)
+    fi
     drive_size=$(lsblk -b -n -o SIZE "$target_path" 2>/dev/null | head -n 1)
     if [[ -n "$image_size" && -n "$drive_size" && "$image_size" -gt "$drive_size" ]]; then
         echo "Error: Image file is larger than the target drive."

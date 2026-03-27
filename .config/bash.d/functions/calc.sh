@@ -7,48 +7,31 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 fi
 
 ###############################################################################
-# calc Function
+# calc — Evaluate math expressions
 #
-# This function checks that:
-#   1. The calc.pl script exists at $HOME/.local/bin/calc.pl.
-#   2. The script is executable.
-#   3. Perl is installed and available in your PATH.
-#
-# If all checks pass, the function runs the calc.pl script using Perl,
-# passing along any arguments. Otherwise, it prints a descriptive error
-# message and returns an appropriate non-zero exit status.
+# Uses python3, bc, or perl (whichever is available).
 #
 # Usage:
-#   calc [arguments]
-#
-# Author: Your Name
-# Date: 2025-03-27
+#   calc 2 + 2
+#   calc 'sqrt(144)'
+#   calc '3.14 * (5**2)'
 ###############################################################################
 calc() {
-    # Define the full path to the calc.pl script.
-    local calc_path="$HOME/.local/bin/calc.pl"
-
-    # Check if the calc.pl script exists.
-    if [[ ! -f "$calc_path" ]]; then
-        echo "Error: calc.pl script not found at $calc_path." >&2
-        return 127
+    if [[ $# -eq 0 ]]; then
+        echo "Usage: calc <expression>" >&2
+        return 1
     fi
 
-    # Check if the calc.pl script is executable.
-    if [[ ! -x "$calc_path" ]]; then
-        echo "Error: calc.pl script at $calc_path is not executable." >&2
-        return 126
-    fi
+    local expr="$*"
 
-    # Ensure that Perl is available.
-    if ! command -v perl >/dev/null 2>&1; then
-        echo "Error: Perl is not installed or not in your PATH." >&2
-        return 127
+    if command -v python3 &>/dev/null; then
+        python3 -c "from math import *; print($expr)"
+    elif command -v bc &>/dev/null; then
+        echo "$expr" | bc -l
+    elif command -v perl &>/dev/null; then
+        perl -e "print($expr), print \"\\n\""
+    else
+        echo "Error: no math tool found (need python3, bc, or perl)" >&2
+        return 1
     fi
-
-    # Execute the calc.pl script using Perl, passing any arguments.
-    perl "$calc_path" "$@"
-    local exit_code=$?
-    return "$exit_code"
 }
-

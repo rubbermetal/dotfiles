@@ -103,6 +103,16 @@ link_file "$DOTFILES_DIR/.config/starship.toml" "$HOME/.config/starship.toml"
 # --- Scripts ---
 link_file "$DOTFILES_DIR/Scripts" "$HOME/Scripts"
 
+# --- SSH config example ---
+if [[ ! -f "$HOME/.ssh/config" ]]; then
+    mkdir -p "$HOME/.ssh" && chmod 700 "$HOME/.ssh"
+    cp "$DOTFILES_DIR/.config/ssh_config.example" "$HOME/.ssh/config"
+    chmod 600 "$HOME/.ssh/config"
+    echo "  created: ~/.ssh/config (edit hosts for your network)"
+else
+    echo "  exists:  ~/.ssh/config (compare with .config/ssh_config.example)"
+fi
+
 # --- Create .bashrc.local if it doesn't exist ---
 if [[ ! -f "$HOME/.bashrc.local" ]]; then
     cat > "$HOME/.bashrc.local" << 'LOCALEOF'
