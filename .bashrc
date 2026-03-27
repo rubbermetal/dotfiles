@@ -162,7 +162,7 @@ fi
 # 7. Display System/HUD (Optional)
 ###############################################################################
 
-wal -R
+command -v wal &>/dev/null && wal -R 2>/dev/null
 display_system_info
 
 # Disable screen blanking and power saving features
@@ -386,6 +386,14 @@ if command -v starship &>/dev/null; then
     eval "$(starship init bash)"
 else
     PS1="$DEFAULT_PS1"
+fi
+
+###############################################################################
+# 23. Local Overrides (per-machine, not tracked in git)
+###############################################################################
+
+if [[ -f "$HOME/.bashrc.local" ]]; then
+    source "$HOME/.bashrc.local"
 fi
 
 ###############################################################################

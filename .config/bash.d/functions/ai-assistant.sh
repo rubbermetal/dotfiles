@@ -18,8 +18,8 @@ run_ai() {
     fi
 }
 ai_assistant() {
-    local model_path="/home/madhatter/models/mistral-7b-instruct-v0.1.Q4_K_M.gguf"
-    local llama_bin="/home/madhatter/Projects/llama.cpp/build/bin/llama-cli"
+    local model_path="$HOME/models/mistral-7b-instruct-v0.1.Q4_K_M.gguf"
+    local llama_bin="$HOME/Projects/llama.cpp/build/bin/llama-cli"
     if [ ! -f "$llama_bin" ]; then
         echo "Error: llama-cli binary not found at $llama_bin"
         return 1

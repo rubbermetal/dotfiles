@@ -8,11 +8,12 @@ fi
 
 # getip: Retrieve the external (WAN) IP address.
 getip() {
-    if ! command -v elinks &>/dev/null; then
-        echo "Error: 'elinks' is required for this function."
+    if command -v curl &>/dev/null; then
+        curl -s https://ifconfig.me
+    elif command -v wget &>/dev/null; then
+        wget -qO- https://ifconfig.me
+    else
+        echo "Error: 'curl' or 'wget' required for this function." >&2
         return 1
     fi
-    elinks -dump "http://checkip.dyndns.org:8245/" \
-        | awk '{ print $4 }' \
-        | sed '/^$/d; s/^[ ]*//; s/[ ]*$//'
 }
