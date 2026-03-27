@@ -1,0 +1,46 @@
+# Launch terminal
+super + Return
+    st
+
+# Launch dmenu
+super + p
+    dmenu_run
+
+# Close focused window
+super + q
+    pkill -f $(xprop | grep WM_CLASS | cut -d '"' -f 4)
+
+# start firefox
+super + f
+    firefox
+
+# start chromium 
+super + c
+    chromium
+
+# start opera
+super + o
+    opera
+
+# start kate
+super + k
+    kate
+
+start dolphin
+    super + d
+
+# Reload sxhkd config
+super + Escape
+    pkill -USR1 -x sxhkd
+
+# Lock screen
+super + l
+    slock
+
+# Adjust volume
+XF86AudioRaiseVolume
+    pactl set-sink-volume @DEFAULT_SINK@ +5%
+
+
+XF86AudioLowerVolume
+    pactl set-sink-volume @DEFAULT_SINK@ -5%

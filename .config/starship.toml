@@ -1,0 +1,20 @@
+format = """
+[](bg:#282c34 fg:#ffcc00)$username[](fg:#ffcc00 bg:#61afef)$directory[](fg:#61afef bg:#98c379)$git_branch$git_status[](fg:#98c379 bg:#282c34) $character"""
+
+[username]
+show_always = true
+style_user = "bg:#ffcc00 fg:#282c34 bold"
+
+[directory]
+style = "bg:#61afef fg:#282c34 bold"
+
+[git_branch]
+symbol = " "
+style = "bg:#98c379 fg:#282c34 bold"
+
+[git_status]
+style = "bg:#98c379 fg:#282c34 bold"
+
+[character]
+success_symbol = "[➜](bold green)"
+error_symbol = "[✗](bold red)"

@@ -1,0 +1,201 @@
+###############################################################################
+# $HOME/.config/.bash.d/.aliases
+#
+# Shell aliases and functions to simplify common tasks.
+# Package management aliases are set in a distro‐agnostic way, based on the
+# available package manager (pacman, apt, dnf, zypper, etc.).
+#
+# Notes:
+# - For aliases that need parameters and don't work well with arguments, convert
+#   them to functions if needed.
+###############################################################################
+
+###############################################################################
+# 1. File Management
+###############################################################################
+alias mkdir='mkdir -vp'
+alias chmod='chmod -v --preserve-root'
+alias mx='chmod a+x'
+alias chown='chown --preserve-root'
+alias chgrp='chgrp --preserve-root'
+
+###############################################################################
+# 2. Conversions
+###############################################################################
+alias convert='ffmpeg -i'
+
+###############################################################################
+# 3. Listing Files
+###############################################################################
+# eza-based listings (if you have `eza` installed)
+alias ela='eza --icons=always --absolute=off --color=always --across --group-directories-first -a'
+alias els='eza --icons=always --absolute=off --color=always --across --group-directories-first'
+
+###############################################################################
+# 4. File Comparison
+###############################################################################
+alias diff='diff --suppress-common-lines'
+
+###############################################################################
+# 5. File Copying & Moving
+###############################################################################
+alias mv='mv -vi'
+alias cp='cp -vip'
+alias ln='ln -i'
+alias rm='rm -I --preserve-root'
+alias rmd='rm --recursive --force --verbose'
+alias shred='shred --force --remove --verbose'
+
+###############################################################################
+# 6. Mounting & Unmounting
+###############################################################################
+alias mount='mount | column -t'
+alias m='mount'
+alias um='umount'
+
+###############################################################################
+# 7. Date & Time
+###############################################################################
+alias now='date +"%T"'
+alias today='date +"%Y-%m-%d"'
+
+###############################################################################
+# 8. Text Editors
+###############################################################################
+alias edit='nano'
+alias nano='nano --smarthome --multibuffer --const --autoindent'
+alias visudo='EDITOR=nano visudo'
+alias cat='batcat'
+
+###############################################################################
+# 9. Downloading
+###############################################################################
+alias dl='wget -P $HOME/Downloads'
+
+###############################################################################
+# 10. System Monitoring & Disk Usage
+###############################################################################
+alias top='htop'
+alias du='du -h'
+alias df='df -h'
+alias whereis='which'
+alias grep='grep -n --color=auto'
+alias egrep='grep -n --color=auto'
+alias fgrep='grep -n --color=auto'
+alias psgrep='ps -aux | grep -n --color=auto'
+
+###############################################################################
+# 11. Package Manager Aliases (Distro-Agnostic)
+###############################################################################
+# Detect available package manager and define common package-related aliases.
+if command -v pacman &>/dev/null; then
+    # Arch-based
+    alias pkgman='sudo pacman'
+    alias install='pkgman -S'
+    alias uninstall='pkgman -Rcs'
+    alias update='pkgman -Syyu --ignore=linux,linux-lts,hplip'
+    alias upgrade='pkgman -Syu linux linux-lts'
+    alias pkglist='pkgman -Qe'
+    alias pkglistmore='pkgman -Q'
+    alias pkgsearch='pkgman -Ss'
+    alias remove_orphans='pkgman -Qtdq | pkgman -Rns -'
+    alias list_orphans='pkgman -Qdt'
+    alias convert_deb='debtap'
+    alias makepkg='makepkg -srciC'
+    alias clearcache='pkgman -Sc'
+elif command -v apt &>/dev/null; then
+    # Debian/Ubuntu-based
+    alias pkgman='sudo apt'
+    alias install='pkgman install'
+    alias uninstall='pkgman remove'
+    alias update='pkgman update'
+    alias upgrade='pkgman upgrade'
+    alias pkglist='pkgman list --installed'
+    alias pkgsearch='pkgman search'
+elif command -v dnf &>/dev/null; then
+    # Fedora-based
+    alias pkgman='sudo dnf'
+    alias install='pkgman install'
+    alias uninstall='pkgman remove'
+    alias update='pkgman check-update'
+    alias upgrade='pkgman upgrade'
+    alias pkglist='pkgman list installed'
+    alias pkgsearch='pkgman search'
+elif command -v zypper &>/dev/null; then
+    # openSUSE-based
+    alias pkgman='sudo zypper'
+    alias install='pkgman install'
+    alias uninstall='pkgman remove'
+    alias update='pkgman refresh'
+    alias upgrade='pkgman update'
+    alias pkglist='pkgman packages --installed'
+    alias pkgsearch='pkgman search'
+fi
+
+###############################################################################
+# 12. Script & Utility Functions
+###############################################################################
+
+alias mail='mutt'
+
+###############################################################################
+# 13. SSH Connections
+###############################################################################
+alias ssh_arch='ssh -v madhatter@172.232.28.180'
+alias ssh_plex='ssh -v pi@192.168.0.133'
+alias termius='flatpak run com.termius.Termius'
+
+###############################################################################
+# 14. Notifications
+###############################################################################
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" \
+"$(history | tail -n1 | sed -e "s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//")"'
+
+###############################################################################
+# 15. dmesg with Colors
+###############################################################################
+alias dmesg='dmesg --color'
+
+###############################################################################
+# 16. Networking
+###############################################################################
+alias wget='wget -c'
+alias ping='ping -c 5'
+alias fastping='ping -c 100 -i 0.2'
+alias ports='netstat -tulanp'
+
+###############################################################################
+# 17. Terminal & Cache Management
+###############################################################################
+alias cls='clear'
+
+###############################################################################
+# 18. Grub Management
+###############################################################################
+alias grubedit='sudoedit /etc/default/grub'
+alias grubsave='sudo update-grub'
+
+###############################################################################
+# 19. History Search
+###############################################################################
+alias hh='hstr'
+
+###############################################################################
+# 20. Optional Utilities
+###############################################################################
+if command -v multitail &>/dev/null; then
+    alias multitail='multitail -c'
+fi
+
+if command -v jp2a &>/dev/null; then
+    alias jp2a='jp2a --color'
+fi
+
+alias sync_dotfiles='$HOME/Projects/dotfiles/sync_dotfiles.sh'
+
+alias startkde='startgui kde'
+alias startdwm='startgui dwm'
+
+###############################################################################
+# End of .aliases
+###############################################################################

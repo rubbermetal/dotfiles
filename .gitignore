@@ -1,0 +1,67 @@
+# ============================================================
+# Dotfiles .gitignore
+# Track config files only — never application data or caches
+# ============================================================
+
+# --- Browsers (cache, service workers, binaries, profiles) ---
+.config/chromium/
+.config/google-chrome/
+.config/opera/
+.config/firefox/
+.config/vivaldi/
+.config/brave/
+.config/microsoft-edge/
+
+# --- Emulators / Game data ---
+.config/rpcs3/
+.config/dolphin-emu/games/
+.config/dolphin-emu/Wii/
+.config/stella/
+.config/nestopia/
+
+# --- Trading / Finance apps (runtime data) ---
+.config/TradingView/
+.config/Ledger\ Live/
+
+# --- GPU / Shader caches ---
+.config/*/GPUCache/
+.config/*/GrShaderCache/
+.config/*/ShaderCache/
+
+# --- IDE / editor compiled data ---
+.config/QtProject/helpcollection.qhc
+.config/QtProject/qtcreator/helpcollection*
+.config/QtProject/qtcreator/index/
+.config/QtProject/qtcreator/qbs/
+.config/emacs/   # compiled ELPA packages — not config
+.config/doom/    # keep if you want doom config tracked, remove if not
+
+# --- Package manager caches ---
+.config/composer/
+
+# --- App runtime data (not config) ---
+.config/*/CacheStorage/
+.config/*/Cache/
+.config/*/Code\ Cache/
+.config/*/blob_storage/
+.config/*/databases/
+.config/*/IndexedDB/
+.config/*/Local\ Storage/
+.config/*/Session\ Storage/
+.config/*/Service\ Worker/
+.config/*/component_crx_cache/
+.config/*/Crash\ Reports/
+.config/*/BrowserMetrics/
+.config/*/Safe\ Browsing/
+.config/*/OnDeviceHeadSuggestModel/
+
+# --- Logs and temp files ---
+*.log
+*.lock
+*.tmp
+*.bak
+*.swap
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db

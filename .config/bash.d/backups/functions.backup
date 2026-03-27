@@ -1,0 +1,1881 @@
+#!/usr/bin/env bash
+###############################################################################
+# functions.sh
+#
+# A collection of Bash functions to enhance your shell workflow.
+# Functions are grouped by functionality, use proper error handling, and
+# adhere to modern scripting best practices. This file is intended to be
+# sourced from your shell startup file (e.g. ~/.bashrc or ~/.zshrc).
+#
+# Author: [Your Name]
+# License: MIT
+###############################################################################
+
+
+###############################################################################
+# Prevent Direct Execution
+###############################################################################
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    echo "This script is meant to be sourced, not executed directly."
+    exit 1
+fi
+
+###############################################################################
+# Prevent Direct Execution
+###############################################################################
+display_system_info() {
+    for cmd in macchina neofetch archey fastfetch screenfetch linuxlogo; do
+        if command -v "$cmd" &>/dev/null; then
+            if [[ "$cmd" == "neofetch" && -f "$CONFIG_BASH_DIR/.neofetch.conf" ]]; then
+                neofetch --config "$CONFIG_BASH_DIR/.neofetch.conf"
+                printf '\e[A\e[K'  # Move cursor up one line after neofetch
+            else
+                "$cmd"
+            fi
+            return  # Exit function after first successful command
+        fi
+    done
+}
+###############################################################################
+# Helper: Functions Help
+###############################################################################
+# functions_help
+#
+# Displays a comprehensive list of available functions along with a short
+# description of what each does.
+###############################################################################
+helpme() {
+    echo -e "${fg_bright_cyan}==============================================${clr_restore}"
+    echo -e "${fg_bright_cyan}            Available Functions               ${clr_restore}"
+    echo -e "${fg_bright_cyan}==============================================${clr_restore}"
+    echo ""
+
+    echo -e "${fg_bright_blue}[Weather and IP Functions]${clr_restore}"
+    echo -e "  ${fg_bright_green}weather <location>${clr_restore}"
+    echo "      Displays weather information for a given location."
+    echo -e "  ${fg_bright_green}getip${clr_restore}"
+    echo "      Retrieves your external (WAN) IP address."
+    echo ""
+
+    echo -e "${fg_bright_blue}[Dictionary and Directory Functions]${clr_restore}"
+    echo -e "  ${fg_bright_green}define <word>${clr_restore}"
+    echo "      Looks up a definition for the given word."
+    echo -e "  ${fg_bright_green}mkcd <directory>${clr_restore}"
+    echo "      Creates the specified directory (with parents) and changes into it."
+    echo -e "  ${fg_bright_green}extract <archive_file>${clr_restore}"
+    echo "      Extracts various archive file types (tar.*, zip, rar, 7z, etc.)."
+    echo ""
+
+    echo -e "${fg_bright_blue}[Package Search]${clr_restore}"
+    echo -e "  ${fg_bright_green}package-search <search_terms>${clr_restore}"
+    echo "      Searches for packages via pacman with highlighted output."
+    echo ""
+
+    echo -e "${fg_bright_blue}[Audio Conversion]${clr_restore}"
+    echo -e "  ${fg_bright_green}convert_mp3 <file>${clr_restore}"
+    echo "      Converts a single file to MP3 and removes the original."
+    echo -e "  ${fg_bright_green}batch_convert_mp3 <extension>${clr_restore}"
+    echo "      Converts all files with the specified extension to MP3."
+    echo ""
+
+    echo -e "${fg_bright_blue}[Navigation]${clr_restore}"
+    echo -e "  ${fg_bright_green}up <levels>${clr_restore}"
+    echo "      Moves up the specified number of directory levels."
+    echo -e "  ${fg_bright_green}back <levels>${clr_restore}"
+    echo "      Moves back along a stored path."
+    echo ""
+
+    echo -e "${fg_bright_blue}[Enhanced Sudo]${clr_restore}"
+    echo -e "  ${fg_bright_green}sudo <command...>${clr_restore}"
+    echo "      A wrapper for sudo that processes command aliases."
+    echo ""
+
+    echo -e "${fg_bright_blue}[Custom Tar Wrapper]${clr_restore}"
+    echo -e "  ${fg_bright_green}tarx <options and files>${clr_restore}"
+    echo "      A wrapper for tar that processes options and filters STDERR."
+    echo ""
+
+    echo -e "${fg_bright_blue}[PATH Modification]${clr_restore}"
+    echo -e "  ${fg_bright_green}addpath <dir> [first|remove] [verbose]${clr_restore}"
+    echo "      Adds or removes a directory from an environment variable (default: PATH)."
+    echo ""
+
+    echo -e "${fg_bright_blue}[Session and History Helpers]${clr_restore}"
+    echo -e "  ${fg_bright_green}mostused${clr_restore}"
+    echo "      Displays a list of your most frequently used commands."
+    echo -e "  ${fg_bright_green}runfree <command...>${clr_restore}"
+    echo "      Runs a command in the background and disowns it."
+    echo -e "  ${fg_bright_green}csvview <file>${clr_restore}"
+    echo "      Views a CSV file with aligned columns."
+    echo ""
+
+    echo -e "${fg_bright_blue}[Trash Management]${clr_restore}"
+    echo -e "  ${fg_bright_green}trash <files>${clr_restore}"
+    echo "      Moves file(s) to the trash folder."
+    echo -e "  ${fg_bright_green}trashlist${clr_restore}"
+    echo "      Lists the contents of the trash folder."
+    echo -e "  ${fg_bright_green}trashempty${clr_restore}"
+    echo "      Empties the trash folder."
+    echo ""
+
+    echo -e "${fg_bright_blue}[Checksum and Copy with Progress]${clr_restore}"
+    echo -e "  ${fg_bright_green}checksha256 <file> <checksum_file>${clr_restore}"
+    echo "      Checks a file's SHA256 checksum against a provided checksum."
+    echo -e "  ${fg_bright_green}cpp <source> <destination>${clr_restore}"
+    echo "      Copies a file with a progress bar using rsync (or fallback via cp)."
+    echo ""
+
+    echo -e "${fg_bright_blue}[File/Directory Copy & Move]${clr_restore}"
+    echo -e "  ${fg_bright_green}cpg <source> <destination>${clr_restore}"
+    echo "      Copies a file and changes into the destination if it exists."
+    echo -e "  ${fg_bright_green}mvg <source> <destination>${clr_restore}"
+    echo "      Moves a file and changes into the destination if it exists."
+    echo -e "  ${fg_bright_green}mkdirg <directory>${clr_restore}"
+    echo "      Creates a directory and changes into it."
+    echo -e "  ${fg_bright_green}repeat <n> <command>${clr_restore}"
+    echo "      Repeats the given command n times."
+    echo ""
+
+    echo -e "${fg_bright_blue}[Color Output]${clr_restore}"
+    echo -e "  ${fg_bright_green}colors${clr_restore}"
+    echo "      Displays basic foreground/background color combinations."
+    echo -e "  ${fg_bright_green}colors256${clr_restore}"
+    echo "      Displays a list of 256 colors."
+    echo -e "  ${fg_bright_green}colors24bit${clr_restore}"
+    echo "      Tests for 24bit true color support."
+    echo ""
+
+    echo -e "${fg_bright_blue}[User Interaction]${clr_restore}"
+    echo -e "  ${fg_bright_green}ask <prompt> [Y|N]${clr_restore}"
+    echo "      Prompts for a Yes/No answer until a valid response is given."
+    echo ""
+
+    echo -e "${fg_bright_blue}[Permission Calculators and Fixers]${clr_restore}"
+    echo -e "  ${fg_bright_green}chmodcalc <octal> | <owner> <group> <other>${clr_restore}"
+    echo "      Displays file permissions based on numeric or symbolic values."
+    echo -e "  ${fg_bright_green}chmodfiles <mode> [directory]${clr_restore}"
+    echo "      Recursively changes permissions for files."
+    echo -e "  ${fg_bright_green}chmoddirs <mode> [directory]${clr_restore}"
+    echo "      Recursively changes permissions for directories."
+    echo -e "  ${fg_bright_green}chfix [directory]${clr_restore}"
+    echo "      Recursively fixes permissions for code files and directories."
+    echo -e "  ${fg_bright_green}chmodcopy <source_file> <destination_file>${clr_restore}"
+    echo "      Copies file permissions from one file to another."
+    echo ""
+
+    echo -e "${fg_bright_blue}[User Home & Config]${clr_restore}"
+    echo -e "  ${fg_bright_green}fixuserhome [username]${clr_restore}"
+    echo "      Fixes permissions for a user's home folder."
+    echo -e "  ${fg_bright_green}configcopy <from_user> <to_user>${clr_restore}"
+    echo "      Copies configuration files from one account to another."
+    echo ""
+
+    echo -e "${fg_bright_blue}[Miscellaneous]${clr_restore}"
+    echo -e "  ${fg_bright_green}trim <string>${clr_restore}"
+    echo "      Trims leading and trailing whitespace from a string."
+    echo -e "  ${fg_bright_green}update_firefox [--clean] [--run]${clr_restore}"
+    echo "      Updates and builds the Firefox source; optionally cleans and runs it."
+    echo -e "  ${fg_bright_green}update_chromium [--run]${clr_restore}"
+    echo "      Updates and builds the Chromium source; optionally runs it."
+    echo ""
+    echo -e "${fg_bright_yellow}For more details, refer to the documentation within the functions file.${clr_restore}"
+}
+
+
+
+###############################################################################
+# Weather and IP Functions
+###############################################################################
+
+# weather: Display weather information for a given location.
+weather() {
+    local location="$1"
+    if [[ -z "$location" ]]; then
+        echo "Usage: weather <location>"
+        return 1
+    fi
+    if ! command -v elinks &>/dev/null; then
+        echo "Error: 'elinks' is required for this function."
+        return 1
+    fi
+    # Fetch weather from Google search results (may break if Google changes its format).
+    elinks -dump "http://www.google.com/search?hl=en&q=weather+${location}" \
+        | grep -A 5 -m 1 "Weather for" \
+        | sed 's;\[26\]Add to iGoogle\[27\]IMG;;g'
+}
+
+# getip: Retrieve the external (WAN) IP address.
+getip() {
+    if ! command -v elinks &>/dev/null; then
+        echo "Error: 'elinks' is required for this function."
+        return 1
+    fi
+    elinks -dump "http://checkip.dyndns.org:8245/" \
+        | awk '{ print $4 }' \
+        | sed '/^$/d; s/^[ ]*//; s/[ ]*$//'
+}
+
+
+###############################################################################
+# Dictionary and Directory Functions
+###############################################################################
+
+# define: Lookup definition of a word using Google.
+define() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: define <word>"
+        return 1
+    fi
+    local tmp_dir="$HOME/.tmp"
+    mkdir -p "$tmp_dir"
+    local temp_file="${tmp_dir}/templookup.txt"
+    if ! command -v elinks &>/dev/null; then
+        echo "Error: 'elinks' is required for this function."
+        return 1
+    fi
+    elinks -dump "http://www.google.com/search?hl=en&q=define%3A+${1}" \
+        | grep -m 3 -w "*" \
+        | sed 's/;/ -/g' \
+        | cut -d- -f1 > "$temp_file"
+    if [[ -s "$temp_file" ]]; then
+        while IFS= read -r line; do
+            echo "$line"
+        done < "$temp_file"
+    else
+        echo "Sorry ${USER}, no definition found for \"${1}\"."
+    fi
+    rm -f "$temp_file"
+}
+
+# mkcd: Create a directory (with parents if needed) and change into it.
+mkcd() {
+    if [[ "$#" -ne 1 ]]; then
+        echo "Usage: mkcd <directory>"
+        return 1
+    fi
+    mkdir -p "$1" && cd "$1" || {
+        echo "Error: Could not create or change into directory '$1'."
+        return 1
+    }
+}
+
+# extract: Extract various archive file types.
+extract() {
+    if [[ ! -f "$1" ]]; then
+        echo "Error: '$1' is not a valid file."
+        return 1
+    fi
+    case "$1" in
+        *.tar.bz2 | *.tbz2)
+            tar xjf "$1" ;;
+        *.tar.gz | *.tgz)
+            tar xzf "$1" ;;
+        *.tar.xz)
+            tar xJf "$1" ;;
+        *.tar)
+            tar xf "$1" ;;
+        *.bz2)
+            bunzip2 "$1" ;;
+        *.gz)
+            gunzip "$1" ;;
+        *.zip)
+            unzip "$1" ;;
+        *.rar)
+            rar x "$1" ;;
+        *.7z)
+            7z x "$1" ;;
+        *.Z)
+            uncompress "$1" ;;
+        *)
+            echo "Error: Cannot extract '$1' - unsupported file extension."
+            return 1 ;;
+    esac
+}
+
+
+###############################################################################
+# Package Search Function (Pacman Coloring)
+###############################################################################
+
+package-search() {
+    if command -v pacman >/dev/null 2>&1; then
+        # Arch Linux: Use pacman and detailed color formatting.
+        pacman -Ss "$@" | sed -e 's#core/.*#\033[1;31m&\033[0;37m#g' \
+                                -e 's#extra/.*#\033[0;32m&\033[0;37m#g' \
+                                -e 's#community/.*#\033[1;35m&\033[0;37m#g' \
+                                -e 's#^.*/.* [0-9].*#\033[0;36m&\033[0;37m#g'
+    elif command -v apt-cache >/dev/null 2>&1; then
+        # Debian/Ubuntu: Use apt-cache search and color the entire line green.
+        apt-cache search "$@" | sed -e 's/\(.*\)/\033[0;32m\1\033[0m/g'
+    elif command -v dnf >/dev/null 2>&1; then
+        # Fedora: Use dnf search and color the entire output green.
+        dnf search "$@" | sed -e 's/\(.*\)/\033[0;32m\1\033[0m/g'
+    elif command -v zypper >/dev/null 2>&1; then
+        # openSUSE: Use zypper search and color the entire output green.
+        zypper search "$@" | sed -e 's/\(.*\)/\033[0;32m\1\033[0m/g'
+    else
+        echo "Error: No supported package manager found (pacman, apt-cache, dnf, or zypper)."
+        return 1
+    fi
+}
+
+
+
+###############################################################################
+# Audio Conversion Functions
+###############################################################################
+
+# convert_mp3: Convert a single file to MP3 and remove the original.
+convert_mp3() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: convert_mp3 <file>"
+        return 1
+    fi
+    local file="$1"
+    local newfile="${file}.mp3"
+    if ! command -v ffmpeg &>/dev/null; then
+        echo "Error: 'ffmpeg' is not installed."
+        return 1
+    fi
+    ffmpeg -i "${file}" -vn -ab 128k -ar 44100 -y "${newfile}"
+    if [[ -f "$newfile" ]]; then
+        rm -f "${file}"
+        echo -e "Successfully converted to '\e[32m${newfile}\e[0m'"
+        echo -e "Removed '\e[32m${file}\e[0m'"
+    fi
+}
+
+# batch_convert_mp3: Convert all files with a given extension to MP3.
+batch_convert_mp3() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: batch_convert_mp3 <extension>"
+        return 1
+    fi
+    local ext="$1"
+    if ! command -v ffmpeg &>/dev/null; then
+        echo "Error: 'ffmpeg' is not installed."
+        return 1
+    fi
+    for file in *."${ext}"; do
+        [[ -e "$file" ]] || continue
+        echo -e "Processing file '\e[32m${file}\e[0m'"
+        local newfile="${file}.mp3"
+        ffmpeg -i "${file}" -vn -ab 128k -ar 44100 -y "${newfile}"
+        if [[ -f "$newfile" ]]; then
+            rm -f "${file}"
+            echo -e "Successfully converted to '\e[32m${newfile}\e[0m'"
+            echo -e "Removed '\e[32m${file}\e[0m'"
+        fi
+    done
+}
+
+
+###############################################################################
+# Navigation Functions
+###############################################################################
+
+# up: Move up a given number of directory levels.
+up() {
+    if [[ -z "$1" || ! "$1" =~ ^[0-9]+$ ]]; then
+        echo "Usage: up <number_of_levels>"
+        return 1
+    fi
+    local i
+    for (( i = 0; i < "$1"; i++ )); do
+        cd .. || return 1
+    done
+    # Save the current path in MPWD for potential use with 'back'
+    export MPWD="$PWD"
+}
+
+# back: Return back along the stored path.
+back() {
+    if [[ -z "$MPWD" ]]; then
+        echo "Error: No stored path (use up first)."
+        return 1
+    fi
+    if [[ -z "$1" || ! "$1" =~ ^[0-9]+$ ]]; then
+        echo "Usage: back <number_of_levels>"
+        return 1
+    fi
+    local target="$MPWD"
+    local i
+    for (( i = 0; i < "$1"; i++ )); do
+        target="${target%/..}"
+    done
+    cd "$target" || return 1
+    export MPWD="$target"
+}
+
+
+###############################################################################
+# Enhanced Sudo Function
+###############################################################################
+# Warning: Overriding sudo can be risky. This function attempts to check for
+# any matching aliases and substitute them. Use with caution.
+sudo() {
+    local sudo_bin="/usr/bin/sudo"
+    local args=("$@")
+    local old_IFS="$IFS"
+    IFS=$'\n'
+    for a in $(alias); do
+        if [[ $a =~ ^alias\ ([[:alpha:]]*)=\'(.*)\' ]]; then
+            if [[ "${args[0]}" == "${BASH_REMATCH[1]}" ]]; then
+                args[0]=""
+                sudo_bin="${sudo_bin} ${BASH_REMATCH[2]}"
+            fi
+        fi
+    done
+    IFS="$old_IFS"
+    eval "$sudo_bin ${args[*]}"
+}
+
+
+###############################################################################
+# Custom Tar Wrapper Function (Renamed to tarx)
+###############################################################################
+# tarx: A custom wrapper for tar that processes options and filters STDERR.
+# (This function is named "tarx" to avoid overriding the system tar.)
+tarx() {
+    local tar_bin
+    tar_bin=$(command -v tar) || { echo "Error: tar command not found."; return 1; }
+    local cmd="${tar_bin}"
+    local stdinstdout=
+    local old_IFS="$IFS"
+    IFS=$'\n'
+    local regex='^\ +(-[a-zA-Z]+,\ +)?(--[a-z\-]+=)(COMMAND|DATE(-OR-FILE)?|FILE|NAME|ST(RING|YLE))'
+    declare -A qopts
+    for line in $("$tar_bin" --help); do
+        if [[ "${line}" =~ $regex ]]; then
+            qopts["${BASH_REMATCH[2]}"]=1
+        fi
+    done
+    IFS="$old_IFS"
+    for opt in "$@"; do
+        if [[ "$opt" =~ ^-[a-zA-Z] ]]; then
+            cmd+=" ${opt}"
+        elif [[ "$opt" =~ ^(--[a-z\-]+=?)(.*) ]]; then
+            local oname="${BASH_REMATCH[1]}"
+            local oval="${BASH_REMATCH[2]}"
+            if [[ -n "${qopts[$oname]}" ]]; then
+                cmd+=" ${oname}\"${oval}\""
+            else
+                cmd+=" ${oname}"
+            fi
+        else
+            cmd+=" \"${opt}\""
+        fi
+        [[ "$opt" == "-" ]] && stdinstdout=1
+    done
+    if [[ -n "$stdinstdout" ]]; then
+        echo "Piping to/from STDIN/STDOUT. Cannot filter STDERR."
+        eval "$cmd"
+    else
+        local stderr_output
+        stderr_output=$( { eval "$cmd"; } 2>&1 )
+        for err in $stderr_output; do
+            if [[ ! "$err" =~ [Hh]eader[[:space:]]Key ]]; then
+                echo "$err"
+            fi
+        done
+    fi
+}
+
+
+###############################################################################
+# PATH Modification Function
+###############################################################################
+# addpath: Add (or remove) a directory to/from an environment variable.
+# Default variable is PATH; use the optional parameters "first" to add at the
+# beginning or "remove" to delete the entry.
+###############################################################################
+addpath() {
+    shopt -s extglob
+    local new_entry="$1"
+    local position="${2:-}"  # Options: "first", "remove", or empty (append)
+    local verbose="${3:-}"
+
+    # Helper functions for verbose output and joining arrays.
+    __addpath_verb() { [[ -n "$verbose" ]] && echo "-- $1"; }
+    __addpath_join() { local IFS="${AP_VAR_DELIM}"; echo "$*"; }
+
+    # Use defaults if not set.
+    [[ -z "${AP_VAR_NAME}" ]] && AP_VAR_NAME="PATH"
+    [[ -z "${AP_VAR_DELIM}" ]] && AP_VAR_DELIM=":"
+
+    # For Bash 4+, build an associative array to avoid duplicates.
+    if (( BASH_VERSINFO[0] >= 4 )); then
+        declare -A current_paths
+        local index=0
+        IFS="${AP_VAR_DELIM}" read -r -a path_array <<< "${!AP_VAR_NAME}"
+        for path in "${path_array[@]}"; do
+            current_paths["$path"]="$index"
+            ((index++))
+        done
+    else
+        __addpath_verb "Warning: Old Bash version detected. Some features are disabled."
+        if [[ "$position" == "first" ]]; then
+            eval "${AP_VAR_NAME}=\"${new_entry}${AP_VAR_DELIM}\$(eval echo \${${AP_VAR_NAME}})\""
+            __addpath_verb "Added ${new_entry} to beginning of ${AP_VAR_NAME}"
+        elif [[ "$position" == "remove" ]]; then
+            __addpath_verb "Removal requested; skipping re-addition of '${new_entry}'."
+        else
+            eval "${AP_VAR_NAME}=\"\$(eval echo \${${AP_VAR_NAME}})${AP_VAR_DELIM}${new_entry}\""
+            __addpath_verb "Added ${new_entry} to end of ${AP_VAR_NAME}"
+        fi
+        export "${AP_VAR_NAME}"
+        unset AP_VAR_NAME
+        return
+    fi
+
+    # Remove trailing slash from new_entry.
+    [[ "$new_entry" =~ (.+)/$ ]] && new_entry="${BASH_REMATCH[1]}"
+    if [[ ! -d "$new_entry" ]]; then
+        __addpath_verb "Error: ${new_entry} does not exist or is not a directory."
+        [[ "$position" == "remove" ]] && __addpath_verb "Removal requested."
+        unset AP_VAR_NAME
+        return
+    fi
+
+    # Rebuild PATH without the new_entry (if already present).
+    local updated_paths=()
+    for p in "${!current_paths[@]}"; do
+        if [[ "$p" != "$new_entry" ]]; then
+            updated_paths+=( "$p" )
+        else
+            __addpath_verb "${new_entry} is already in ${AP_VAR_NAME}."
+            [[ "$position" != "remove" ]] && { __addpath_verb "Not re-adding."; unset AP_VAR_NAME; return; }
+        fi
+    done
+
+    if [[ "$position" == "first" ]]; then
+        updated_paths=( "$new_entry" "${updated_paths[@]}" )
+        __addpath_verb "Added ${new_entry} to beginning of ${AP_VAR_NAME}"
+    elif [[ "$position" == "remove" ]]; then
+        __addpath_verb "Removed ${new_entry} from ${AP_VAR_NAME}"
+    else
+        updated_paths+=( "$new_entry" )
+        __addpath_verb "Added ${new_entry} to end of ${AP_VAR_NAME}"
+    fi
+
+    eval "${AP_VAR_NAME}=\"\$(__addpath_join ${updated_paths[@]})\""
+    export "${AP_VAR_NAME}"
+    unset AP_VAR_NAME
+}
+
+
+###############################################################################
+# Session and History Helpers
+###############################################################################
+
+# _exit: Runs on shell exit to display a logout message.
+_exit() {
+    local color="\033[1;31m"
+    local highlight="\033[1;34m"
+    local no_color="\033[0m"
+    echo -e "${color}User ${highlight}${USER}${color} has logged out of ${highlight}${HOSTNAME}${color}.${no_color}"
+}
+trap _exit EXIT
+
+# mostused: Display a list of the most used commands from history.
+mostused() {
+    history | awk '{ a[$4]++ } END { for (i in a) print a[i], i }' \
+    | sort -rn | head -n10 \
+    | awk '{
+          if (NR==1) { max=$1 }
+          bar="";
+          for (i=0; i<int(($1/max)*10); i++) { bar=bar "#"; }
+          printf "%25s %15d %s\n", $2, $1, bar;
+      }'
+}
+
+# runfree: Start a program in the background and disown it.
+runfree() {
+    "$@" > /dev/null 2>&1 & disown
+}
+
+# csvview: View a CSV file with columns aligned.
+csvview() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: csvview <file.csv>"
+        return 1
+    fi
+    sed 's/,/ ,/g' "$1" | column -t -s, | less -S
+}
+
+
+###############################################################################
+# Trash Management Functions
+###############################################################################
+
+# trash: Move file(s) to the trash folder.
+trash() {
+    if command -v trash-put &>/dev/null; then
+        trash-put "$@"
+    elif [[ -d "$HOME/.local/share/Trash/files" ]]; then
+        mv "$@" "$HOME/.local/share/Trash/files/"
+    elif [[ -d "$HOME/.Trash" ]]; then
+        mv "$@" "$HOME/.Trash/"
+    elif [[ -d "$HOME/.trash" ]]; then
+        mv "$@" "$HOME/.trash/"
+    else
+        mkdir -p "$HOME/.trash"
+        mv "$@" "$HOME/.trash/"
+    fi
+}
+
+# trashlist: List the contents of the trash folder.
+trashlist() {
+    if command -v trash-list &>/dev/null; then
+        trash-list
+    elif [[ -d "$HOME/.local/share/Trash/files" ]]; then
+        ls -la "$HOME/.local/share/Trash/files/"
+    elif [[ -d "$HOME/.Trash" ]]; then
+        ls -la "$HOME/.Trash/"
+    elif [[ -d "$HOME/.trash" ]]; then
+        ls -la "$HOME/.trash/"
+    else
+        echo "No trash folder exists."
+    fi
+}
+
+# trashempty: Empty the trash folder.
+trashempty() {
+    if command -v trash-empty &>/dev/null; then
+        trash-empty
+    elif [[ -d "$HOME/.local/share/Trash/files" ]]; then
+        rm -rf "$HOME/.local/share/Trash/files/"{..?*,.[!.]*,*} 2>/dev/null
+    elif [[ -d "$HOME/.Trash" ]]; then
+        rm -rf "$HOME/.Trash/"{..?*,.[!.]*,*} 2>/dev/null
+    elif [[ -d "$HOME/.trash" ]]; then
+        rm -rf "$HOME/.trash/"{..?*,.[!.]*,*} 2>/dev/null
+    fi
+}
+
+
+###############################################################################
+# Checksum and File Copy with Progress
+###############################################################################
+
+# checksha256: Check a file's SHA256 checksum against a provided checksum file.
+checksha256() {
+    if [[ "$#" -lt 2 || "$1" == "--help" || "$1" == "-h" ]]; then
+        echo -e "Usage: checksha256 <downloaded_file> <checksum_file>"
+        return 1
+    fi
+    if ! command -v sha256sum &>/dev/null; then
+        echo -e "Error: 'sha256sum' is not installed."
+        return 1
+    fi
+    local file_sum expected_sum
+    file_sum=$(sha256sum "$1" | cut -d' ' -f1)
+    expected_sum=$(grep -Po '\b[a-zA-Z0-9]{64}\b' "$2")
+    if [[ "$file_sum" == "$expected_sum" ]]; then
+        echo -e "\033[0;32mGood\033[0m"
+    else
+        echo -e "\033[0;31mBad\033[0m"
+    fi
+}
+
+# cpp: Copy a file with a progress bar using rsync (or fallback using cp with strace).
+cpp() {
+    if [[ "$#" -ne 2 ]]; then
+        echo "Usage: cpp <source> <destination>"
+        return 1
+    fi
+    if command -v rsync &>/dev/null; then
+        rsync -ah --info=progress2 "$1" "$2"
+    else
+        set -e
+        strace -q -ewrite cp -- "$1" "$2" 2>&1 \
+        | awk -v total_size=$(stat -c '%s' "$1") '{
+            count += $NF;
+            if (count % 10 == 0) {
+                percent = count / total_size * 100;
+                printf "%3d%% [", percent;
+                for (i=0; i<percent; i++) printf "=";
+                printf ">";
+                for (i=percent; i<100; i++) printf " ";
+                printf "]\r";
+            }
+        }
+        END { print "" }'
+    fi
+}
+
+
+###############################################################################
+# File and Directory Copy/Move Helpers
+###############################################################################
+
+# cpg: Copy a file and change into the destination directory if it exists.
+cpg() {
+    if [[ "$#" -ne 2 ]]; then
+        echo "Usage: cpg <source> <destination>"
+        return 1
+    fi
+    cp "$1" "$2" && [[ -d "$2" ]] && cd "$2"
+}
+
+# mvg: Move a file and change into the destination directory if it exists.
+mvg() {
+    if [[ "$#" -ne 2 ]]; then
+        echo "Usage: mvg <source> <destination>"
+        return 1
+    fi
+    mv "$1" "$2" && [[ -d "$2" ]] && cd "$2"
+}
+
+# mkdirg: Create a directory and change into it.
+mkdirg() {
+    mkdir -p "$@" && cd "$@"
+}
+
+# repeat: Repeat a command n times.
+repeat() {
+    if [[ -z "$1" || "$1" -le 0 ]]; then
+        echo "Usage: repeat <n> <command>"
+        return 1
+    fi
+    local max="$1"
+    shift
+    local i
+    for (( i=1; i<=max; i++ )); do
+        eval "$@"
+    done
+}
+
+
+###############################################################################
+# Color Output Functions
+###############################################################################
+
+# colors: Display basic foreground/background color combinations.
+colors() {
+    printf "Color escapes: %s\n" '\e[${value};...;${value}m'
+    printf "Values 30..37 are \e[33mforeground colors\e[m\n"
+    printf "Values 40..47 are \e[43mbackground colors\e[m\n"
+    printf "Value  1 gives a \e[1mbold-faced look\e[m\n\n"
+    local fgc bgc vals
+    for fgc in {30..37}; do
+        for bgc in {40..47}; do
+            vals="${fgc};${bgc}"
+            printf "  %-9s" "\e[${vals}m"
+            printf " \e[${vals}mTEXT\e[m"
+            printf " \e[${vals};1mBOLD\e[m"
+        done
+        echo; echo
+    done
+}
+
+# colors256: Display a list of 256 colors.
+colors256() {
+    local i
+    for i in {0..255}; do
+        printf "\x1b[38;5;${i}mcolour${i}\n"
+    done
+}
+
+# colors24bit: Test for 24bit true color support.
+colors24bit() {
+    echo 'If the gradients are smooth, you are displaying 24bit true color.'
+    awk 'BEGIN{
+        s="1234567890";
+        s=s s s s s s s s s s s s s s s s s s s s s s s;
+        for(colnum=0; colnum<256; colnum++){
+            r = 255 - (colnum*255/255);
+            g = (colnum*510/255);
+            b = (colnum*255/255);
+            if(g>255) g = 510 - g;
+            printf "\033[48;2;%d;%d;%dm", r, g, b;
+            printf "\033[38;2;%d;%d;%dm", 255-r, 255-g, 255-b;
+            printf "%s\033[0m", substr(s, colnum+1, 1);
+        }
+        printf "\n";
+    }'
+}
+
+
+###############################################################################
+# User Interaction Helpers
+###############################################################################
+
+# ask: Prompt for a Yes/No question until a valid answer is given.
+ask() {
+    local prompt default reply
+    if [[ "${2:-}" == "Y" ]]; then
+        prompt="Y/n"
+        default="Y"
+    elif [[ "${2:-}" == "N" ]]; then
+        prompt="y/N"
+        default="N"
+    else
+        prompt="y/n"
+        default=""
+    fi
+    while true; do
+        echo -ne "$1 [$prompt] "
+        read -r reply </dev/tty
+        [[ -z "$reply" ]] && reply="$default"
+        case "$reply" in
+            [Yy]* ) return 0 ;;
+            [Nn]* ) return 1 ;;
+        esac
+    done
+}
+
+
+###############################################################################
+# File Permission Calculator Functions
+###############################################################################
+
+# chmodcalc: Display symbolic permissions for a given octal or symbolic input.
+chmodcalc() {
+    local BLUE="\033[0;34m"
+    local CYAN="\033[0;36m"
+    local GREEN="\033[0;32m"
+    local MAGENTA="\033[0;35m"
+    local RED="\033[0;31m"
+    local YELLOW="\033[0;33m"
+    local ERROR="\033[1;31m"
+    local NOCOLOR="\033[0m"
+    if [[ "$#" -eq 1 ]]; then
+        if [[ ${#1} -ge 4 ]]; then
+            echo -e "${RED}Error: Invalid octal.${NOCOLOR}"
+            return 128
+        fi
+        local text="$1"
+        local part=() example=() i=0
+        while (( i < ${#text} )); do
+            ((i++))
+            local char="${text:$((i-1)):1}"
+            case $char in
+                0) part[i]="---" ;;
+                1) part[i]="--x" ;;
+                2) part[i]="-w-" ;;
+                3) part[i]="-wx" ;;
+                4) part[i]="r--" ;;
+                5) part[i]="r-x" ;;
+                6) part[i]="rw-" ;;
+                7) part[i]="rwx" ;;
+                *) part[i]="Error: Invalid octal." ; break ;;
+            esac
+            example[i]="${part[i]//-/}"
+        done
+        echo -e "${GREEN}${part[1]}${NOCOLOR} ${YELLOW}${part[2]}${NOCOLOR} ${RED}${part[3]}${NOCOLOR}"
+        echo ""
+        echo "Examples:"
+        echo -e "${CYAN}chmod${NOCOLOR} ${CYAN}-R${NOCOLOR} ${MAGENTA}${text}${NOCOLOR} ${BLUE}./*${NOCOLOR}"
+        echo -e "${CYAN}chmod${NOCOLOR} ${CYAN}-R${NOCOLOR} ${CYAN}u=${GREEN}${example[1]}${NOCOLOR}${CYAN},g=${YELLOW}${example[2]}${NOCOLOR}${CYAN},o=${RED}${example[3]}${NOCOLOR} ${BLUE}./*${NOCOLOR}"
+        echo ""
+    elif [[ "$#" -eq 3 ]]; then
+        local formatted=""
+        for p in "$@"; do
+            local n=0
+            [[ "$p" == *r* ]] && (( n+=4 ))
+            [[ "$p" == *w* ]] && (( n+=2 ))
+            [[ "$p" == *x* ]] && (( n+=1 ))
+            formatted+=$(printf "%d" "$n")
+        done
+        echo -e "${CYAN}${formatted}${NOCOLOR}"
+        chmodcalc "${formatted}"
+    else
+        echo -e "${ERROR}Error: 1 or 3 parameters required.${NOCOLOR}"
+        echo ""
+        echo -e "Syntax: ${CYAN}chmodcalc${NOCOLOR} ${GREEN}[owner]${NOCOLOR} ${YELLOW}[group]${NOCOLOR} ${RED}[other]${NOCOLOR}"
+        echo -e "Example: ${GREEN}chmodcalc${NOCOLOR} ${GREEN}rwx${NOCOLOR} ${YELLOW}rw${NOCOLOR} ${RED}r${NOCOLOR}"
+        echo ""
+        echo -e "Syntax: ${CYAN}chmodcalc [octal]${NOCOLOR}"
+        echo -e "Example: ${GREEN}chmodcalc 777${NOCOLOR}"
+        echo ""
+        echo -e "You can also use symbols with chmod, e.g.,"
+        echo -e "${BLUE}chmod u=rwx,g=rw,o=r filename.ext${NOCOLOR}"
+        echo ""
+        echo -e "Note: read=4, write=2, execute=1"
+        echo ""
+    fi
+}
+
+# chmodfiles: Recursively set permissions for files.
+chmodfiles() {
+    local perm="$1"
+    local directory="${2:-$PWD}"
+    if [[ -z "$perm" ]]; then
+        echo "Usage: chmodfiles <mode> [directory]"
+        echo "Example: chmodfiles 664"
+        return 1
+    fi
+    if [[ ! -d "$directory" ]]; then
+        echo "Error: Directory '$directory' not found."
+        return 2
+    fi
+    echo "Changing file permissions to $perm in:"
+    echo "$directory"
+    if ask "Are you sure?" N; then
+        find "$directory" -type f -exec chmod "$perm" {} \;
+        echo "Done."
+    fi
+}
+
+# chmoddirs: Recursively set permissions for directories.
+chmoddirs() {
+    local perm="$1"
+    local directory="${2:-$PWD}"
+    if [[ -z "$perm" ]]; then
+        echo "Usage: chmoddirs <mode> [directory]"
+        echo "Example: chmoddirs 775"
+        return 1
+    fi
+    if [[ ! -d "$directory" ]]; then
+        echo "Error: Directory '$directory' not found."
+        return 2
+    fi
+    echo "Changing directory permissions to $perm in:"
+    echo "$directory"
+    if ask "Are you sure?" N; then
+        find "$directory" -type d -exec chmod "$perm" {} \;
+        echo "Done."
+    fi
+}
+
+# chfix: Recursively fix permissions for code files and directories.
+# Caution: This will remove executable permissions on files.
+chfix() {
+    local dir_permissions="0775"  # rwx rwx rx
+    local file_permissions="0664" # rw- rw- r--
+    local directory="${1:-$PWD}"
+    if [[ ! -d "$directory" ]]; then
+        echo "Error: Directory '$directory' not found."
+        return 1
+    fi
+    # Protect against modifying system directories.
+    case "$directory" in
+        "/"|"/root"|"/bin"|"/boot"|"/etc"|"/home"|"/lib"|"/lib64"|"/mnt"|"/opt"|"/proc"|"/sbin"|"/usr/bin"|"/usr/lib"|"/usr/lib64"|"/usr/sbin"|"/srv"|"/usr"|"/var"|"/var/www")
+            echo "Error: Cannot change permissions in protected directory '$directory'."
+            return 2
+            ;;
+    esac
+    echo "Changing file and directory permissions in:"
+    echo "$directory"
+    if ask "Are you sure?" N; then
+        sudo find "$directory" -type f -exec chmod "$file_permissions" {} \;
+        sudo find "$directory" -type d -exec chmod "$dir_permissions" {} \;
+        echo "Done."
+    fi
+}
+
+# chmodcopy: Copy permissions from one file to another.
+chmodcopy() {
+    if [[ "$#" -lt 2 ]]; then
+        echo "Usage: chmodcopy <source_file> <destination_file>"
+        return 1
+    fi
+    chmod --reference="$1" "$2"
+}
+
+
+###############################################################################
+# User Home Permission Fixer and Config Copy
+###############################################################################
+
+# fixuserhome: Fix permissions in a user's home folder.
+fixuserhome() {
+    local username="${1:-$(whoami)}"
+    if [[ ! -d "/home/${username}" ]]; then
+        echo "Error: User '${username}' does not have a home folder."
+        return 1
+    fi
+    local hourglass="\033[0;33m⧗\033[0m"
+    local checkmark="\r\033[1;32m✔\033[0m"
+    if ask "\033[1;31mWARNING:\033[0m Change all permissions for user \033[0;36m${username}\033[0m's home folder?" N; then
+        sudo true
+        if ask "Reset group ownership to \033[0;36m${username}\033[0m?" Y; then
+            echo -ne "${hourglass} Setting owner and group as ${username}..."
+            sudo chown -R "${username}:${username}" "/home/${username}"
+        else
+            echo -ne "${hourglass} Setting owner as ${username}..."
+            sudo chown -R "${username}" "/home/${username}"
+        fi
+        echo -e "${checkmark}"
+        echo -ne "${hourglass} Ensuring user has read and write access..."
+        chmod -R u+rw "/home/${username}"
+        echo -e "${checkmark}"
+        echo -ne "${hourglass} Removing write access from group..."
+        chmod -R g-w "/home/${username}"
+        echo -e "${checkmark}"
+        echo -ne "${hourglass} Removing all access from others..."
+        chmod -R o-rwx "/home/${username}"
+        echo -e "${checkmark}"
+        echo -ne "${hourglass} Making shell scripts executable..."
+        find "/home/${username}" -type f \( -name "*.sh" -o -name ".*.sh" \) -exec chmod ug+x {} \;
+        echo -e "${checkmark}"
+        echo -ne "${hourglass} Ensuring directories have execute permission..."
+        chmod -R ug+X "/home/${username}"
+        echo -e "${checkmark}"
+        echo -ne "${hourglass} Removing group execute on directories without group read..."
+        find "/home/${username}" -type d ! -perm -g+r -exec chmod g-wx {} \;
+        echo -e "${checkmark}"
+        echo -ne "${hourglass} Setting the setgid bit on the home directory..."
+        chmod g+s "/home/${username}"
+        echo -e "${checkmark}"
+        if command -v setfacl &>/dev/null; then
+            echo -ne "${hourglass} Modifying default ACL entries..."
+            setfacl -d -m u::rwx "/home/${username}"
+            setfacl -d -m g::rx "/home/${username}"
+            setfacl -d -m o::X "/home/${username}"
+            echo -e "${checkmark}"
+        fi
+        echo "Done!"
+    fi
+}
+
+# configcopy: Copy configuration files from one account to another.
+configcopy() {
+    if [[ -z "$1" || -z "$2" ]]; then
+        echo -e "Usage: configcopy <from_user> <to_user>"
+        return 1
+    elif [[ "$1" == "$2" ]]; then
+        echo -e "\033[1;31mError:\033[0m The from and to user parameters cannot be the same."
+        return 2
+    fi
+
+    local dir_from dir_to owner
+    if [[ "$1" == "default" ]]; then
+        dir_from="/etc/skel/"
+        dir_to="/home/$2/"
+        owner="$2"
+    elif [[ "$2" == "default" ]]; then
+        dir_from="/home/$1/"
+        dir_to="/etc/skel/"
+        owner="root"
+    elif [[ "$1" == "root" ]]; then
+        dir_from="/root/"
+        dir_to="/home/$2/"
+        owner="$2"
+    elif [[ "$2" == "root" ]]; then
+        dir_from="/home/$1/"
+        dir_to="/root/"
+        owner="root"
+    else
+        dir_from="/home/$1/"
+        dir_to="/home/$2/"
+        owner="$2"
+    fi
+
+    if ! ask "Are you sure? This will overwrite configuration files in ${dir_to%/}" N; then
+        return
+    fi
+
+    declare -a files=()
+    [[ -f "${dir_from}.bash_logout" ]]  && files+=(".bash_logout")
+    [[ -f "${dir_from}.bash_profile" ]] && files+=(".bash_profile")
+    [[ -f "${dir_from}.bashrc" ]]       && files+=(".bashrc")
+    [[ -f "${dir_from}.bashrc_help" ]]  && files+=(".bashrc_help")
+    [[ -f "${dir_from}.inputrc" ]]      && files+=(".inputrc")
+    [[ -f "${dir_from}.nanorc" ]]       && files+=(".nanorc")
+    [[ -f "${dir_from}.p10k.zsh" ]]     && files+=(".p10k.zsh")
+    [[ -f "${dir_from}.screenrc" ]]     && files+=(".screenrc")
+    [[ -f "${dir_from}.vimrc" ]]        && files+=(".vimrc")
+    [[ -f "${dir_from}.Xauthority" ]]   && files+=(".Xauthority")
+    [[ -f "${dir_from}.zshrc" ]]        && files+=(".zshrc")
+    for file in "${files[@]}"; do
+        sudo cp "${dir_from}${file}" "${dir_to}" 2>/dev/null
+        sudo chown "${owner}:${owner}" "${dir_to}${file}"
+        echo -e "\033[1;32m✔\033[0m Copied: \033[1;36m${file}\033[0m"
+    done
+
+    if [[ -d "${dir_from}.config/bashrc" ]]; then
+        sudo mkdir -p "${dir_to}.config"
+        sudo cp -R "${dir_from}.config/bashrc" "${dir_to}.config/" 2>/dev/null
+        echo -e "\033[1;32m✔\033[0m Copied: Bashrc Config"
+    fi
+    if [[ -d "${dir_from}.config/fish" ]]; then
+        sudo mkdir -p "${dir_to}.config"
+        sudo cp -R "${dir_from}.config/fish" "${dir_to}.config/" 2>/dev/null
+        echo -e "\033[1;32m✔\033[0m Copied: Fish"
+    fi
+    if [[ -f "${dir_from}.config/micro/settings.json" ]]; then
+        sudo mkdir -p "${dir_to}.config/micro"
+        sudo cp "${dir_from}.config/micro/settings.json" "${dir_to}.config/micro/settings.json" 2>/dev/null
+        sudo cp "${dir_from}.config/micro/bindings.json" "${dir_to}.config/micro/bindings.json" 2>/dev/null
+        sudo cp -R "${dir_from}.config/micro/plug" "${dir_to}.config/micro/" 2>/dev/null
+        echo -e "\033[1;32m✔\033[0m Copied: Micro"
+    fi
+
+    sudo cp -R "${dir_from}".tmux* "${dir_to}" 2>/dev/null
+    if [[ -e "${dir_to}.tmux.conf" ]]; then
+        sudo chown "${owner}:${owner}" "${dir_to}.tmux.conf"
+        echo -e "\033[1;32m✔\033[0m Copied: Tmux"
+    fi
+    if [[ -d "${dir_to}.tmux" ]]; then
+        sudo chown -R "${owner}:${owner}" "${dir_to}.tmux"
+    fi
+
+    echo -e "Owner set to: \033[1;35m${owner}\033[0m"
+    echo -e "\033[1;33mFinished\033[0m copying configuration files from \033[1;34m${dir_from%/}\033[0m to \033[1;34m${dir_to%/}\033[0m"
+}
+
+# trim: Remove leading and trailing whitespace from a string.
+trim() {
+    local var="$*"
+    # Remove leading whitespace.
+    var="${var#"${var%%[![:space:]]*}"}"
+    # Remove trailing whitespace.
+    var="${var%"${var##*[![:space:]]}"}"
+    echo -n "$var"
+}
+
+
+###############################################################################
+# Browser/Build Update Functions
+###############################################################################
+
+# update_firefox: Update the Firefox source, rebuild it, and optionally run it.
+# Usage: update_firefox [--clean] [--run]
+update_firefox() {
+    local CLEAN_BUILD=false
+    local RUN_AFTER_BUILD=false
+    local arg
+
+    for arg in "$@"; do
+        case "$arg" in
+            --clean) CLEAN_BUILD=true ;;
+            --run)   RUN_AFTER_BUILD=true ;;
+            *)
+                echo "Unknown argument: $arg"
+                echo "Usage: update_firefox [--clean] [--run]"
+                return 1
+                ;;
+        esac
+    done
+
+    if ! command -v hg &>/dev/null; then
+        echo "Error: Mercurial (hg) is required but not installed."
+        return 1
+    fi
+
+    if command -v sccache &>/dev/null; then
+        export RUSTC_WRAPPER
+        RUSTC_WRAPPER=$(command -v sccache)
+        export SCCACHE_DIR="$HOME/.cache/sccache"
+    else
+        echo "Warning: sccache is not installed. Builds may be slower."
+    fi
+
+    local FIREFOX_DIR="$HOME/firefox-source"
+    if [[ ! -d "$FIREFOX_DIR" ]]; then
+        echo "Error: Firefox source directory not found at $FIREFOX_DIR"
+        return 1
+    fi
+
+    cd "$FIREFOX_DIR" || { echo "Error: Failed to change directory to $FIREFOX_DIR"; return 1; }
+
+    if [[ ! -x "./mach" ]]; then
+        echo "Error: 'mach' script not found or not executable in $FIREFOX_DIR"
+        return 1
+    fi
+
+    echo "Pulling the latest Firefox changes..."
+    hg pull && hg update
+
+    if [[ "$CLEAN_BUILD" == true ]]; then
+        echo "Performing a clean build..."
+        ./mach clobber
+    fi
+
+    echo "Starting the Firefox build..."
+    if ./mach build; then
+        echo "Firefox build completed successfully."
+        if [[ "$RUN_AFTER_BUILD" == true ]]; then
+            echo "Launching Firefox..."
+            ./mach run
+        fi
+    else
+        echo "Error: Firefox build failed."
+        return 1
+    fi
+}
+
+# update_chromium: Update and build the Chromium source, optionally launching it.
+# Usage: update_chromium [--run]
+update_chromium() {
+    set -euo pipefail
+
+    local CHROMIUM_DIR="$HOME/Projects/chromium/src"
+    local BUILD_DIR="$CHROMIUM_DIR/out/Default"
+    local DEP_SCRIPT="$CHROMIUM_DIR/build/install-build-deps.sh"
+
+    if [[ ! -d "$CHROMIUM_DIR" ]]; then
+        echo "Error: Chromium source directory not found at $CHROMIUM_DIR"
+        return 1
+    fi
+
+    echo "Navigating to Chromium source directory: $CHROMIUM_DIR"
+    cd "$CHROMIUM_DIR" || { echo "Failed to change directory to $CHROMIUM_DIR"; return 1; }
+
+    echo "Pulling latest Chromium changes..."
+    if ! gclient sync --with_branch_heads --with_tags; then
+        echo "Error: gclient sync failed."
+        return 1
+    fi
+
+    if [[ -f "$DEP_SCRIPT" ]]; then
+        echo "Installing missing dependencies..."
+        if ! sudo "$DEP_SCRIPT" --no-prompt; then
+            echo "Error: Dependency installation failed."
+            return 1
+        fi
+    else
+        echo "Warning: Dependency script not found at $DEP_SCRIPT; skipping dependency installation."
+    fi
+
+    if [[ ! -d "$BUILD_DIR" ]]; then
+        echo "Generating build directory at $BUILD_DIR..."
+        if ! gn gen "$BUILD_DIR" --args='is_debug=false is_component_build=false enable_nacl=false'; then
+            echo "Error: gn gen failed."
+            return 1
+        fi
+    fi
+
+    echo "Starting Chromium build..."
+    if ! autoninja -C "$BUILD_DIR" chrome -j"$(nproc)"; then
+        echo "Error: Chromium build failed."
+        return 1
+    fi
+
+    echo "Chromium build completed successfully."
+
+    if [[ "${1:-}" == "--run" ]]; then
+        echo "Launching Chromium..."
+        "$BUILD_DIR/chrome" --no-sandbox
+    fi
+}
+###############################################################################
+# Function: install_kickstart_nvim
+# Purpose:
+#   Remove any existing Neovim configuration and install Kickstart.nvim
+#   by cloning its repository into ~/.config/nvim.
+# Requirements:
+#   - Git must be installed.
+###############################################################################
+install_kickstart_nvim() {
+    local repo_url="https://github.com/nvim-lua/kickstart.nvim.git"
+    local config_dir="$HOME/.config/nvim"
+
+    # Check if Git is installed.
+    if ! command -v git >/dev/null 2>&1; then
+        echo "Error: Git is not installed. Please install Git and try again."
+        return 1
+    fi
+
+    # Check if the Neovim configuration directory already exists.
+    if [ -d "$config_dir" ]; then
+        echo "The directory '$config_dir' already exists."
+        read -p "Do you want to remove the existing directory? (y/n): " user_choice
+        if [ "$user_choice" = "y" ] || [ "$user_choice" = "Y" ]; then
+            rm -rf "$config_dir" || {
+                echo "Error: Failed to remove directory '$config_dir'."
+                return 1
+            }
+            echo "Removed the existing directory '$config_dir'."
+        else
+            echo "Aborted installation. Please remove or rename the existing directory and try again."
+            return 1
+        fi
+    fi
+
+    # Clone the Kickstart.nvim repository.
+    echo "Cloning Kickstart.nvim from $repo_url into $config_dir..."
+    git clone "$repo_url" "$config_dir" || {
+        echo "Error: Failed to clone repository from $repo_url."
+        return 1
+    }
+    echo "Kickstart.nvim installed successfully in '$config_dir'."
+}
+
+###############################################################################
+# Function: update_neovim
+# Purpose:
+#   Update Neovim installed from source by pulling the latest changes,
+#   recompiling, and installing it.
+# Requirements:
+#   - Your Neovim source should be in ~/Projects/neovim.
+###############################################################################
+update_neovim() {
+    local nvim_source_dir="$HOME/Projects/neovim"
+
+    # Check if the Neovim source directory exists.
+    if [ ! -d "$nvim_source_dir" ]; then
+        echo "Error: Neovim source directory '$nvim_source_dir' not found."
+        return 1
+    fi
+
+    # Change to the Neovim source directory.
+    cd "$nvim_source_dir" || {
+        echo "Error: Could not change directory to '$nvim_source_dir'."
+        return 1
+    }
+
+    # Pull the latest changes from the repository.
+    echo "Pulling the latest changes in $nvim_source_dir..."
+    git pull || {
+        echo "Error: Failed to pull the latest changes."
+        return 1
+    }
+
+    # Compile Neovim.
+    echo "Compiling Neovim..."
+    make CMAKE_BUILD_TYPE=Release || {
+        echo "Error: Compilation of Neovim failed."
+        return 1
+    }
+
+    # Install Neovim.
+    echo "Installing Neovim..."
+    sudo make install || {
+        echo "Error: Installation of Neovim failed."
+        return 1
+    }
+
+    echo "Neovim updated successfully."
+}
+###############################################################################
+# update_rust_eza: Ensures the latest Rust (Nightly) is installed and updates
+# the eza project by pulling the latest code and rebuilding it.
+###############################################################################
+update_rust_eza() {
+    local rustup_url="https://sh.rustup.rs"
+    local rust_project_dir="$HOME/Projects/eza"
+
+    echo "=== Checking for rustup installation ==="
+    if ! command -v rustup &>/dev/null; then
+        echo "rustup not found. Installing rustup..."
+        if ! curl --proto '=https' --tlsv1.2 -sSf "$rustup_url" | sh -s -- -y --default-toolchain nightly; then
+            echo "Error: Failed to install rustup."
+            return 1
+        fi
+        # Update PATH so that rustup and Cargo are immediately available.
+        export PATH="$HOME/.cargo/bin:$PATH"
+    else
+        echo "rustup is already installed."
+    fi
+
+    echo "=== Ensuring Rust is set to nightly ==="
+    if ! rustc --version | grep -q "nightly"; then
+        echo "Rust is not on nightly. Setting toolchain to nightly..."
+        if ! rustup default nightly; then
+            echo "Error: Failed to set rustup default to nightly."
+            return 1
+        fi
+        if ! rustup override set nightly; then
+            echo "Error: Failed to set rustup override to nightly."
+            return 1
+        fi
+    else
+        echo "Rust is already set to nightly."
+    fi
+
+    echo "=== Updating Rust toolchain ==="
+    if ! rustup update; then
+        echo "Error: rustup update failed."
+        return 1
+    fi
+
+    echo "=== Updating Cargo and cargo-update ==="
+    if ! cargo install cargo-update; then
+        echo "Warning: cargo-update may already be installed."
+    fi
+    if ! cargo install-update -a; then
+        echo "Error: cargo install-update failed."
+        return 1
+    fi
+
+    echo "=== Checking eza project directory ==="
+    if [[ ! -d "$rust_project_dir" ]]; then
+        echo "Error: eza source directory not found at $rust_project_dir"
+        return 1
+    fi
+
+    echo "=== Updating and building eza ==="
+    if ! cd "$rust_project_dir"; then
+        echo "Error: Failed to enter eza directory."
+        return 1
+    fi
+
+    if ! git pull; then
+        echo "Error: git pull failed in $rust_project_dir."
+        return 1
+    fi
+
+    if ! cargo clean; then
+        echo "Error: cargo clean failed."
+        return 1
+    fi
+
+    if ! cargo build --release; then
+        echo "Error: cargo build failed."
+        return 1
+    fi
+
+    echo "=== Installation complete! ==="
+    echo "The new eza binary is located at:"
+    echo "$rust_project_dir/target/release/eza"
+}
+###############################################################################
+# install_fzf: Uninstalls fzf, then clones and reinstalls it in ~/Projects/fzf
+###############################################################################
+install_fzf() {
+    local fzf_repo="https://github.com/junegunn/fzf.git"
+    local fzf_dir="$HOME/Projects/fzf"
+
+    echo "Removing any existing fzf installation..."
+    if [[ -d "$fzf_dir" ]]; then
+        rm -rf "$fzf_dir"
+        echo "Deleted existing fzf directory at $fzf_dir."
+    fi
+
+    if command -v fzf &>/dev/null; then
+        rm -f "$(command -v fzf)"
+        echo "Removed existing fzf binary."
+    fi
+
+    echo "Cloning fzf into $fzf_dir..."
+    git clone --depth 1 "$fzf_repo" "$fzf_dir"
+
+    echo "Running fzf installation script..."
+    "$fzf_dir/install" --all
+
+    echo "Adding fzf to PATH..."
+    export PATH="$fzf_dir/bin:$PATH"
+
+    echo "fzf installation complete!"
+}
+
+###############################################################################
+# fzfind: Fuzzy find files in the current directory.
+###############################################################################
+fzfind() {
+    local file
+    file=$(find . -type f | fzf --preview "bat --style=numbers --color=always --line-range=:100 {}") || return
+    echo "Selected: $file"
+}
+
+###############################################################################
+# fzcd: Fuzzy find and cd into directories.
+###############################################################################
+fzcd() {
+    local dir
+    dir=$(find . -type d | fzf --preview "ls -la {}") || return
+    cd "$dir" || return
+}
+
+###############################################################################
+# fzgrep: Fuzzy search for text in files.
+###############################################################################
+fzgrep() {
+    local search_term
+    search_term=$(echo "" | fzf --prompt "Enter search term: ") || return
+    grep -rnI --color=always "$search_term" . | fzf --ansi --preview "bat --style=numbers --color=always --line-range=:100 {1}"
+}
+
+###############################################################################
+# fzhist: Fuzzy find in command history.
+###############################################################################
+fzhist() {
+    history | fzf --height 40% --reverse --preview "echo {}" | awk '{$1=""; print substr($0,2)}' | xargs -I {} bash -c "{}"
+}
+
+###############################################################################
+# fzproc: Fuzzy find and kill a process.
+###############################################################################
+fzproc() {
+    local pid
+    pid=$(ps aux | fzf --preview "echo {}" | awk '{print $2}') || return
+    [[ -n "$pid" ]] && kill -9 "$pid" && echo "Killed process $pid"
+}
+
+###############################################################################
+# fztmux: Fuzzy find and switch to a tmux session.
+###############################################################################
+fztmux() {
+    local session
+    session=$(tmux list-sessions -F "#{session_name}" | fzf) || return
+    tmux attach-session -t "$session"
+}
+###############################################################################
+# install_tmux: Installs or updates tmux from source.
+# - Clones into ~/Projects/tmux (if not present)
+# - Updates repo if already cloned
+# - Builds and installs the latest version
+###############################################################################
+install_tmux() {
+    local tmux_repo="https://github.com/tmux/tmux.git"
+    local tmux_dir="$HOME/Projects/tmux"
+    local install_dir="/usr/local"
+
+    echo "Installing dependencies for tmux..."
+    if command -v apt &>/dev/null; then
+        sudo apt update && sudo apt install -y \
+            libevent-dev ncurses-dev build-essential automake bison pkg-config
+    elif command -v dnf &>/dev/null; then
+        sudo dnf install -y libevent-devel ncurses-devel make automake gcc gcc-c++ kernel-devel bison
+    elif command -v pacman &>/dev/null; then
+        sudo pacman -Sy --noconfirm \
+            libevent ncurses base-devel automake bison pkgconf
+    else
+        echo "Error: Package manager not recognized. Install dependencies manually."
+        return 1
+    fi
+
+    if [[ -d "$tmux_dir" ]]; then
+        echo "Updating existing tmux source in $tmux_dir..."
+        cd "$tmux_dir" || return 1
+        git pull --rebase
+    else
+        echo "Cloning tmux into $tmux_dir..."
+        git clone --depth 1 "$tmux_repo" "$tmux_dir"
+        cd "$tmux_dir" || return 1
+    fi
+
+    echo "Building tmux from source..."
+    sh autogen.sh
+    ./configure --prefix="$install_dir"
+    make -j"$(nproc)"
+
+    echo "Installing tmux..."
+    sudo make install
+
+    echo "Verifying tmux installation..."
+    if command -v tmux &>/dev/null; then
+        echo "tmux successfully installed/updated: $(tmux -V)"
+    else
+        echo "Error: tmux installation failed."
+        return 1
+    fi
+}
+
+# Fuzzy directory completion for `cd`, with fallback to bash-completion
+_fzf_cd_complete() {
+    local curr_word="${COMP_WORDS[COMP_CWORD]}"  # Capture current input
+    local dir
+
+    # Check if `fzf` is installed and usable
+    if command -v fzf >/dev/null 2>&1; then
+        # If no input, use `fzf` to select a directory
+        if [[ -z "$curr_word" ]]; then
+            dir=$(find . -type d 2>/dev/null | fzf) || return
+            COMPREPLY=("$dir")
+        else
+            # Otherwise, use Bash's built-in directory completion
+            COMPREPLY=($(compgen -d -- "$curr_word"))
+        fi
+    else
+        # If `fzf` is missing, use Bash’s default directory completion
+        COMPREPLY=($(compgen -d -- "$curr_word"))
+    fi
+}
+
+# Register the function for `cd` completion
+complete -F _fzf_cd_complete cd
+
+# Fuzzy file completion for nvim using fzf in Bash
+_nvim_fzf_complete() {
+    local files
+    files=$(find . -type f 2>/dev/null | fzf) || return
+    COMPREPLY=("$files")
+}
+
+# Register completion for nvim in Bash
+complete -F _nvim_fzf_complete nvim
+
+#!/bin/bash
+# Temperature Conversion Script
+#
+# This script provides functions to convert temperatures between Fahrenheit,
+# Celsius, and Kelvin.
+#
+# Functions:
+#   ftoc: Converts Fahrenheit to Celsius.
+#   ctof: Converts Celsius to Fahrenheit.
+#   ftok: Converts Fahrenheit to Kelvin.
+#   ctok: Converts Celsius to Kelvin.
+#
+# Usage examples:
+#   ftoc 100
+#   ctof 37
+#   ftok 100
+#   ctok 37
+
+# ftoc: Convert Fahrenheit to Celsius.
+# Formula: Celsius = (Fahrenheit - 32) * 5/9
+ftoc() {
+    # Check for exactly one argument.
+    if [ "$#" -ne 1 ]; then
+        echo "Usage: ftoc <Fahrenheit>"
+        return 1
+    fi
+
+    local fahrenheit="$1"
+
+    # Validate that the input is a number.
+    if ! [[ "$fahrenheit" =~ ^-?[0-9]+(\.[0-9]+)?$ ]]; then
+        echo "Error: '$fahrenheit' is not a valid number."
+        return 1
+    fi
+
+    # Calculate Celsius using bc for floating-point arithmetic.
+    local celsius
+    celsius=$(echo "scale=4; ($fahrenheit - 32) * 5 / 9" | bc -l)
+    echo "$celsius"
+}
+
+# ctof: Convert Celsius to Fahrenheit.
+# Formula: Fahrenheit = (Celsius * 9/5) + 32
+ctof() {
+    if [ "$#" -ne 1 ]; then
+        echo "Usage: ctof <Celsius>"
+        return 1
+    fi
+
+    local celsius="$1"
+
+    if ! [[ "$celsius" =~ ^-?[0-9]+(\.[0-9]+)?$ ]]; then
+        echo "Error: '$celsius' is not a valid number."
+        return 1
+    fi
+
+    local fahrenheit
+    fahrenheit=$(echo "scale=4; $celsius * 9 / 5 + 32" | bc -l)
+    echo "$fahrenheit"
+}
+
+# ftok: Convert Fahrenheit to Kelvin.
+# Formula: Kelvin = ((Fahrenheit - 32) * 5/9) + 273.15
+ftok() {
+    if [ "$#" -ne 1 ]; then
+        echo "Usage: ftok <Fahrenheit>"
+        return 1
+    fi
+
+    local fahrenheit="$1"
+
+    if ! [[ "$fahrenheit" =~ ^-?[0-9]+(\.[0-9]+)?$ ]]; then
+        echo "Error: '$fahrenheit' is not a valid number."
+        return 1
+    fi
+
+    local kelvin
+    kelvin=$(echo "scale=4; ($fahrenheit - 32) * 5 / 9 + 273.15" | bc -l)
+    echo "$kelvin"
+}
+
+# ctok: Convert Celsius to Kelvin.
+# Formula: Kelvin = Celsius + 273.15
+ctok() {
+    if [ "$#" -ne 1 ]; then
+        echo "Usage: ctok <Celsius>"
+        return 1
+    fi
+
+    local celsius="$1"
+
+    if ! [[ "$celsius" =~ ^-?[0-9]+(\.[0-9]+)?$ ]]; then
+        echo "Error: '$celsius' is not a valid number."
+        return 1
+    fi
+
+    local kelvin
+    kelvin=$(echo "scale=4; $celsius + 273.15" | bc -l)
+    echo "$kelvin"
+}
+#
+# Requirements:
+#   - fzf: for interactive drive selection.
+#   - dd: for cloning the image.
+#   - lsblk: for listing available drives (this script is written for Linux).
+#
+# Warning: The target drive will be completely overwritten. Use with caution!
+#
+# Troubleshooting:
+#   - If fzf does not display a selection prompt, verify that fzf is installed.
+#   - Ensure that lsblk produces a list of drives; if not, you may be on a non-Linux system.
+#     In that case, replace the lsblk command with an appropriate drive listing command.
+
+clone() {
+    # Check if fzf is installed.
+    if ! command -v fzf >/dev/null 2>&1; then
+        echo "Error: fzf is not installed. Please install fzf and try again."
+        return 1
+    fi
+
+    # Prompt for the input image file (if).
+    read -rp "Enter the path to the image file (if): " input_file
+    if [ ! -f "$input_file" ]; then
+        echo "Error: File '$input_file' does not exist."
+        return 1
+    fi
+
+    # List available block devices using lsblk and let the user select one using fzf.
+    echo "Select the target drive (of) from the list below."
+    echo "WARNING: All data on the selected drive will be erased!"
+
+    # Retrieve available drives.
+    local available_drives
+    available_drives=$(lsblk -d -n -o NAME,SIZE,MODEL)
+    if [ -z "$available_drives" ]; then
+        echo "No available drives found with lsblk. If you are on a non-Linux system, please adjust the drive listing command."
+        return 1
+    fi
+
+    # Use fzf to interactively select the target drive.
+    local target_line
+    target_line=$(echo "$available_drives" | fzf --prompt="Select target drive: ")
+    if [ -z "$target_line" ]; then
+        echo "No drive selected. Aborting."
+        return 1
+    fi
+
+    # Extract the drive name (the first field) and build the full device path.
+    local target_drive
+    target_drive=$(echo "$target_line" | awk '{print $1}')
+    local target_path="/dev/${target_drive}"
+    echo "Selected target drive: ${target_path}"
+
+    # Ask for confirmation before proceeding.
+    read -rp "WARNING: This will erase all data on ${target_path}. Are you sure? (y/n): " confirm
+    if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+        echo "Operation aborted."
+        return 1
+    fi
+
+    # Start the clone operation using dd.
+    echo "Starting clone operation..."
+    # Using bs=4M for speed, status=progress for feedback, and conv=fsync to ensure proper flushing.
+    if dd if="$input_file" of="$target_path" bs=4M status=progress conv=fsync; then
+        echo "Clone completed successfully."
+    else
+        echo "Error: Clone operation failed."
+        return 1
+    fi
+}
+
+run_ai() {
+    local output
+    output=$(./bin/llama-cli -m ~/models/mistral-7b-instruct-v0.1.Q4_K_M.gguf -p "$1")
+
+    echo "AI Suggested Command: $output"
+
+    read -rp "Run this command? (y/n): " confirm
+    if [[ "$confirm" == "y" ]]; then
+        eval "$output"
+    fi
+}
+ai_assistant() {
+    local model_path="/home/madhatter/models/mistral-7b-instruct-v0.1.Q4_K_M.gguf"
+    local llama_bin="/home/madhatter/Projects/llama.cpp/build/bin/llama-cli"
+    if [ ! -f "$llama_bin" ]; then
+        echo "Error: llama-cli binary not found at $llama_bin"
+        return 1
+    fi
+    if [ ! -f "$model_path" ]; then
+        echo "Error: Model not found at $model_path"
+        return 1
+    fi
+
+    echo "🔹 AI Terminal Assistant is now running! Type 'exit' to quit."
+    echo "🔹 Ask questions or request commands. If a command is generated, you can choose to run it."
+
+    while true; do
+        read -rp "🤖 AI> " user_input
+        if [[ "$user_input" == "exit" ]]; then
+            echo "Goodbye!"
+            break
+        fi
+
+        # Get AI response
+        response=$("$llama_bin" -m "$model_path" -p "$user_input" -c 1024 --n-gpu-layers 30)
+
+        # Display AI response
+        echo -e "🧠 AI Suggestion:\n$response"
+
+        # Ask user if they want to run it
+        if [[ "$response" =~ ^(ls|cd|mv|rm|cp|find|grep|sed|awk|cat|chmod|chown|tar|zip|unzip|mkdir|rmdir|df|du|ping|uptime|top|htop|neofetch|nvidia-smi|curl|wget|echo|date|whoami|pwd|ps|kill) ]]; then
+            read -rp "Run this command? (y/n): " confirm
+            if [[ "$confirm" == "y" ]]; then
+                eval "$response"
+            else
+                echo "Command not executed."
+            fi
+        fi
+    done
+}
+roll-dice() {
+    local num_dice=$1
+    local num_sides=$2
+
+    # Validate input
+    if [[ -z $num_dice || -z $num_sides || $num_dice -lt 1 || $num_sides -lt 2 ]]; then
+        echo "Usage: roll <number-of-dice> <sides-of-dice>"
+        echo "Example: roll 3 6 (Rolls 3 six-sided dice)"
+        return 1
+    fi
+
+    echo -e "\n--- Rolling $num_dice d${num_sides} ---"
+    local total=0
+    local results=()
+
+    for ((i = 1; i <= num_dice; i++)); do
+        roll=$(( RANDOM % num_sides + 1 ))
+        results+=("$roll")
+        total=$((total + roll))
+    done
+
+    echo "Rolls: ${results[*]}"
+    echo "Total: $total"
+}
+
+change_hostname() {
+    #!/bin/bash
+
+# Ensure script is run as root
+if [[ $EUID -ne 0 ]]; then
+    echo "Error: This script must be run as root. Use sudo."
+    exit 1
+fi
+
+# Ensure hostname argument is provided
+if [[ -z "$1" ]]; then
+    echo "Usage: $0 NEW_HOSTNAME"
+    exit 1
+fi
+
+NEW_HOSTNAME="$1"
+CURRENT_HOSTNAME=$(hostname)
+
+# Change hostname using hostnamectl
+echo "Changing hostname from '$CURRENT_HOSTNAME' to '$NEW_HOSTNAME'..."
+hostnamectl set-hostname "$NEW_HOSTNAME"
+
+# Update /etc/hosts to replace old hostname with new one
+if grep -q "$CURRENT_HOSTNAME" /etc/hosts; then
+    sed -i "s/$CURRENT_HOSTNAME/$NEW_HOSTNAME/g" /etc/hosts
+    echo "Updated /etc/hosts."
+else
+    echo "Warning: Old hostname not found in /etc/hosts. You may need to update it manually."
+fi
+
+# Confirm change
+echo "New hostname: $(hostname)"
+
+# Prompt for reboot
+read -p "Reboot now to apply changes? (y/N): " choice
+if [[ "$choice" =~ ^[Yy]$ ]]; then
+    echo "Rebooting..."
+    reboot
+else
+    echo "Hostname changed. Reboot to fully apply changes."
+fi
+}
+###############################################################################
+# End of functions.sh
+###############################################################################

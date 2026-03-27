@@ -1,0 +1,30 @@
+# .attributes
+
+# attribute start
+bold=$(echo -en '\033[1m')
+dim=$(echo -en '\033[2m')
+ul=$(echo -en '\033[4m')
+blink=$(echo -en '\033[5m')
+reverse=$(echo -en '\033[7m')
+hidden=$(echo -en '\033[8m')
+link=$(echo -en '\E[04;38;5;146m')
+italic=$(echo -en '\033[3m')
+strikethrough=$(echo -en '\033[9m')
+double_ul=$(echo -en '\033[21m')
+overline=$(echo -en '\033[53m')
+standout_mode=$(echo -en '\E[38;5;246m')
+
+# attribute end
+attrib_restore=$(echo -en '\033[0m')
+end_bold=$(echo -en '\033[21m')
+end_dim=$(echo -en '\033[22m')
+end_ul=$(echo -en '\033[24m')
+end_blink=$(echo -en '\033[25m')
+end_reverse=$(echo -en '\033[27m')
+end_hidden=$(echo -en '\033[28m')
+end_link=$(echo -en '\E[0m')
+end_italic=$(echo -en '\033[23m')
+end_strikethrough=$(echo -en '\033[29m')
+end_double_ul=$(echo -en '\033[24m')
+end_overline=$(echo -en '\033[55m')
+end_standout_mode=$(echo -en '\E[0m')
