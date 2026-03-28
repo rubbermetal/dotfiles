@@ -1,0 +1,14 @@
+#!/bin/sh
+# freeswap — Print free swap in human-readable format
+# Output: "X.XX GB" or "X.XX MB"
+
+kb="$(awk '/^SwapFree:/ { print $2 }' /proc/meminfo)"
+bytes=$((kb * 1024))
+
+if [ "$bytes" -ge 1073741824 ]; then
+    awk "BEGIN { printf \"%.2f GB\n\", $bytes / 1073741824 }"
+elif [ "$bytes" -ge 1048576 ]; then
+    awk "BEGIN { printf \"%.2f MB\n\", $bytes / 1048576 }"
+else
+    awk "BEGIN { printf \"%.2f KB\n\", $bytes / 1024 }"
+fi

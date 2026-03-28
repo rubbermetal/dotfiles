@@ -6,6 +6,7 @@
 #   ./install.sh              # Install with backups
 #   ./install.sh --force      # Overwrite without backups
 #   ./install.sh --bootstrap  # Install + install core tools
+#   ./install.sh --conky      # Also install Conky desktop widget
 #   ./install.sh --uninstall  # Remove symlinks, restore backups
 #
 # Works on: Debian, Ubuntu, Raspberry Pi OS, Arch, Fedora, macOS
@@ -18,12 +19,14 @@ BACKUP_DIR="$HOME/.dotfiles_backup/$(date +%Y%m%d_%H%M%S)"
 FORCE=false
 BOOTSTRAP=false
 UNINSTALL=false
+CONKY=false
 
 for arg in "$@"; do
     case "$arg" in
         --force)     FORCE=true ;;
         --bootstrap) BOOTSTRAP=true ;;
         --uninstall) UNINSTALL=true ;;
+        --conky)     CONKY=true ;;
     esac
 done
 
@@ -116,9 +119,12 @@ if $UNINSTALL; then
     unlink_file "$HOME/Scripts"
     unlink_file "$HOME/.config/starship.toml"
 
-    for dir in bash.d .Conky alacritty btop conky macchina neofetch picom sxhkd tmux wallpapers; do
+    for dir in bash.d .Conky alacritty btop macchina neofetch picom sxhkd tmux wallpapers; do
         unlink_file "$HOME/.config/$dir"
     done
+
+    # Remove Conky autostart if present
+    unlink_file "$HOME/.config/autostart/conkyx.desktop"
 
     # Remove zsh integration line if present
     if [[ -f "$HOME/.zshrc" ]]; then
@@ -209,10 +215,8 @@ link_file "$DOTFILES_DIR/.fzf.bash"  "$HOME/.fzf.bash"
 # --- .config directories ---
 CONFIG_DIRS=(
     "bash.d"
-    ".Conky"
     "alacritty"
     "btop"
-    "conky"
     "macchina"
     "neofetch"
     "picom"
@@ -286,6 +290,94 @@ if [[ ! -f "$HOME/.dotfiles_profile" ]]; then
     echo "$profile" > "$HOME/.dotfiles_profile"
     echo "  created: ~/.dotfiles_profile ($profile)"
     echo "  Change anytime: echo desktop|server|minimal > ~/.dotfiles_profile"
+fi
+
+# =========================================================================
+# CONKY — Optional desktop widget
+# =========================================================================
+# Auto-offer on desktop profile, or install with --conky flag
+PROFILE="$(cat "$HOME/.dotfiles_profile" 2>/dev/null || echo "minimal")"
+
+if ! $CONKY && [[ "$PROFILE" == "desktop" ]]; then
+    echo ""
+    echo "  Desktop profile detected. Install Conky widget? [y/N]"
+    read -r -t 10 conky_answer || conky_answer=""
+    [[ "$conky_answer" =~ ^[Yy] ]] && CONKY=true
+fi
+
+if $CONKY; then
+    echo ""
+    echo "Installing Conky widget..."
+
+    # Link the .Conky directory
+    link_file "$DOTFILES_DIR/.config/.Conky" "$HOME/.config/.Conky"
+
+    # Make shell scripts executable
+    chmod +x "$DOTFILES_DIR/.config/.Conky/conkyx/scripts/sh/"* 2>/dev/null
+    chmod +x "$DOTFILES_DIR/.config/.Conky/conkyx/bin/"* 2>/dev/null
+
+    # Install conky if not present
+    if ! command -v conky &>/dev/null; then
+        echo "  Installing conky..."
+        pkg_install conky || echo "  Warning: could not install conky automatically" >&2
+    fi
+
+    # Install fonts if the font directories exist
+    FONT_DIR="$DOTFILES_DIR/.config/.Conky/conkyx/fonts"
+    if [[ -d "$FONT_DIR" ]]; then
+        LOCAL_FONTS="$HOME/.local/share/fonts"
+        mkdir -p "$LOCAL_FONTS"
+        fonts_installed=0
+        for font_subdir in "$FONT_DIR"/*/; do
+            [[ -d "$font_subdir" ]] || continue
+            for ttf in "$font_subdir"/*.ttf "$font_subdir"/*.otf; do
+                [[ -f "$ttf" ]] || continue
+                fname="$(basename "$ttf")"
+                if [[ ! -f "$LOCAL_FONTS/$fname" ]]; then
+                    cp "$ttf" "$LOCAL_FONTS/"
+                    fonts_installed=$((fonts_installed + 1))
+                fi
+            done
+        done
+        if [[ $fonts_installed -gt 0 ]]; then
+            echo "  installed: $fonts_installed fonts to $LOCAL_FONTS"
+            fc-cache -f "$LOCAL_FONTS" 2>/dev/null || true
+        else
+            echo "  fonts: already installed"
+        fi
+    fi
+
+    # Try to compile C scripts if gcc is available
+    CONKY_C_SRC="$DOTFILES_DIR/.config/.Conky/conkyx/scripts/C/Source"
+    if command -v gcc &>/dev/null && [[ -f "$CONKY_C_SRC/Makefile" ]]; then
+        echo "  Compiling C helper scripts..."
+        if make -C "$CONKY_C_SRC" install 2>/dev/null; then
+            echo "  compiled: C scripts built and installed"
+        else
+            echo "  skipped: C compilation failed (shell scripts will be used)"
+        fi
+    else
+        echo "  skipped: gcc not found (shell scripts will be used as backend)"
+    fi
+
+    # Create autostart entry for desktop environments
+    AUTOSTART_DIR="$HOME/.config/autostart"
+    mkdir -p "$AUTOSTART_DIR"
+    CONKY_START="$HOME/.config/.Conky/conkyx/bin/conkyx-start.sh"
+    cat > "$AUTOSTART_DIR/conkyx.desktop" << DESKEOF
+[Desktop Entry]
+Type=Application
+Name=Conkyx System Monitor
+Exec=$CONKY_START
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+DESKEOF
+    echo "  created: autostart entry for Conky"
+
+    echo "  Conky installed. Start with: ~/.config/.Conky/conkyx/bin/conkyx-start.sh"
+    echo "  Override backend: CONKY_BACKEND=sh (or c, py)"
+    echo "  Override weather: CONKY_WEATHER_LOCATION=<zip>"
 fi
 
 # --- Install dotfiles command ---

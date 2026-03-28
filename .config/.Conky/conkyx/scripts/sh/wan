@@ -1,0 +1,29 @@
+#!/bin/sh
+# wan — Print external/public IP address
+# Output: IP string (e.g., "203.0.113.45")
+
+# Try lightweight plain-text services first, fall back to dyndns HTML parsing
+for url in \
+    "https://api.ipify.org" \
+    "https://ifconfig.me/ip" \
+    "https://icanhazip.com" \
+    "http://checkip.dyndns.org"
+do
+    if command -v curl >/dev/null 2>&1; then
+        result="$(curl -s --max-time 5 "$url" 2>/dev/null)"
+    elif command -v wget >/dev/null 2>&1; then
+        result="$(wget -qO- --timeout=5 "$url" 2>/dev/null)"
+    else
+        echo "N/A"
+        exit 1
+    fi
+
+    # Extract IP (handles both plain text and HTML responses)
+    ip="$(echo "$result" | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)"
+    if [ -n "$ip" ]; then
+        echo "$ip"
+        exit 0
+    fi
+done
+
+echo "N/A"

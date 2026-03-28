@@ -1,0 +1,36 @@
+#!/bin/sh
+# battery_status — Print battery percentage and charge state
+# Output: "85% (Charging)" or "100% (Charged)" or "N/A"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+. "$SCRIPT_DIR/detect.sh"
+
+if [ -z "$CONKY_BAT_DEV" ]; then
+    echo "N/A"
+    exit 0
+fi
+
+bat="/sys/class/power_supply/$CONKY_BAT_DEV"
+
+capacity="$(cat "$bat/capacity" 2>/dev/null)"
+status="$(cat "$bat/status" 2>/dev/null)"
+
+if [ -z "$capacity" ] || [ -z "$status" ]; then
+    echo "N/A"
+    exit 0
+fi
+
+case "$status" in
+    Charging)
+        if [ "$capacity" -ge 100 ]; then
+            echo "${capacity}% (Charged)"
+        else
+            echo "${capacity}% (Charging)"
+        fi
+        ;;
+    Full)
+        echo "${capacity}% (Charged)"
+        ;;
+    *)
+        echo "${capacity}% ($status)"
+        ;;
+esac

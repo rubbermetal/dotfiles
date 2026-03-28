@@ -1,3 +1,8 @@
+-- bottom_left_conkyrc — Journal log widget (bottom-left corner)
+
+local home = os.getenv("HOME") or "/home/pi"
+local conkyx = home .. "/.config/.Conky/conkyx"
+
 conky.config = {
     update_interval = 5,
     total_run_times = 0,
@@ -9,9 +14,9 @@ conky.config = {
     alignment = 'bottom_left',
     gap_x = 10,
     gap_y = 10,
-    minimum_width = 500,  -- Adjust as needed
-    maximum_width = 500,  -- Adjust as needed
-    minimum_height = 200,  -- Adjust as needed
+    minimum_width = 500,
+    maximum_width = 500,
+    minimum_height = 200,
     background = false,
     double_buffer = true,
     draw_shades = true,
@@ -20,11 +25,11 @@ conky.config = {
     draw_graph_borders = false,
     default_color = 'white',
     use_spacer = 'none',
-    font = 'Droid Sans:size=8',
-	font = 'Noto Sans:size=8',
-	use_xft = true,
+    font = 'Noto Sans:size=8',
+    use_xft = true,
     format_human_readable = true,
-    lua_load = '/home/rubbermetal/.Conky/conkyx/config/set_variables.lua',
+
+    lua_load = conkyx .. '/config/set_variables.lua',
 };
 
 conky.text = [[

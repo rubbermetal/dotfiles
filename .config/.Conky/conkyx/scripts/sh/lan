@@ -1,0 +1,13 @@
+#!/bin/sh
+# lan — Print local IP address
+# Output: IP string (e.g., "192.168.1.100")
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+. "$SCRIPT_DIR/detect.sh"
+
+if [ -n "$CONKY_NET_IFACE" ]; then
+    ip -4 addr show "$CONKY_NET_IFACE" 2>/dev/null \
+        | awk '/inet / { split($2, a, "/"); print a[1]; exit }'
+else
+    # Fallback: route-based detection
+    ip route get 1.1.1.1 2>/dev/null | awk '{ for(i=1;i<=NF;i++) if($i=="src") print $(i+1); exit }'
+fi

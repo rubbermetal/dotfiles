@@ -1,0 +1,26 @@
+#!/bin/sh
+# weather — Fetch current weather from AccuWeather RSS
+# Usage: weather <location_code>
+# Output: "Partly Sunny: 72°F"
+
+location="${1:?Usage: weather <location_code>}"
+metric="${CONKY_WEATHER_METRIC:-0}"
+url="http://rss.accuweather.com/rss/liveweather_rss.asp?metric=${metric}&locCode=${location}"
+
+if command -v curl >/dev/null 2>&1; then
+    data="$(curl -s --max-time 10 "$url" 2>/dev/null)"
+elif command -v wget >/dev/null 2>&1; then
+    data="$(wget -qO- --timeout=10 "$url" 2>/dev/null)"
+else
+    echo "N/A"
+    exit 1
+fi
+
+# Extract "Currently: ..." from <title> tags
+result="$(echo "$data" | grep -o '<title>Currently: [^<]*' | head -1 | sed 's/<title>Currently: //')"
+
+if [ -n "$result" ]; then
+    echo "$result"
+else
+    echo "N/A"
+fi

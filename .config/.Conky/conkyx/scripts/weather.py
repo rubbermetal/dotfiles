@@ -9,7 +9,8 @@ import xmltodict
 
 # 0 for Farenheit - 1 for Celsius
 METRIC = 0
-IMAGEFOLDER = "/home/rubbermetal/.Conky/conkyx/images/"
+import os
+IMAGEFOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "images") + "/"
 
 def get_weather(location_code):
     # URL to fetch weather data

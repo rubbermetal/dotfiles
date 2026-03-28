@@ -1,103 +1,185 @@
-function conky_get_variable(var_name)
-    local variables = {
-    wireless = "python3 /home/madhatter/.config/.Conky/conkyx/scripts/wireless-essid.py"
-    }
-    return variables[var_name]
+-------------------------------------------------------------------------------
+-- set_variables.lua — Conky helper script dispatcher
+--
+-- Auto-detects the conkyx base directory from this file's location,
+-- then picks the best available backend for each helper script:
+--   1. C compiled binary  (fastest, needs compilation)
+--   2. Shell script       (portable, always works on Linux)
+--   3. Python script      (optional, needs python3 + psutil)
+--
+-- Override the backend by setting CONKY_BACKEND env var to "c", "sh", or "py"
+-------------------------------------------------------------------------------
+
+-- Resolve base directory from this file's path
+-- This file lives in <conkyx>/config/set_variables.lua
+local function get_base_dir()
+    local src = debug.getinfo(1, "S").source
+    if src:sub(1, 1) == "@" then
+        src = src:sub(2)
+    end
+    -- Strip /config/set_variables.lua to get conkyx root
+    return src:match("(.+)/config/set_variables%.lua$") or
+           os.getenv("HOME") .. "/.config/.Conky/conkyx"
 end
+
+local BASE = get_base_dir()
+local SCRIPTS = BASE .. "/scripts"
+
+-- Backend preference: env override or auto-detect per script
+local ENV_BACKEND = os.getenv("CONKY_BACKEND")  -- "c", "sh", or "py"
+
+local function file_exists(path)
+    local f = io.open(path, "r")
+    if f then f:close() return true end
+    return false
+end
+
+local function is_executable(path)
+    -- Check if file exists and is executable
+    local f = io.popen("test -x '" .. path .. "' && echo yes 2>/dev/null")
+    local result = f:read("*a")
+    f:close()
+    return result:match("yes") ~= nil
+end
+
+-- Find the best available script for a given name
+-- Returns the full command string
+local function resolve_script(name, args)
+    args = args or ""
+    local candidates = {}
+
+    if ENV_BACKEND == "c" then
+        candidates = { SCRIPTS .. "/C/" .. name }
+    elseif ENV_BACKEND == "sh" then
+        candidates = { SCRIPTS .. "/sh/" .. name }
+    elseif ENV_BACKEND == "py" then
+        candidates = { "python3 " .. SCRIPTS .. "/" .. name .. ".py" }
+    else
+        -- Auto: try C first, then shell, then Python
+        candidates = {
+            SCRIPTS .. "/C/" .. name,
+            SCRIPTS .. "/sh/" .. name,
+        }
+    end
+
+    for _, cmd in ipairs(candidates) do
+        -- For python3 commands, check the .py file
+        local check_path = cmd:match("python3 (.+)") or cmd
+        if is_executable(check_path) or file_exists(check_path) then
+            if args ~= "" then
+                return cmd .. " " .. args
+            end
+            return cmd
+        end
+    end
+
+    -- Last resort: try Python if nothing else found
+    local py_script = SCRIPTS .. "/" .. name .. ".py"
+    if file_exists(py_script) then
+        local cmd = "python3 " .. py_script
+        if args ~= "" then cmd = cmd .. " " .. args end
+        return cmd
+    end
+
+    -- Nothing found — return shell version (will produce "N/A" if missing)
+    return SCRIPTS .. "/sh/" .. name .. (args ~= "" and (" " .. args) or "")
+end
+
+-- Run a script and return its output (trimmed)
+local function run(name, args)
+    local cmd = resolve_script(name, args)
+    local f = io.popen(cmd)
+    local output = f:read("*a") or ""
+    f:close()
+    return output:gsub("%s+$", "")
+end
+
+-------------------------------------------------------------------------------
+-- Conky functions (called from conkyrc via: ${lua conky_function_name})
+-------------------------------------------------------------------------------
+
 function conky_get_essid()
-    local file = io.popen("/home/madhatter/.config/.Conky/conkyx/scripts/C/wireless-essid")
-    local output = file:read("*a")
-    file:close()
-     output = string.gsub(output, "\n", "")
-    return output
+    return run("wireless-essid")
 end
+
 function conky_get_journal()
-    local f = io.popen("journalctl -n 5 --no-pager -o short | awk '{ gsub(\"archlinux\", \"\"); print substr($0, index($0, $4)) }'")
-    local l = f:read("*a")
+    local f = io.popen("journalctl -n 5 --no-pager -o short 2>/dev/null | awk '{ $1=$2=$3=\"\"; print substr($0,4) }'")
+    local l = f:read("*a") or ""
     f:close()
     return l
 end
+
 function conky_get_wan_ip()
-    local f = io.popen("/home/madhatter/.config/.Conky/conkyx/scripts/C/wan")
-    local ip = f:read("*a")
-    f:close()
-    ip = string.gsub(ip, "\n", "")
-    return ip
+    return run("wan")
 end
+
 function conky_get_lan_ip()
-    local f = io.popen("/home/madhatter/.config/.Conky/conkyx/scripts/C/lan")
-    local ip = f:read("*a")
-    f:close()
-    ip = string.gsub(ip, "\n", "")
-    return ip
+    return run("lan")
 end
+
 function conky_get_downspeed()
-    local f = io.popen("/home/madhatter/.config/.Conky/conkyx/scripts/C/interfacedownspeed")
-    local output = f:read("*a")
-    f:close()
-    output = string.gsub(output, "\n", "")
-    return output
+    return run("interfacedownspeed")
 end
+
 function conky_get_upspeed()
-    local f = io.popen("/home/madhatter/.config/.Conky/conkyx/scripts/C/interfaceupspeed")
-    local output = f:read("*a")
-    f:close()
-    output = string.gsub(output, "\n", "")
-    return output
+    return run("interfaceupspeed")
 end
+
 function conky_battery_status()
-    local f = io.popen("/home/madhatter/.config/.Conky/conkyx/scripts/C/battery_status")
-    local output = f:read("*a")
-    f:close()
-    output = string.gsub(output, "\n", "")
-    return output
+    return run("battery_status")
 end
+
 function conky_battery_condition()
-    local f = io.popen("/home/madhatter/.config/.Conky/conkyx/scripts/C/battery_condition")
-    local output = f:read("*a")
-    f:close()
-    output = string.gsub(output, "\n", "")
-    return output
+    return run("battery_condition")
 end
+
 function conky_get_totalmem()
-    local f = io.popen("/home/madhatter/.config/.Conky/conkyx/scripts/C/totalmem")
-    local output = f:read("*a")
-    f:close()
-    output = string.gsub(output, "\n", "")
-    return output
+    return run("totalmem")
 end
+
 function conky_get_usedmem()
-    local f = io.popen("/home/madhatter/.config/.Conky/conkyx/scripts/C/usedmem")
-    local output = f:read("*a")
-    f:close()
-    output = string.gsub(output, "\n", "")
-    return output
+    return run("usedmem")
 end
+
 function conky_get_totalswap()
-    local f = io.popen("/home/madhatter/.config/.Conky/conkyx/scripts/C/totalswap")
-    local output = f:read("*a")
-    f:close()
-    output = string.gsub(output, "\n", "")
-    return output
+    return run("totalswap")
 end
+
 function conky_get_freeswap()
-    local f = io.popen("/home/madhatter/.config/.Conky/conkyx/scripts/C/freeswap")
-    local output = f:read("*a")
-    f:close()
-    output = string.gsub(output, "\n", "")
-    return output
+    return run("freeswap")
 end
+
 function conky_get_usedswap()
-    local f = io.popen("/home/madhatter/.config/.Conky/conkyx/scripts/C/usedswap")
-    local output = f:read("*a")
-    f:close()
-    output = string.gsub(output, "\n", "")
-    return output
+    return run("usedswap")
 end
+
+function conky_get_freemem()
+    return run("freemem")
+end
+
 function conky_get_moonphase()
-    local f = io.popen("/home/madhatter/.config/.Conky/conkyx/scripts/C/moon_phase")
-    local output = f:read("*a")
-    f:close()
-    output = string.gsub(output, "\n", "")
-    return output
+    return run("moon_phase")
+end
+
+-- Weather: location code can be overridden via CONKY_WEATHER_LOCATION env var
+function conky_get_weather()
+    local location = os.getenv("CONKY_WEATHER_LOCATION") or "48178"
+    return run("weather", location)
+end
+
+-- Core temps: one function per core slot (1-4)
+function conky_get_core_temp_1()
+    return run("core_temps", "1")
+end
+
+function conky_get_core_temp_2()
+    return run("core_temps", "2")
+end
+
+function conky_get_core_temp_3()
+    return run("core_temps", "3")
+end
+
+function conky_get_core_temp_4()
+    return run("core_temps", "4")
 end

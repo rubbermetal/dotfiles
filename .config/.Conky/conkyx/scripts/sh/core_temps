@@ -1,0 +1,54 @@
+#!/bin/sh
+# core_temps — Print CPU core temperature in Fahrenheit
+# Usage: core_temps [core_number]
+# Output: "142.5°F"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+. "$SCRIPT_DIR/detect.sh"
+
+core="${1:-1}"
+
+# Method 1: thermal_zone (works on RPi, most ARM, many x86)
+if [ -n "$CONKY_THERMAL" ] && [ -f "$CONKY_THERMAL/temp" ]; then
+    temp_mc="$(cat "$CONKY_THERMAL/temp" 2>/dev/null)"
+    if [ -n "$temp_mc" ]; then
+        awk "BEGIN { c = $temp_mc / 1000; printf \"%.1f°F\n\", (c * 9/5) + 32 }"
+        exit 0
+    fi
+fi
+
+# Method 2: hwmon (per-core, x86 with coretemp driver)
+for hwmon in /sys/class/hwmon/hwmon*; do
+    name="$(cat "$hwmon/name" 2>/dev/null)"
+    case "$name" in
+        coretemp|k10temp|cpu_thermal)
+            # temp1_input is usually package, temp2+ are cores
+            idx=$((core + 1))
+            temp_file="$hwmon/temp${idx}_input"
+            [ -f "$temp_file" ] || temp_file="$hwmon/temp1_input"
+            if [ -f "$temp_file" ]; then
+                temp_mc="$(cat "$temp_file" 2>/dev/null)"
+                awk "BEGIN { c = $temp_mc / 1000; printf \"%.1f°F\n\", (c * 9/5) + 32 }"
+                exit 0
+            fi
+            ;;
+    esac
+done
+
+# Method 3: sensors command (fallback)
+if command -v sensors >/dev/null 2>&1; then
+    temp_c="$(sensors 2>/dev/null | awk -v core="$core" '
+        /^Core / {
+            n++
+            if (n == core) {
+                match($0, /\+([0-9.]+)°C/, a)
+                if (RSTART) print a[1]
+            }
+        }
+    ')"
+    if [ -n "$temp_c" ]; then
+        awk "BEGIN { printf \"%.1f°F\n\", ($temp_c * 9/5) + 32 }"
+        exit 0
+    fi
+fi
+
+echo "N/A"

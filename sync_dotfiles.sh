@@ -26,7 +26,6 @@ declare -a SYNC_CONFIGS=(
     ".Conky"
     "alacritty"
     "btop"
-    "conky"
     "macchina"
     "neofetch"
     "picom"

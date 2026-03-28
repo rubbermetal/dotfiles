@@ -1,0 +1,31 @@
+#!/bin/sh
+# wireless-essid — Print WiFi ESSID and signal strength
+# Output: "MyNetwork (-65 dBm)"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+. "$SCRIPT_DIR/detect.sh"
+
+iface="${1:-$CONKY_NET_IFACE}"
+
+# Get ESSID
+if command -v iwgetid >/dev/null 2>&1; then
+    essid="$(iwgetid "$iface" -r 2>/dev/null)"
+elif command -v iw >/dev/null 2>&1; then
+    essid="$(iw dev "$iface" info 2>/dev/null | awk '/ssid/ { $1=""; print substr($0,2) }')"
+fi
+
+if [ -z "$essid" ]; then
+    echo "Not connected"
+    exit 0
+fi
+
+# Get signal strength
+signal=""
+if command -v iw >/dev/null 2>&1; then
+    signal="$(iw dev "$iface" link 2>/dev/null | awk '/signal:/ { print $2 " dBm" }')"
+fi
+
+if [ -n "$signal" ]; then
+    echo "$essid ($signal)"
+else
+    echo "$essid"
+fi

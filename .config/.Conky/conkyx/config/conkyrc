@@ -1,229 +1,139 @@
+-- =============================================================================
+-- conkyrc — System monitor widget
+--
+-- Fonts required: ConkySymbols, Droid Sans, Noto Sans, PWSmallIcons,
+--   Digital Camera Symbols, Technology, Arial, Camouflage Snow, Aachen Vertical
+--
+-- Scripts are resolved automatically by set_variables.lua
+-- (C binary -> shell -> Python, in order of preference)
+-- =============================================================================
+
+-- Resolve paths relative to this config file's location
+local home = os.getenv("HOME") or "/home/pi"
+local conkyx = home .. "/.config/.Conky/conkyx"
+
 conky.config = {
--- .bashrc							                                Conky Config Script            
--- ----------------------------------------------------------------------------------------------- 
--- Fonts used:                                                                                                                          
--- ConkySymbols              Droid Sans                                                                          
--- Noto Sans                 PWSmallIcons                                                                   
--- Digital Camera Symbols    Technology                                                                        
--- arial                     Camouflage Snow                                                            
--- ----------------------------------------------------------------------------------------------- 
--- Required Scripts                                                                                                                
--- weather.sh
--- battery_status.py
--- freemem.py
--- freeswap.py
--- totalmem.py
--- usedmem.py
--- totalswap.py
--- usedswap.py
--- interfacedownspeed.py
--- interfaceupspeed.py
--- lan.py
--- wan.py
--- curl                                                                                                                                        
--- ----------------------------------------------------------------------------------------------- 
--- Description                                                                                                                         
--- I modeled this after the simple system monitor applet on KDE. I used this   
--- for a long time and built a conky around it. I decided to put it all into a         
--- conky for simplification and efficiency purposes.                                                 
--- ----------------------------------------------------------------------------------------------- 
+    background = true,
+    font = 'Noto Sans:size=10',
+    use_xft = true,
+    xftalpha = 0.5,
+    update_interval = 1.0,
+    total_run_times = 0,
 
-	background = true,
-	font = 'Droid Sans:size=8',
-	font = 'Noto Sans:size=10',
-	use_xft = true,
-	xftalpha = 0.5,
-	update_interval = 1.0,
-	total_run_times = 0,
+    own_window = true,
+    own_window_transparent = true,
+    own_window_argb_visual = true,
+    own_window_type = 'normal',
+    own_window_class = 'conky-semi',
+    own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
 
-	own_window = true,
-	own_window_transparent = true,
-	own_window_argb_visual = true,
-	own_window_type = 'normal',
-	own_window_class = 'conky-semi',
-	own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+    double_buffer = true,
+    draw_shades = true,
+    draw_outline = true,
+    draw_borders = false,
+    draw_graph_borders = false,
+    minimum_width = 408,
+    maximum_width = 600,
+    default_color = '#ffffff',
+    default_shade_color = '#000000',
+    alignment = 'top_right',
+    gap_x = 20,
+    gap_y = 5,
+    no_buffers = true,
+    cpu_avg_samples = 2,
+    override_utf8_locale = true,
+    uppercase = false,
+    use_spacer = 'none',
+    format_human_readable = true,
+    temperature_unit = 'fahrenheit',
 
-	double_buffer = true,
-	draw_shades = true,
-	draw_outline = false,
-	draw_borders = false,
-	draw_graph_borders = false,
-	minimum_width = 408,
-	maximum_width = 600,
-	default_color = '#ffffff',
-	default_shade_color = '#000000',
-	draw_outline = true,
-	alignment = 'top_right',
-	gap_x = 20,
-	gap_y = 5,
-	no_buffers = true,
-	cpu_avg_samples = 2,
-	override_utf8_locale = true,
-	uppercase = false,
-	use_spacer = 'none',
-	format_human_readable = true,
-	temperature_unit = 'fahrenheit',
-	lua_load = '/home/madhatter/.config/.Conky/conkyx/config/set_variables.lua',
+    lua_load = conkyx .. '/config/set_variables.lua',
 };
 
+-- Helper: path to scripts directory (used in execi calls)
+-- These use the shell scripts directly; set_variables.lua handles the
+-- Lua-called functions with its own fallback logic.
+local sh = conkyx .. '/scripts/sh/'
+
 conky.text = [[
-# ----------------------------------------------------------------------------------------------- #
-# Load CPU icons,graph and bars for 4 cores
-# ----------------------------------------------------------------------------------------------- #
-
+# ---- CPU bars (4 cores) --------------------------------------------------- #
 ${alignr 2}${goto 255}${color orange}${font ConkySymbols:size=16}F${font} ${font arial:size=10:bold}${color orange}${cpubar cpu0 10,100}${font}
 ${alignr 2}${goto 255}${color orange}${font ConkySymbols:size=16}F${font} ${font arial:size=10:bold}${color orange}${cpubar cpu1 10,100}${font}
-${alignr 2}${goto 255}${color orange}${font ConkySymbols:size=16}F${font} ${font arial:size=10:bold}${color orange}${cpubar cpu0 10,100}${font}
-${alignr 2}${goto 255}${color orange}${font ConkySymbols:size=16}F${font} ${font arial:size=10:bold}${color orange}${cpubar cpu1 10,100}${font}
-# ----------------------------------------------------------------------------------------------- #
-# Show the ESSID and strength (dBm) of the Wifi we are connected to.
-# ----------------------------------------------------------------------------------------------- #
-${alignr 2}${goto 255}${voffset 15}${font arial:size=10:bold}${color orange}${font ConkySymbols:size=16}G${font} ${font arial:size=10:bold}${color orange}${}${font}
-# ----------------------------------------------------------------------------------------------- #
-# Shows if connected to a vpn. Green lock for yes, red lock for no
-# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 255}${color orange}${font ConkySymbols:size=16}F${font} ${font arial:size=10:bold}${color orange}${cpubar cpu2 10,100}${font}
+${alignr 2}${goto 255}${color orange}${font ConkySymbols:size=16}F${font} ${font arial:size=10:bold}${color orange}${cpubar cpu3 10,100}${font}
+# ---- WiFi ESSID and signal ------------------------------------------------ #
+${alignr 2}${goto 255}${voffset 15}${font arial:size=10:bold}${color orange}${font ConkySymbols:size=16}G${font} ${font arial:size=10:bold}${color orange}${lua conky_get_essid}${font}
+# ---- VPN status ----------------------------------------------------------- #
 ${alignr 2}${goto 255}${font arial:size=10:bold}      ${color orange}VPN:${font} ${if_up tun0}${font PWSmallIcons:size=18}${color green}b${font}${else}${font PWSmallIcons:size=18}${color red}c${font}${endif}
-# ----------------------------------------------------------------------------------------------- #
-# Get our external IP address
-# ----------------------------------------------------------------------------------------------- #
-${alignr 2}${goto 255}${font ConkySymbols:size=16}${color orange}I${font} ${font arial:size=10:bold}${color orange}${execi 120 ~/.config/.Conky/conkyx/scripts/C/wan}${font}
-# ----------------------------------------------------------------------------------------------- #
-# Get our local IP address
-# ----------------------------------------------------------------------------------------------- #
+# ---- External IP ---------------------------------------------------------- #
+${alignr 2}${goto 255}${font ConkySymbols:size=16}${color orange}I${font} ${font arial:size=10:bold}${color orange}${lua conky_get_wan_ip}${font}
+# ---- Local IP ------------------------------------------------------------- #
 ${alignr 2}${goto 255} ${font arial:size=10:bold}${color orange}     ${lua conky_get_lan_ip}${font}
-# ----------------------------------------------------------------------------------------------- #
-# Show the current upload and download speed for wifi
-# ----------------------------------------------------------------------------------------------- #
-${alignr 2}${goto 255}        ${font ConkySymbols:size=10}e${font}${font arial:size=10:bold}${color white} ${}${font}
-${alignr 2}${goto 255}        ${font ConkySymbols:size=10}${color orange}d${font}${font arial:size=10:bold}${color white} ${}${font}
-# ----------------------------------------------------------------------------------------------- #
-# Load the battery bar
-# ----------------------------------------------------------------------------------------------- #
-${alignr 2}${goto 255}${font Digital Camera Symbols:size=11}${color orange}d${font}${font arial:size=10:bold}${color orange}  ${}${font}
-# ----------------------------------------------------------------------------------------------- #
-# Show the battery health left in percentage
-# ----------------------------------------------------------------------------------------------- #
-${alignr 2}${goto 255}${voffset -23}${offset 21}${font arial:size=8:bold}${color white}   ${}${font}
-${alignr 2}${goto 255}${voffset -9}${offset 21}${font arial:size=8:bold}${color white}   ${} Health${font}
-# ----------------------------------------------------------------------------------------------- #
-# Show the hard disk read and write rates
-# ----------------------------------------------------------------------------------------------- #
+# ---- Network speed -------------------------------------------------------- #
+${alignr 2}${goto 255}        ${font ConkySymbols:size=10}e${font}${font arial:size=10:bold}${color white} ${lua conky_get_downspeed}${font}
+${alignr 2}${goto 255}        ${font ConkySymbols:size=10}${color orange}d${font}${font arial:size=10:bold}${color white} ${lua conky_get_upspeed}${font}
+# ---- Battery -------------------------------------------------------------- #
+${alignr 2}${goto 255}${font Digital Camera Symbols:size=11}${color orange}d${font}${font arial:size=10:bold}${color orange}  ${lua conky_battery_status}${font}
+${alignr 2}${goto 255}${voffset -23}${offset 21}${font arial:size=8:bold}${color white}   ${lua conky_battery_status}${font}
+${alignr 2}${goto 255}${voffset -9}${offset 21}${font arial:size=8:bold}${color white}   ${lua conky_battery_condition} Health${font}
+# ---- Disk I/O ------------------------------------------------------------- #
 ${alignr 2}${goto 255}${font ConkySymbols:size=16}${color orange}k${font}
-${alignr 2}${goto 280}${font arial:size=10:bold}${color orange}R        ${color white}${diskio_read sda}${font}
-${alignr 2}${goto 280}${font arial:size=10:bold}${color orange}W       ${color white}${diskio_write sda}${font}
-# ----------------------------------------------------------------------------------------------- #
-# Show our distro's logo
-# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 280}${font arial:size=10:bold}${color orange}R        ${color white}${diskio_read}${font}
+${alignr 2}${goto 280}${font arial:size=10:bold}${color orange}W       ${color white}${diskio_write}${font}
+# ---- Distro logo --------------------------------------------------------- #
 ${voffset -370}  ${font ConkySymbols:size=75}${color blue}t${font}
-# ----------------------------------------------------------------------------------------------- #
-# Show the used and free memory and load the memory bar
-# ----------------------------------------------------------------------------------------------- #
+# ---- Memory --------------------------------------------------------------- #
 ${voffset 68}${goto 30}${font arial:size=13:bold}   ${color orange}Mem: ${color white}${lua conky_get_totalmem}${font}
-${voffset -6}${goto 31}${font arial:size=8:bold}    ${color red}Used:${color white}${lua conky_get_usedmem} ${color green}Free:${color white} ${execi 2 ~/.config/.Conky/conkyx/scripts/C/freemem}${font}
+${voffset -6}${goto 31}${font arial:size=8:bold}    ${color red}Used:${color white}${lua conky_get_usedmem} ${color green}Free:${color white} ${lua conky_get_freemem}${font}
 ${voffset -8}${goto 44}${font arial:size=13:bold}${color orange}${membar 6,170}${font}
-
-# ----------------------------------------------------------------------------------------------- #
-# Show the amount of used and free swap space and load the swap bar
-# ----------------------------------------------------------------------------------------------- #
+# ---- Swap ----------------------------------------------------------------- #
 ${voffset -16}${goto 30}${font arial:size=13:bold}   ${color orange}Swap: ${color white}${lua conky_get_totalswap}${font}
 ${voffset -6}${goto 31}${font arial:size=8:bold}     ${color red}Used:${color white}${lua conky_get_usedswap} ${color green}Free:${color white} ${lua conky_get_freeswap}${font}
 ${voffset -8}${goto 44}${font arial:size=13:bold}${color orange}${swapbar 6,170}${font}
-# ----------------------------------------------------------------------------------------------- #
-# List our current kernel version
-# ----------------------------------------------------------------------------------------------- #
+# ---- Kernel / Distro ------------------------------------------------------ #
 ${voffset -148}${font arial:size=10:bold}     ${color white}${kernel}${font}
-# ----------------------------------------------------------------------------------------------- #
-# List our distro
-# ----------------------------------------------------------------------------------------------- #
 ${voffset -33}${font arial:size=10:bold}     ${color white}${distribution}${font}
-# ----------------------------------------------------------------------------------------------- #
-# Lod the ram icon for memory and swap
-# ----------------------------------------------------------------------------------------------- #
+# ---- RAM icons ------------------------------------------------------------ #
 ${voffset 31}${font ConkySymbols:size=26}${color orange}j${font}
 ${voffset 11}${font ConkySymbols:size=26}${color orange}j${font}
-
-
-
-# ----------------------------------------------------------------------------------------------- #
-# List how many processes we have and then print the top 3
-# ----------------------------------------------------------------------------------------------- #
+# ---- Processes ------------------------------------------------------------ #
 ${font arial:size=13:bold}        Proc: ${color white}${processes}${font}
 ${font arial:size=10:bold}          ${top name 1}${font}
 ${font arial:size=10:bold}          ${top name 2}${font}
 ${font arial:size=10:bold}          ${top name 3}${font}
-# ----------------------------------------------------------------------------------------------- #
-# Load the processes icon
-# ----------------------------------------------------------------------------------------------- #
 ${voffset -92}${font ConkySymbols:size=26}${color orange}N${font}
-# ----------------------------------------------------------------------------------------------- #
-# Print the cpu usage in percents for 4 cores
-# ----------------------------------------------------------------------------------------------- #
+# ---- CPU percentages ------------------------------------------------------ #
 ${alignr 2}${goto 255}${voffset -356}                     ${font arial:size=8:bold}${color white}${cpu cpu0}%${font}
 ${alignr 2}${goto 255}${voffset 4}                     ${font arial:size=8:bold}${color white}${cpu cpu1}%${font}
-${alignr 2}${goto 255}${voffset 4}                     ${font arial:size=8:bold}${color white}${cpu cpu0}%${font}
-${alignr 2}${goto 255}${voffset 4}                     ${font arial:size=8:bold}${color white}${cpu cpu1}%${font}
-# ----------------------------------------------------------------------------------------------- #
-# Load the free space bar for /home and /
-# ----------------------------------------------------------------------------------------------- #
+${alignr 2}${goto 255}${voffset 4}                     ${font arial:size=8:bold}${color white}${cpu cpu2}%${font}
+${alignr 2}${goto 255}${voffset 4}                     ${font arial:size=8:bold}${color white}${cpu cpu3}%${font}
+# ---- Disk usage bars ------------------------------------------------------ #
 ${alignr 2}${goto 222}${voffset 267}${font arial:size=10:bold}${color orange}              ${fs_bar 10,100 /home}${font}
 ${alignr 2}${goto 222}${voffset }${font arial:size=10:bold}${color orange}              ${fs_bar 10,100 /}${font}
-# ----------------------------------------------------------------------------------------------- #
-# Print the used space in percents for /home and /
-# ----------------------------------------------------------------------------------------------- #
 ${alignr 2}${goto 311}${voffset -45}${font arial:size=8:bold}${color white}/home            ${color white} ${fs_used_perc /home}%${font}
 ${alignr 2}${goto 311}${voffset -3}${font arial:size=8:bold}${color white} root               ${color white}${fs_used_perc /}%${font}
-# ----------------------------------------------------------------------------------------------- #
-# Print the current date
-# ----------------------------------------------------------------------------------------------- #
+# ---- Date / Time ---------------------------------------------------------- #
 ${alignr 2}${goto 100}${voffset -375}${font Camouflage Snow:size=14:bold}${color orange}${time %m/%d/%Y}${font}
-# ----------------------------------------------------------------------------------------------- #
-# Print the current time
-# ----------------------------------------------------------------------------------------------- #
 ${alignr 2}${goto 125}${voffset 7}${font Technology:size=16:bold}${color orange}${time %I:%M:%S}${font}
-# ----------------------------------------------------------------------------------------------- #
-# Print the name of the current day
-# ----------------------------------------------------------------------------------------------- #
 ${alignr 2}${goto 95}${voffset -75}${font Camouflage Snow:size=16:bold}${color orange}${time %A}${font}
-# ----------------------------------------------------------------------------------------------- #
-# Print whether its am or pm
-# ----------------------------------------------------------------------------------------------- #
 ${alignr 2}${goto 196}${voffset 31}${font Technology:size=16:bold}${color orange}${time %P}${font}
-# ----------------------------------------------------------------------------------------------- #
-# Show the current selection of num lock or caps lock
-# ----------------------------------------------------------------------------------------------- #
+# ---- Num/Caps Lock -------------------------------------------------------- #
 ${alignr 2}${goto 6}${voffset 192}${font arial:size=8:bold}            Num Lock ${color white}${key_num_lock} ${color orange}  Caps Lock ${color white}${key_caps_lock}${font}
-# ----------------------------------------------------------------------------------------------- #
-# Load the weather script. Prints current conditions
-# ----------------------------------------------------------------------------------------------- #
-${alignr 2}${goto 110}${voffset -195}${font arial:size=10:bold}   ${execi  300 ~/.config/.Conky/conkyx/scripts/C/weather 48178}${font}
-# ----------------------------------------------------------------------------------------------- #
-# Load the cpu core temps. Prints current core temps.
-# ----------------------------------------------------------------------------------------------- #
-${alignr 2}${goto 370}${voffset -134}${font arial:size=8:bold}    ${execi  60 ~/.config/.Conky/conkyx/scripts/C/core_temps 1}${font}
-${alignr 2}${goto 370}${voffset 4}${font arial:size=8:bold}    ${execi  60 ~/.config/.Conky/conkyx/scripts/C/core_temps 2}${font}
-${alignr 2}${goto 370}${voffset 4}${font arial:size=8:bold}    ${execi  60 ~/.config/.Conky/conkyx/scripts/C/core_temps 1}${font}
-${alignr 2}${goto 370}${voffset 4}${font arial:size=8:bold}    ${execi  60 ~/.config/.Conky/conkyx/scripts/C/core_temps 2}${font}
-# ----------------------------------------------------------------------------------------------- #
-# Load the cpu graphs. Prints a graph for each core
-# ----------------------------------------------------------------------------------------------- #
+# ---- Weather -------------------------------------------------------------- #
+${alignr 2}${goto 110}${voffset -195}${font arial:size=10:bold}   ${lua conky_get_weather}${font}
+# ---- Core temps ----------------------------------------------------------- #
+${alignr 2}${goto 370}${voffset -134}${font arial:size=8:bold}    ${lua conky_get_core_temp_1}${font}
+${alignr 2}${goto 370}${voffset 4}${font arial:size=8:bold}    ${lua conky_get_core_temp_2}${font}
+${alignr 2}${goto 370}${voffset 4}${font arial:size=8:bold}    ${lua conky_get_core_temp_3}${font}
+${alignr 2}${goto 370}${voffset 4}${font arial:size=8:bold}    ${lua conky_get_core_temp_4}${font}
+# ---- CPU graphs ----------------------------------------------------------- #
 ${alignr 2}${goto 280}${voffset -119}${font arial:size=8:bold}${cpugraph 1 10,98 66FFA500 99ffff00 -t -l}${font}
 ${alignr 2}${goto 280}${voffset 4}${font arial:size=8:bold}${cpugraph 2 10,98 66FFA500 99ffff00 -t -l}${font}
-${alignr 2}${goto 280}${voffset 4}${font arial:size=8:bold}${cpugraph 1 10,98 66FFA500 99ffff00 -t -l}${font}
-${alignr 2}${goto 280}${voffset 4}${font arial:size=8:bold}${cpugraph 2 10,98 66FFA500 99ffff00 -l -t}${font}
-# ----------------------------------------------------------------------------------------------- #
-# Load the Diskiographs
-# ----------------------------------------------------------------------------------------------- #
-${alignr 40}${voffset 220}${diskiograph /dev/sda 10,100 66FFA500 99ffff00 -t -l}
+${alignr 2}${goto 280}${voffset 4}${font arial:size=8:bold}${cpugraph 3 10,98 66FFA500 99ffff00 -t -l}${font}
+${alignr 2}${goto 280}${voffset 4}${font arial:size=8:bold}${cpugraph 4 10,98 66FFA500 99ffff00 -t -l}${font}
+# ---- Disk I/O graph ------------------------------------------------------- #
+${alignr 40}${voffset 220}${diskiograph 10,100 66FFA500 99ffff00 -t -l}
 ${voffset -8}${goto 130}${loadgraph 10,80 66FFA500 99ffff00 -l -t}
-# ----------------------------------------------------------------------------------------------- #
-# Load the available update. Prints number of available updates and list the first 5
-# ----------------------------------------------------------------------------------------------- #
-#${voffset 70}${font ConkySymbols:size=26}${color orange}T${font}
-##${voffset -30}${font arial:size=13:bold}        Updates: ${color white}${}${font}
-#${voffset 4}${font arial:size=10:bold}${}${font}
-#${voffset -235}${goto 300}${font Aachen Vertical:size=10}${freq_g}Ghz${font}
-# ----------------------------------------------------------------------------------------------- #
-# Prints the current moon phase
-# ----------------------------------------------------------------------------------------------- #
+# ---- Moon phase ----------------------------------------------------------- #
 ${alignr 2}${goto 110}${voffset -220}${font arial:size=8:bold}    ${lua conky_get_moonphase}${font}
 ]];

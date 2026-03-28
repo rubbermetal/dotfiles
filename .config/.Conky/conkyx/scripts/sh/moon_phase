@@ -1,0 +1,45 @@
+#!/bin/sh
+# moon_phase — Print current moon phase name and illumination percentage
+# Output: "Waxing Gibbous 65.3%"
+
+# Reference new moon: January 6, 2000 (Julian date 2451550.1)
+# Lunar cycle: 29.53058867 days
+
+# Calculate Julian date for current time
+# JD = 367*Y - INT(7*(Y+INT((M+9)/12))/4) + INT(275*M/9) + D + 1721013.5 + UT/24
+
+awk 'BEGIN {
+    # Get current time as days since epoch, convert to Julian
+    cmd = "date -u +%s"
+    cmd | getline epoch
+    close(cmd)
+
+    jd = (epoch / 86400.0) + 2440587.5
+
+    # Days since known new moon
+    ref = 2451550.1
+    cycle = 29.53058867
+    days_since = jd - ref
+    phase_frac = (days_since / cycle) - int(days_since / cycle)
+    if (phase_frac < 0) phase_frac += 1.0
+
+    # Phase angle in degrees
+    angle = phase_frac * 360.0
+
+    # Illumination (approximate: using cosine)
+    pi = 3.14159265358979323846
+    illum = (1 - cos(phase_frac * 2 * pi)) / 2.0 * 100.0
+
+    # Phase name based on angle
+    if (angle < 11.25)       name = "New Moon"
+    else if (angle < 78.75)  name = "Waxing Crescent"
+    else if (angle < 101.25) name = "First Quarter"
+    else if (angle < 168.75) name = "Waxing Gibbous"
+    else if (angle < 191.25) name = "Full Moon"
+    else if (angle < 258.75) name = "Waning Gibbous"
+    else if (angle < 281.25) name = "Last Quarter"
+    else if (angle < 348.75) name = "Waning Crescent"
+    else                     name = "New Moon"
+
+    printf "%s %.1f%%\n", name, illum
+}'

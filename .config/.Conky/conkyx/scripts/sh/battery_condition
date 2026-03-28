@@ -1,0 +1,31 @@
+#!/bin/sh
+# battery_condition — Print battery health as percentage of design capacity
+# Output: "92.50%" or "N/A"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+. "$SCRIPT_DIR/detect.sh"
+
+if [ -z "$CONKY_BAT_DEV" ]; then
+    echo "N/A"
+    exit 0
+fi
+
+bat="/sys/class/power_supply/$CONKY_BAT_DEV"
+
+# Try charge_full_design first, then energy_full_design
+if [ -f "$bat/charge_full_design" ]; then
+    design="$(cat "$bat/charge_full_design" 2>/dev/null)"
+    current="$(cat "$bat/charge_full" 2>/dev/null)"
+elif [ -f "$bat/energy_full_design" ]; then
+    design="$(cat "$bat/energy_full_design" 2>/dev/null)"
+    current="$(cat "$bat/energy_full" 2>/dev/null)"
+else
+    echo "N/A"
+    exit 0
+fi
+
+if [ -z "$design" ] || [ -z "$current" ] || [ "$design" -eq 0 ]; then
+    echo "N/A"
+    exit 0
+fi
+
+awk "BEGIN { printf \"%.2f%%\n\", ($current / $design) * 100 }"

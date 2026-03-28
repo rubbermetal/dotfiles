@@ -1,0 +1,29 @@
+#!/bin/sh
+# interfaceupspeed — Print current upload speed
+# Output: "2.10 Mb/s"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+. "$SCRIPT_DIR/detect.sh"
+
+iface="${1:-$CONKY_NET_IFACE}"
+stats="/sys/class/net/${iface}/statistics/tx_bytes"
+
+if [ ! -f "$stats" ]; then
+    echo "0.00 b/s"
+    exit 0
+fi
+
+tx1="$(cat "$stats")"
+sleep 1
+tx2="$(cat "$stats")"
+
+diff=$(( (tx2 - tx1) * 8 ))
+
+if [ "$diff" -ge 1073741824 ]; then
+    awk "BEGIN { printf \"%.2f Gb/s\n\", $diff / 1073741824 }"
+elif [ "$diff" -ge 1048576 ]; then
+    awk "BEGIN { printf \"%.2f Mb/s\n\", $diff / 1048576 }"
+elif [ "$diff" -ge 1024 ]; then
+    awk "BEGIN { printf \"%.2f Kb/s\n\", $diff / 1024 }"
+else
+    awk "BEGIN { printf \"%.2f b/s\n\", $diff }"
+fi
