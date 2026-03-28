@@ -26,16 +26,9 @@ local BASE = get_base_dir()
 local SCRIPTS = BASE .. "/scripts"
 
 -- Backend preference: env override or auto-detect per script
-local ENV_BACKEND = os.getenv("CONKY_BACKEND")  -- "c", "sh", or "py"
-
-local function file_exists(path)
-    local f = io.open(path, "r")
-    if f then f:close() return true end
-    return false
-end
+local ENV_BACKEND = os.getenv("CONKY_BACKEND")  -- "c" or "sh"
 
 local function is_executable(path)
-    -- Check if file exists and is executable
     local f = io.popen("test -x '" .. path .. "' && echo yes 2>/dev/null")
     local result = f:read("*a")
     f:close()
@@ -43,19 +36,16 @@ local function is_executable(path)
 end
 
 -- Find the best available script for a given name
--- Returns the full command string
+-- Returns the full command string (tries C binary first, falls back to shell)
 local function resolve_script(name, args)
     args = args or ""
-    local candidates = {}
 
+    local candidates
     if ENV_BACKEND == "c" then
         candidates = { SCRIPTS .. "/C/" .. name }
     elseif ENV_BACKEND == "sh" then
         candidates = { SCRIPTS .. "/sh/" .. name }
-    elseif ENV_BACKEND == "py" then
-        candidates = { "python3 " .. SCRIPTS .. "/" .. name .. ".py" }
     else
-        -- Auto: try C first, then shell, then Python
         candidates = {
             SCRIPTS .. "/C/" .. name,
             SCRIPTS .. "/sh/" .. name,
@@ -63,25 +53,13 @@ local function resolve_script(name, args)
     end
 
     for _, cmd in ipairs(candidates) do
-        -- For python3 commands, check the .py file
-        local check_path = cmd:match("python3 (.+)") or cmd
-        if is_executable(check_path) or file_exists(check_path) then
-            if args ~= "" then
-                return cmd .. " " .. args
-            end
+        if is_executable(cmd) then
+            if args ~= "" then return cmd .. " " .. args end
             return cmd
         end
     end
 
-    -- Last resort: try Python if nothing else found
-    local py_script = SCRIPTS .. "/" .. name .. ".py"
-    if file_exists(py_script) then
-        local cmd = "python3 " .. py_script
-        if args ~= "" then cmd = cmd .. " " .. args end
-        return cmd
-    end
-
-    -- Nothing found — return shell version (will produce "N/A" if missing)
+    -- Fallback to shell (will produce "N/A" if missing)
     return SCRIPTS .. "/sh/" .. name .. (args ~= "" and (" " .. args) or "")
 end
 
