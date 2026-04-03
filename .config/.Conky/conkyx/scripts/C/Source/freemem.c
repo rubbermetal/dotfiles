@@ -1,23 +1,22 @@
 #include <stdio.h>
 #include <stdint.h>
-#include <inttypes.h>
-#include <psutil.h>
-
-void get_available_memory() {
-    // Get the available memory in bytes
-    uint64_t memory = psutil_get_virtual_memory().available;
-
-    // Convert to different units
-    if (memory > 1e9) {
-        printf("%.2f GB\n", (double)memory / 1e9);
-    } else if (memory > 1e6) {
-        printf("%.2f MB\n", (double)memory / 1e6);
-    } else {
-        printf("%.2f KB\n", (double)memory / 1e3);
-    }
-}
+#include <sys/sysinfo.h>
 
 int main() {
-    get_available_memory();
+    struct sysinfo info;
+    if (sysinfo(&info) == 0) {
+        unsigned long long free_memory = (unsigned long long)info.freeram * info.mem_unit;
+
+        if (free_memory > 1024ULL * 1024ULL * 1024ULL) {
+            printf("%.2f GB\n", (double)free_memory / (1024.0 * 1024.0 * 1024.0));
+        } else if (free_memory > 1024ULL * 1024ULL) {
+            printf("%.2f MB\n", (double)free_memory / (1024.0 * 1024.0));
+        } else {
+            printf("%.2f KB\n", (double)free_memory / 1024.0);
+        }
+    } else {
+        printf("Error retrieving memory information.\n");
+    }
+
     return 0;
 }
