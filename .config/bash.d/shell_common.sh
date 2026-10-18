@@ -208,5 +208,108 @@ _source_dir() {
     done
 }
 
+# True when a command word is a program, builtin, function, or other alias.
+# A word equal to the alias being checked must be a real command, not that alias.
+_dotfiles_have_word() {
+    _w=$1
+    _self=$2
+    [ -n "$_w" ] || return 0
+    case $_w in
+        \$*|\'*|\"*) return 0 ;;
+    esac
+    if [ -n "${ZSH_VERSION-}" ]; then
+        if [ "$_w" = "$_self" ]; then
+            whence -p "$_w" >/dev/null 2>&1 && return 0
+            whence -w "$_w" 2>/dev/null | grep -q ': \(builtin\|function\|reserved\)$' && return 0
+            return 1
+        fi
+        whence -p "$_w" >/dev/null 2>&1 && return 0
+        whence -w "$_w" 2>/dev/null | grep -q ': \(builtin\|function\|reserved\|alias\)$' && return 0
+        return 1
+    fi
+    if [ "$_w" = "$_self" ]; then
+        type -P "$_w" >/dev/null 2>&1 && return 0
+        case $(type -t "$_w" 2>/dev/null) in
+            builtin|function|keyword) return 0 ;;
+        esac
+        return 1
+    fi
+    type -P "$_w" >/dev/null 2>&1 && return 0
+    case $(type -t "$_w" 2>/dev/null) in
+        builtin|function|keyword|alias) return 0 ;;
+    esac
+    return 1
+}
+
+# Drop an alias whose program is not installed. New files in aliases/ get the same check.
+_dotfiles_alias_body_ok() {
+    _self=$1
+    _body=$2
+    case $_body in
+        \'*\') _body=${_body#\'}; _body=${_body%\'} ;;
+    esac
+    _flat=$(printf '%s\n' "$_body" | tr '|&;' '\n')
+    _saveifs=$IFS
+    IFS='
+'
+    for _seg in $_flat; do
+        IFS=$_saveifs
+        set -f
+        # shellcheck disable=SC2086
+        set -- $_seg
+        set +f
+        _cmd=
+        _saw_sudo=0
+        for _word in "$@"; do
+            [ -n "$_word" ] || continue
+            case $_word in
+                *=*) [ -z "$_cmd" ] && [ "$_saw_sudo" -eq 0 ] && continue ;;
+            esac
+            case $_word in
+                -*) [ "$_saw_sudo" -eq 1 ] && continue ;;
+            esac
+            if [ "$_word" = sudo ] && [ -z "$_cmd" ]; then
+                _saw_sudo=1
+                continue
+            fi
+            _cmd=$_word
+            break
+        done
+        if [ -n "$_cmd" ] && ! _dotfiles_have_word "$_cmd" "$_self"; then
+            IFS=$_saveifs
+            return 1
+        fi
+        IFS='
+'
+    done
+    IFS=$_saveifs
+    return 0
+}
+
+_dotfiles_drop_missing_aliases() {
+    _lines=$(alias 2>/dev/null || true)
+    [ -n "$_lines" ] || return 0
+    _saveifs=$IFS
+    IFS='
+'
+    for _line in $_lines; do
+        IFS=$_saveifs
+        _item=$_line
+        case $_item in
+            alias\ *) _item=${_item#alias } ;;
+        esac
+        _name=${_item%%=*}
+        _body=${_item#*=}
+        [ -n "$_name" ] || continue
+        if ! _dotfiles_alias_body_ok "$_name" "$_body"; then
+            unalias "$_name" 2>/dev/null || true
+        fi
+        IFS='
+'
+    done
+    IFS=$_saveifs
+}
+
 _source_dir "$FUNCTIONS_DIR"
 _source_dir "$ALIASES_DIR"
+_dotfiles_drop_missing_aliases
