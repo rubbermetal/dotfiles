@@ -61,7 +61,7 @@ pkg_install() {
             brew install "$@" ;;
         *)
             echo "  No package manager for OS '$OS'. Install manually: $*" >&2
-            return 0 ;;
+            return 1 ;;
     esac
 }
 

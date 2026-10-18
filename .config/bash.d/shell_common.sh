@@ -145,6 +145,22 @@ unset _cf
 
 # --- Source functions and aliases ---
 # A file this shell cannot parse is skipped. The rest of the directory still loads.
+# Signature is mtime plus name. GNU stat -c, otherwise BSD stat -f.
+_dotfiles_dir_sig() {
+    local dir="$1" sample listing
+    sample=$(find "$dir" -name '*.sh' -type f 2>/dev/null | head -n 1)
+    [ -n "$sample" ] || return 0
+    if stat -c '%Y' "$sample" >/dev/null 2>&1; then
+        listing=$(find "$dir" -name '*.sh' -type f -exec stat -c '%Y %n' {} + 2>/dev/null)
+    elif stat -f '%m' "$sample" >/dev/null 2>&1; then
+        listing=$(find "$dir" -name '*.sh' -type f -exec stat -f '%m %N' {} + 2>/dev/null)
+    else
+        return 0
+    fi
+    [ -n "$listing" ] || return 0
+    printf '%s\n' "$listing" | sort | cksum | awk '{print $1}'
+}
+
 _source_dir() {
     local dir="$1" _f _shell _sig _cache _sigfile
     [ -d "$dir" ] || return 0
@@ -158,10 +174,10 @@ _source_dir() {
     _cache=""
     if [ "$_shell" = zsh ] || [ "$_shell" = bash ]; then
         mkdir -p "${HOME}/.cache/dotfiles" 2>/dev/null || true
-        _sig=$(find "$dir" -name '*.sh' -printf '%T@ %p\n' 2>/dev/null | cksum | awk '{print $1}')
+        _sig=$(_dotfiles_dir_sig "$dir")
         _cache="${HOME}/.cache/dotfiles/skip-${_shell}-$(basename "$dir")"
         _sigfile="${_cache}.sig"
-        if [ ! -f "$_sigfile" ] || [ "$(cat "$_sigfile" 2>/dev/null)" != "$_sig" ]; then
+        if [ -z "$_sig" ] || [ ! -f "$_sigfile" ] || [ "$(cat "$_sigfile" 2>/dev/null)" != "$_sig" ]; then
             : > "$_cache"
             for _f in "$dir"/*.sh; do
                 [ -r "$_f" ] || continue
@@ -176,7 +192,11 @@ _source_dir() {
                 echo "$_f" >> "$_cache"
                 echo "dotfiles: skipped $_f (this shell cannot parse it)" >&2
             done
-            echo "$_sig" > "$_sigfile"
+            if [ -n "$_sig" ]; then
+                echo "$_sig" > "$_sigfile"
+            else
+                rm -f "$_sigfile"
+            fi
         fi
     fi
     for _f in "$dir"/*.sh; do
