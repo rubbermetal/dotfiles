@@ -92,14 +92,10 @@ fi
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 
 ###############################################################################
-# 8. Prompt (fallback if starship/p10k not available)
+# 8. Prompt. Console box, else Oh My Posh, else Starship, else plain.
 ###############################################################################
 
-if command -v starship &>/dev/null; then
-    eval "$(starship init zsh)"
-else
-    PROMPT='%F{red}[%T]%f %F{blue}%n%f%F{green}@%m:%f%F{cyan}(%1~)%f> '
-fi
+[ -f "$HOME/.config/shell/prompt.sh" ] && . "$HOME/.config/shell/prompt.sh"
 
 ###############################################################################
 # 9. 256-color nano syntax (X terminals). The console keeps nanorc.

@@ -1,0 +1,86 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "version": 4,
+  "final_space": true,
+  "console_title_template": "{{ .UserName }}@{{ .HostName }}: {{ .Folder }}",
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "type": "session",
+          "style": "diamond",
+          "foreground": "#041208",
+          "background": "#14F05A",
+          "leading_diamond": "\uE0B6",
+          "template": " {{ .UserName }}@{{ .HostName }} "
+        },
+        {
+          "type": "path",
+          "style": "powerline",
+          "powerline_symbol": "\uE0B0",
+          "foreground": "#B8FFD0",
+          "background": "#0E2A18",
+          "template": " {{ .Path }} ",
+          "options": {
+            "style": "agnoster_short",
+            "max_depth": 3,
+            "folder_separator_icon": " \uE0B1 "
+          }
+        },
+        {
+          "type": "git",
+          "style": "powerline",
+          "powerline_symbol": "\uE0B0",
+          "foreground": "#041208",
+          "background": "#2EE6A6",
+          "background_templates": [
+            "{{ if or (.Working.Changed) (.Staging.Changed) }}#E6FF4D{{ end }}"
+          ],
+          "template": " {{ .HEAD }}{{ if .Working.Changed }}*{{ end }} ",
+          "options": {
+            "branch_icon": "\uE0A0 ",
+            "fetch_status": false
+          }
+        },
+        {
+          "type": "time",
+          "style": "diamond",
+          "foreground": "#7CFF9B",
+          "background": "#101C14",
+          "trailing_diamond": "\uE0B4",
+          "template": " {{ .CurrentDate | date .Format }} ",
+          "options": {
+            "time_format": "15:04:05"
+          }
+        },
+        {
+          "type": "status",
+          "style": "diamond",
+          "foreground": "#041208",
+          "background": "#FF4D6A",
+          "leading_diamond": " \uE0B6",
+          "trailing_diamond": "\uE0B4",
+          "template": " {{ .Code }} "
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "type": "text",
+          "style": "plain",
+          "foreground": "#14F05A",
+          "foreground_templates": [
+            "{{ if gt .Code 0 }}#FF4D6A{{ end }}"
+          ],
+          "template": "\u276F"
+        }
+      ]
+    }
+  ]
+}

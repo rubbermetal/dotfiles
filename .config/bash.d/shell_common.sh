@@ -55,7 +55,7 @@ done
 unset _d
 
 # --- Terminal settings ---
-export TERM=xterm-256color
+# Leave TERM as the tty set it. The Linux console is TERM=linux.
 export use_color=true
 export LS_ICONS_MODE=always
 export NCURSES_NO_UTF8_ACS=1

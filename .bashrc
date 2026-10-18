@@ -163,16 +163,10 @@ if [[ -f "${CONFIG_BASH_DIR:-$HOME/.config/bash.d}/functions/fun-facts.sh" ]]; t
 fi
 
 ###############################################################################
-# 12. Prompt
+# 12. Prompt. Console box, else Oh My Posh, else Starship, else plain.
 ###############################################################################
 
-DEFAULT_PS1='\[\e[31m\][\A]\[\e[0m\] \[\e[34m\]\u\[\e[0m\]\[\e[32m\]@\h:\[\e[0m\]\[\e[36m\](\W)\[\e[0m\]> \$ '
-
-if command -v starship &>/dev/null; then
-    eval "$(starship init bash)"
-else
-    PS1="$DEFAULT_PS1"
-fi
+[ -f "$HOME/.config/shell/prompt.sh" ] && . "$HOME/.config/shell/prompt.sh"
 
 ###############################################################################
 # 13. 256-color nano syntax (X terminals). The console keeps nanorc.
