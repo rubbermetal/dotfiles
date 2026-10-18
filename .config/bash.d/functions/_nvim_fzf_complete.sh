@@ -12,5 +12,7 @@ _nvim_fzf_complete() {
     files=$(find . -type f 2>/dev/null | fzf) || return
     COMPREPLY=("$files")
 }
-# Register completion for nvim in Bash
-complete -F _nvim_fzf_complete nvim
+# Bash completion. zsh has no complete builtin.
+if command -v complete >/dev/null 2>&1; then
+    complete -F _nvim_fzf_complete nvim
+fi

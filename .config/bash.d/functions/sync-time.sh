@@ -4,8 +4,10 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     exit 1
 fi
 
-# (Optional) Ensure aliases are expanded in this context
-shopt -s expand_aliases
+# Bash-only. zsh has no shopt, and a missing builtin must not print on startup.
+if [ -n "${BASH_VERSION-}" ]; then
+    shopt -s expand_aliases
+fi
 
 # -----------------------------------------------------------------------------
 # Function: sync_time

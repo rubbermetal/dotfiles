@@ -60,7 +60,16 @@ pkg_install() {
         macos)
             brew install "$@" ;;
         *)
-            echo "  Unknown OS '$OS' — install manually: $*" >&2
+            echo "  No package manager for OS '$OS'. Install manually: $*" >&2
+            return 0 ;;
+    esac
+}
+
+pkg_manager_known() {
+    case "$OS" in
+        arch|manjaro|endeavouros|debian|ubuntu|raspbian|linuxmint|pop|fedora|macos)
+            return 0 ;;
+        *)
             return 1 ;;
     esac
 }
@@ -156,46 +165,52 @@ if $BOOTSTRAP; then
     echo "Bootstrapping core tools for $OS..."
     echo ""
 
-    # Tools that make the shell experience complete
-    CORE_TOOLS=(fzf tmux zoxide btop curl git)
-
-    # Starship needs special handling on some distros
-    STARSHIP_NEEDED=false
-    if ! command -v starship &>/dev/null; then
-        STARSHIP_NEEDED=true
-    fi
-
-    # Filter to only missing tools
-    to_install=()
-    for tool in "${CORE_TOOLS[@]}"; do
-        if ! command -v "$tool" &>/dev/null; then
-            to_install+=("$tool")
-        fi
-    done
-
-    if [[ ${#to_install[@]} -gt 0 ]]; then
-        echo "  Installing: ${to_install[*]}"
-        pkg_install "${to_install[@]}" || true
+    if ! pkg_manager_known; then
+        echo "  No package manager for OS '$OS'."
+        echo "  Skipping tool install. The shell config still loads without them."
+        echo ""
     else
-        echo "  Core tools already installed."
-    fi
+        # Tools that make the shell experience complete
+        CORE_TOOLS=(fzf tmux zoxide btop curl git)
 
-    # Starship (install via official script if not in repos)
-    if $STARSHIP_NEEDED; then
-        echo "  Installing starship..."
-        if [[ "$OS" == "arch" || "$OS" == "manjaro" ]]; then
-            pkg_install starship || true
-        else
-            curl -sS https://starship.rs/install.sh | sh -s -- -y 2>/dev/null || true
+        # Starship needs special handling on some distros
+        STARSHIP_NEEDED=false
+        if ! command -v starship &>/dev/null; then
+            STARSHIP_NEEDED=true
         fi
-    fi
 
-    # pywal (optional, skip on servers)
-    if ! command -v wal &>/dev/null; then
-        echo "  Skipping pywal (install manually if on desktop: pip install pywal)"
-    fi
+        # Filter to only missing tools
+        to_install=()
+        for tool in "${CORE_TOOLS[@]}"; do
+            if ! command -v "$tool" &>/dev/null; then
+                to_install+=("$tool")
+            fi
+        done
 
-    echo ""
+        if [[ ${#to_install[@]} -gt 0 ]]; then
+            echo "  Installing: ${to_install[*]}"
+            pkg_install "${to_install[@]}" || true
+        else
+            echo "  Core tools already installed."
+        fi
+
+        # Starship (install via official script if not in repos)
+        if $STARSHIP_NEEDED; then
+            echo "  Installing starship..."
+            if [[ "$OS" == "arch" || "$OS" == "manjaro" ]]; then
+                pkg_install starship || true
+            else
+                curl -sS https://starship.rs/install.sh | sh -s -- -y 2>/dev/null || true
+            fi
+        fi
+
+        # pywal (optional, skip on servers)
+        if ! command -v wal &>/dev/null; then
+            echo "  Skipping pywal (install manually if on desktop: pip install pywal)"
+        fi
+
+        echo ""
+    fi
 fi
 
 # =========================================================================
@@ -302,18 +317,8 @@ if [[ ! -f "$HOME/.dotfiles_profile" ]]; then
 fi
 
 # =========================================================================
-# CONKY — Optional desktop widget
+# CONKY — only with --conky. A missing conky binary does not stop install.
 # =========================================================================
-# Auto-offer on desktop profile, or install with --conky flag
-PROFILE="$(cat "$HOME/.dotfiles_profile" 2>/dev/null || echo "minimal")"
-
-if ! $CONKY && [[ "$PROFILE" == "desktop" ]]; then
-    echo ""
-    echo "  Desktop profile detected. Install Conky widget? [y/N]"
-    read -r -t 10 conky_answer || conky_answer=""
-    [[ "$conky_answer" =~ ^[Yy] ]] && CONKY=true
-fi
-
 if $CONKY; then
     echo ""
     echo "Installing Conky widget..."
@@ -325,10 +330,14 @@ if $CONKY; then
     chmod +x "$DOTFILES_DIR/.config/.Conky/conkyx/scripts/sh/"* 2>/dev/null
     chmod +x "$DOTFILES_DIR/.config/.Conky/conkyx/bin/"* 2>/dev/null
 
-    # Install conky if not present
+    # Install conky when this OS has a package manager. Otherwise leave it off.
     if ! command -v conky &>/dev/null; then
-        echo "  Installing conky..."
-        pkg_install conky || echo "  Warning: could not install conky automatically" >&2
+        if pkg_manager_known; then
+            echo "  Installing conky..."
+            pkg_install conky || echo "  Warning: could not install conky automatically" >&2
+        else
+            echo "  conky is not installed. Config is linked. The widget stays off."
+        fi
     fi
 
     # Install fonts if the font directories exist

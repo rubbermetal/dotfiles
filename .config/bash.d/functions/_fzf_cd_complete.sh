@@ -26,5 +26,7 @@ _fzf_cd_complete() {
         COMPREPLY=($(compgen -d -- "$curr_word"))
     fi
 }
-# Register the function for `cd` completion
-complete -F _fzf_cd_complete cd
+# Bash completion. zsh has no complete builtin.
+if command -v complete >/dev/null 2>&1; then
+    complete -F _fzf_cd_complete cd
+fi

@@ -9,6 +9,9 @@
 # completions, and prompt.
 ###############################################################################
 
+# Per-machine paths. Not tracked. Applies before the interactive return.
+[ -f "$HOME/.config/dotfiles-machine.sh" ] && . "$HOME/.config/dotfiles-machine.sh"
+
 # Exit if not interactive
 [[ $- != *i* ]] && return
 

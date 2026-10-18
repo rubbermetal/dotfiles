@@ -22,20 +22,16 @@ set_flushcache_alias() {
     # Check each required command.
     for cmd in "${required_commands[@]}"; do
         if ! command -v "$cmd" > /dev/null; then
-            echo "Error: '$cmd' is not installed or not found in your PATH." >&2
-            return 1
+            return 0
         fi
     done
 
-    # Check if the drop_caches file exists. This is necessary for flushing the cache.
+    # No drop_caches means this is not a Linux host that can flush that way.
     if [ ! -f /proc/sys/vm/drop_caches ]; then
-        echo "Error: /proc/sys/vm/drop_caches not found. Are you running on a compatible system?" >&2
-        return 1
+        return 0
     fi
 
-    # Define the alias "flushcache" if all checks pass.
     alias flushcache="sudo free -h && sudo sh -c \"echo 3 > /proc/sys/vm/drop_caches\" && sudo swapoff -a && sudo swapon -a && printf '\n\033[1;33m%s\033[0m\n\n' 'Ram-cache and Swap Cleared' && free -h"
-    echo "Alias 'flushcache' has been set."
 }
 
 # Run the function to set the alias.

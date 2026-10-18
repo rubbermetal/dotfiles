@@ -19,6 +19,11 @@ else
 fi
 export CURRENT_SHELL
 
+# Per-machine paths (ccache, a local toolchain). This file is not in the repo.
+if [ -f "${HOME}/.config/dotfiles-machine.sh" ]; then
+    . "${HOME}/.config/dotfiles-machine.sh"
+fi
+
 # --- Detect machine profile ---
 # Checks for display server, then falls back to ~/.dotfiles_profile
 detect_profile() {
@@ -139,27 +144,49 @@ done
 unset _cf
 
 # --- Source functions and aliases ---
-# Sorted glob ensures numbered prefixes control load order
+# A file this shell cannot parse is skipped. The rest of the directory still loads.
 _source_dir() {
-    local dir="$1"
-    [ -d "$dir" ] || return
+    local dir="$1" _f _shell _sig _cache _sigfile
+    [ -d "$dir" ] || return 0
+    if [ -n "${ZSH_VERSION-}" ]; then
+        _shell=zsh
+    elif [ -n "${BASH_VERSION-}" ]; then
+        _shell=bash
+    else
+        _shell=sh
+    fi
+    _cache=""
+    if [ "$_shell" = zsh ] || [ "$_shell" = bash ]; then
+        mkdir -p "${HOME}/.cache/dotfiles" 2>/dev/null || true
+        _sig=$(find "$dir" -name '*.sh' -printf '%T@ %p\n' 2>/dev/null | cksum | awk '{print $1}')
+        _cache="${HOME}/.cache/dotfiles/skip-${_shell}-$(basename "$dir")"
+        _sigfile="${_cache}.sig"
+        if [ ! -f "$_sigfile" ] || [ "$(cat "$_sigfile" 2>/dev/null)" != "$_sig" ]; then
+            : > "$_cache"
+            for _f in "$dir"/*.sh; do
+                [ -r "$_f" ] || continue
+                _bad=0
+                if [ "$_shell" = zsh ]; then
+                    zsh -n "$_f" >/dev/null 2>&1 || _bad=1
+                    zsh --emulate sh -n "$_f" >/dev/null 2>&1 || _bad=1
+                elif [ "$_shell" = bash ]; then
+                    bash -n "$_f" >/dev/null 2>&1 || _bad=1
+                fi
+                [ "$_bad" -eq 0 ] && continue
+                echo "$_f" >> "$_cache"
+                echo "dotfiles: skipped $_f (this shell cannot parse it)" >&2
+            done
+            echo "$_sig" > "$_sigfile"
+        fi
+    fi
     for _f in "$dir"/*.sh; do
-        [ -r "$_f" ] && . "$_f"
+        [ -r "$_f" ] || continue
+        if [ -n "$_cache" ] && [ -s "$_cache" ] && grep -qxF "$_f" "$_cache"; then
+            continue
+        fi
+        . "$_f" || true
     done
 }
 
 _source_dir "$FUNCTIONS_DIR"
 _source_dir "$ALIASES_DIR"
-
-# --- Display ---
-command -v wal >/dev/null 2>&1 && wal -R 2>/dev/null
-display_system_info 2>/dev/null
-
-# Desktop-only: disable screen blanking
-if [ "$DOTFILES_PROFILE" = "desktop" ]; then
-    if command -v xset >/dev/null 2>&1 && [ -n "$DISPLAY" ]; then
-        xset s off 2>/dev/null
-        xset -dpms 2>/dev/null
-        xset s noblank 2>/dev/null
-    fi
-fi

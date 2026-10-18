@@ -65,3 +65,9 @@
 # --- OS junk ---
 .DS_Store
 Thumbs.db
+
+# Per-machine files. They live in $HOME and must not be committed.
+dotfiles-machine.sh
+.bashrc.local
+.zshrc.local
+.dotfiles_profile

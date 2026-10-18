@@ -17,20 +17,12 @@ set_psattach_alias() {
     reptyr_path=$(command -v reptyr)
 
     # Check if 'reptyr' exists in the PATH.
-    if [ -z "$reptyr_path" ]; then
-        echo "Error: 'reptyr' is not installed or not found in your PATH." >&2
-        return 1
+    # Missing reptyr is normal. Leave the alias unset and keep startup quiet.
+    if [ -z "$reptyr_path" ] || [ ! -x "$reptyr_path" ]; then
+        return 0
     fi
 
-    # Check if the found 'reptyr' is executable.
-    if [ ! -x "$reptyr_path" ]; then
-        echo "Error: Found 'reptyr' at '$reptyr_path', but it is not executable." >&2
-        return 1
-    fi
-
-    # Define the alias if all checks pass.
     alias psattach='sudo reptyr -T'
-    echo "Alias 'psattach' has been set to 'sudo reptyr -T'."
 }
 
 # Run the function to set the alias.

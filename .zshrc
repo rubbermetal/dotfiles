@@ -11,6 +11,9 @@
 # --- This file is a STANDALONE .zshrc for machines without oh-my-zsh ---
 # --- On machines WITH oh-my-zsh, only the source line above is needed ---
 
+# Per-machine paths. Not tracked. Applies to scripts that source this file too.
+[ -f "$HOME/.config/dotfiles-machine.sh" ] && . "$HOME/.config/dotfiles-machine.sh"
+
 [[ $- != *i* ]] && return
 
 ###############################################################################
