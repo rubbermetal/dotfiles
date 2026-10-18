@@ -54,7 +54,7 @@ FACTS_FILE="$DATA_DIR/facts.txt"
 export CONFIG_BASH_DIR FUNCTIONS_DIR ALIASES_DIR COMPLETIONS_DIR DATA_DIR FACTS_FILE
 
 # Create required directories
-for _d in "$HOME/Projects" "$HOME/Scripts" "$HOME/apps" "$HOME/.local/bin"; do
+for _d in "$HOME/Scripts" "$HOME/.local/bin"; do
     [ -d "$_d" ] || mkdir -p "$_d" 2>/dev/null
 done
 unset _d
