@@ -1,0 +1,12 @@
+## Files that match no other syntax.
+
+syntax default
+comment "#"
+
+color sky "\<https?://[^[:space:]]+"
+color sky "<[[:alnum:].%_+-]+@[[:alnum:].-]+\.[[:alpha:]]{2,}>"
+color sand "^\[[^]]+\]$"
+color italic,grey "^[[:blank:]]*#.*"
+color bold,black,yellow "\<(FIXME|TODO|XXX|NOTE)\>"
+color ,crimson " +	+"
+color ,brick "[[:space:]]+$"

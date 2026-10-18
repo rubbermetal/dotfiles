@@ -175,7 +175,13 @@ else
 fi
 
 ###############################################################################
-# 13. Local overrides (per-machine, not tracked in git)
+# 13. 256-color nano syntax (X terminals). The console keeps nanorc.
+###############################################################################
+
+[ -f "$HOME/.config/nano/enable-x.sh" ] && . "$HOME/.config/nano/enable-x.sh"
+
+###############################################################################
+# 14. Local overrides (per-machine, not tracked in git)
 ###############################################################################
 
 [[ -f "$HOME/.bashrc.local" ]] && source "$HOME/.bashrc.local"

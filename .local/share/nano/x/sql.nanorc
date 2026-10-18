@@ -1,0 +1,15 @@
+## SQL.
+
+syntax sql "\.sql$"
+comment "-- "
+
+icolor lagoon "\<(add|all|alter|and|as|asc|begin|between|by|case|check|column|commit|constraint|create|cross|database|default|delete|desc|distinct|drop|else|end|except|exists|foreign|from|full|grant|group|having|in|index|inner|insert|intersect|into|is|join|key|left|like|limit|not|null|offset|on|or|order|outer|primary|references|returning|revoke|right|rollback|select|set|table|then|truncate|union|unique|update|values|view|when|where|with)\>"
+icolor teal "\<(bigint|boolean|bytea|char|character|date|decimal|double|float|int|integer|json|jsonb|numeric|real|serial|smallint|text|time|timestamp|uuid|varchar)\>"
+color mauve "\<(TRUE|FALSE|NULL)\>"
+color peach "\<(-?[0-9]+(\.[0-9]+)?)\>"
+color mint "'([^']|'')*'"
+color mint "\"([^\"\\]|\\.)*\""
+color italic,grey "--.*"
+color italic,grey start="/\*" end="\*/"
+color bold,black,yellow "\<(FIXME|TODO|XXX|NOTE)\>"
+color ,brick "[[:space:]]+$"

@@ -1,0 +1,15 @@
+## Markdown.
+
+syntax markdown "\.(md|markdown|mkd|mdown)$"
+comment ""
+
+color bold,sand "^#{1,6}[[:blank:]].*"
+color sand "^[[:blank:]]*([-*+]|\*|[0-9]+\.)[[:blank:]]+"
+color teal "^[[:blank:]]*>.*"
+color mauve "^```.*|^~~~.*"
+color mint "`[^`]+`"
+color sky "\[[^]]+\]\([^)]+\)"
+color sky "<[[:alnum:].%_+-]+@[[:alnum:].-]+\.[[:alpha:]]{2,}>"
+color italic,grey "\*[^*[:space:]][^*]*\*|_[^_[:space:]][^_]*_"
+color bold,black,yellow "\<(FIXME|TODO|XXX|NOTE)\>"
+color ,brick "[[:space:]]+$"

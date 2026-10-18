@@ -1,0 +1,15 @@
+## Tcl.
+
+syntax tcl "\.tcl$"
+header "^#!.*/(tclsh|wish)\>"
+magic "Tcl(/Tk)? script"
+comment "#"
+
+color sand "^[[:blank:]]*proc[[:blank:]]+[[:alpha:]_:][[:alnum:]_:]*"
+color lagoon "\<(after|append|apply|array|break|case|catch|cd|clock|close|concat|continue|dict|else|elseif|eof|error|eval|exec|exit|expr|fconfigure|file|flush|for|foreach|format|gets|glob|global|if|incr|info|interp|join|lappend|lindex|linsert|list|llength|lmap|load|lrange|lreplace|lsearch|lset|lsort|namespace|open|package|pid|proc|puts|pwd|read|regexp|regsub|rename|return|scan|seek|set|socket|source|split|string|subst|switch|tcl|tell|then|time|trace|unset|update|uplevel|upvar|variable|vwait|while)\>"
+color sky "\$\{[[:alpha:]_:][[:alnum:]_:]*\}"
+color sky "\$[[:alpha:]_:][[:alnum:]_:]*"
+color mint "\"([^\"\\]|\\.)*\""
+color italic,grey "(^|[[:blank:]])#.*"
+color bold,black,yellow "\<(FIXME|TODO|XXX|NOTE)\>"
+color ,brick "[[:space:]]+$"

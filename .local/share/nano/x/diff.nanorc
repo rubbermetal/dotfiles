@@ -1,0 +1,13 @@
+## Unified and context diffs.
+
+syntax diff "\.(diff|patch)$"
+header "^diff[[:blank:]]"
+magic "diff output"
+comment ""
+
+color mint "^\+.*"
+color crimson "^-.*"
+color sky "^@@.*"
+color sand "^(diff|index|---|\+\+\+|\*\*\*).*"
+color italic,grey "^#.*"
+color ,brick "[[:space:]]+$"

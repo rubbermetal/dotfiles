@@ -1,0 +1,16 @@
+## TOML.
+
+syntax toml "\.toml$"
+header "^#!.*\<toml"
+comment "#"
+
+color sand "^[[:blank:]]*\[[[:alpha:]_].*\]"
+color sky "^[[:blank:]]*[[:alpha:]_][[:alnum:]_-]*[[:blank:]]*="
+color mauve "\<(true|false)\>"
+color peach "\<([+-]?[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)?|[0-9]{4}-[0-9]{2}-[0-9]{2})\>"
+color mint "\"([^\"\\]|\\.)*\""
+color mint "'[^']*'"
+color mint start="\"\"\"" end="\"\"\""
+color italic,grey "(^|[[:blank:]])#.*"
+color bold,black,yellow "\<(FIXME|TODO|XXX|NOTE)\>"
+color ,brick "[[:space:]]+$"

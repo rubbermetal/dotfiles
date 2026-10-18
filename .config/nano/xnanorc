@@ -1,0 +1,33 @@
+# 256-color source highlighting for st and other X terminals.
+# The nano() function and nano-x load this when TERM supports 256 colors.
+# The Linux console keeps ~/.config/nano/nanorc.
+#
+# Palette on a dark background:
+#   comments italic,grey    strings mint         escapes orange
+#   numbers peach           keywords lagoon      types teal
+#   constants mauve         functions sand       preprocessor rosy
+#   decorators purple       variables sky
+
+## Interface
+set titlecolor bold,black,green
+set statuscolor bold,black,green
+set promptcolor bold,black,green
+set errorcolor bold,white,red
+set spotlightcolor bold,black,yellow
+set selectedcolor bold,black,cyan
+set numbercolor cyan
+set keycolor green
+set functioncolor cyan
+set scrollercolor green,black
+set stripecolor blue
+
+## Editor chrome
+set linenumbers
+set indicator
+set constantshow
+set stateflags
+set guidestripe 80
+set magic
+
+## Syntax
+include "~/.local/share/nano/x/*.nanorc"

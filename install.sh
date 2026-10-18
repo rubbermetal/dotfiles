@@ -119,9 +119,11 @@ if $UNINSTALL; then
     unlink_file "$HOME/Scripts"
     unlink_file "$HOME/.config/starship.toml"
 
-    for dir in bash.d .Conky alacritty btop macchina neofetch picom sxhkd tmux wallpapers; do
+    for dir in bash.d .Conky alacritty btop macchina neofetch picom sxhkd tmux wallpapers nano; do
         unlink_file "$HOME/.config/$dir"
     done
+    unlink_file "$HOME/.local/bin/nano-x"
+    unlink_file "$HOME/.local/share/nano/x"
 
     # Remove Conky autostart if present
     unlink_file "$HOME/.config/autostart/conkyx.desktop"
@@ -223,6 +225,7 @@ CONFIG_DIRS=(
     "sxhkd"
     "tmux"
     "wallpapers"
+    "nano"
 )
 
 for dir in "${CONFIG_DIRS[@]}"; do
@@ -231,6 +234,8 @@ done
 
 link_file "$DOTFILES_DIR/.config/starship.toml" "$HOME/.config/starship.toml"
 link_file "$DOTFILES_DIR/Scripts" "$HOME/Scripts"
+link_file "$DOTFILES_DIR/.local/bin/nano-x" "$HOME/.local/bin/nano-x"
+link_file "$DOTFILES_DIR/.local/share/nano/x" "$HOME/.local/share/nano/x"
 
 # --- SSH config ---
 if [[ ! -f "$HOME/.ssh/config" ]]; then

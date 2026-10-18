@@ -1,0 +1,17 @@
+## Awk.
+
+syntax awk "\.awk$"
+header "^#!.*/g?awk\>"
+magic "awk script"
+comment "#"
+
+color sand "^[[:blank:]]*function[[:blank:]]+[[:alpha:]_][[:alnum:]_]*"
+color sand "\<[[:alpha:]_][[:alnum:]_]*[[:space:]]*\("
+color lagoon "\<(BEGIN|END|break|continue|delete|do|else|exit|for|function|getline|if|in|next|nextfile|print|printf|return|while)\>"
+color teal "\<(ARGC|ARGV|CONVFMT|ENVIRON|ERRNO|FILENAME|FNR|FS|NF|NR|OFMT|OFS|ORS|RLENGTH|RS|RSTART|SUBSEP)\>"
+color sky "\$[0-9]+"
+color peach "\<([0-9]+(\.[0-9]*)?([eE][+-]?[0-9]+)?)\>"
+color mint "\"([^\"\\]|\\.)*\""
+color italic,grey "(^|[[:blank:]])#.*"
+color bold,black,yellow "\<(FIXME|TODO|XXX|NOTE)\>"
+color ,brick "[[:space:]]+$"

@@ -1,0 +1,27 @@
+# Phosphor theme for the Linux console. Color names follow the tty palette:
+# green #14F05A, bright green #7CFF9B, cyan #3DFFE8, blue #5CC8FF,
+# yellow #E6FF4D, red #FF4D6A, magenta #C77DFF, black #050805.
+
+## Interface
+set titlecolor bold,black,green
+set statuscolor bold,black,green
+set promptcolor bold,black,green
+set errorcolor bold,white,red
+set spotlightcolor bold,black,yellow
+set selectedcolor bold,black,cyan
+set numbercolor cyan
+set keycolor green
+set functioncolor cyan
+set scrollercolor green,black
+set stripecolor blue
+
+## Editor chrome
+set linenumbers
+set indicator
+set constantshow
+set stateflags
+set guidestripe 80
+
+## Syntax
+# 256-color rules for X terminals are in xnanorc, loaded by nano-x.
+include "~/.local/share/nano/*.nanorc"

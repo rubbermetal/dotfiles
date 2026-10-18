@@ -1,0 +1,19 @@
+## Lua.
+
+syntax lua "\.lua$"
+header "^#!.*\<lua"
+magic "Lua script"
+comment "--"
+
+color sand "^[[:blank:]]*(local[[:blank:]]+)?function[[:blank:]]+[[:alpha:]_:.[:alnum:]_]*"
+color sand "\<[[:alpha:]_][[:alnum:]_]*[[:space:]]*\("
+color lagoon "\<(and|break|do|else|elseif|end|false|for|function|goto|if|in|local|nil|not|or|repeat|return|then|true|until|while)\>"
+color mauve "\<(_ENV|_G|_VERSION)\>"
+color peach "\<(0[xX][[:xdigit:]]+(\.[[:xdigit:]]*)?([pP][+-]?[0-9]+)?|[0-9]+(\.[0-9]*)?([eE][+-]?[0-9]+)?)\>"
+color mint "\"([^\"\\]|\\.)*\""
+color mint "'([^'\\]|\\.)*'"
+color mint start="\[=*\[" end="\]=*\]"
+color italic,grey "--([^\[]|$).*"
+color italic,grey start="--\[=*\[" end="\]=*\]"
+color bold,black,yellow "\<(FIXME|TODO|XXX|NOTE)\>"
+color ,brick "[[:space:]]+$"

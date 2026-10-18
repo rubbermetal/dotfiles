@@ -1,0 +1,15 @@
+## YAML.
+
+syntax yaml "\.ya?ml$"
+magic "YAML"
+comment "#"
+
+color sky "^[[:blank:]]*[^[:blank:]#][^:#]*:"
+color mauve "\<(true|false|yes|no|on|off|null|~)\>"
+color peach "\<(-?[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)?)\>"
+color mint "\"([^\"\\]|\\.)*\""
+color mint "'[^']*'"
+color mint start="[|>][+-]?[[:blank:]]*$" end="^[[:graph:]]"
+color italic,grey "(^|[[:blank:]])#.*"
+color bold,black,yellow "\<(FIXME|TODO|XXX|NOTE)\>"
+color ,brick "[[:space:]]+$"

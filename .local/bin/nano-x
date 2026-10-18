@@ -1,0 +1,8 @@
+#!/bin/sh
+# nano with the 256-color syntax set. On an 8-color terminal, use stock nano.
+case ${TERM-} in
+  *256color*|*-direct*)
+    exec "$HOME/.local/bin/nano" -f "$HOME/.config/nano/xnanorc" "$@"
+    ;;
+esac
+exec "$HOME/.local/bin/nano" "$@"

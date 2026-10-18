@@ -1,0 +1,15 @@
+## Makefiles.
+
+syntax makefile "(^|/)([Mm]akefile|\.mk|\.make)$"
+magic "makefile script"
+comment "#"
+
+color sand "^[^:=#][^:=]*:"
+color lagoon "^[[:blank:]]*(ifeq|ifneq|ifdef|ifndef|else|endif|include|sinclude|-include|define|endef|export|unexport|override|vpath)\>"
+color sky "\$\([^)]*\)"
+color sky "\$\{[^}]*\}"
+color mint "\"([^\"\\]|\\.)*\""
+color mint "'[^']*'"
+color italic,grey "(^|[[:blank:]])#.*"
+color bold,black,yellow "\<(FIXME|TODO|XXX|NOTE)\>"
+color ,brick "[[:space:]]+$"

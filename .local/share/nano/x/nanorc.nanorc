@@ -1,0 +1,11 @@
+## Nano's own syntax files.
+
+syntax nanorc "\.nanorc$|(^|/)x?nanorc$"
+comment "#"
+
+color lagoon "\<(syntax|header|magic|color|icolor|comment|tabgives|linter|formatter|include|extendsyntax|set|unset|bind|unbind)\>"
+color teal "\<(bold|italic|bright|light|red|green|blue|yellow|cyan|magenta|white|black|normal|pink|purple|mauve|lagoon|mint|lime|peach|orange|latte|rosy|beet|plum|sea|sky|slate|teal|sage|brown|ocher|sand|tawny|brick|crimson|grey|gray)\>"
+color sand "start=|end="
+color mint "\"([^\"\\]|\\.)*\""
+color italic,grey "(^|[[:blank:]])#.*"
+color ,brick "[[:space:]]+$"

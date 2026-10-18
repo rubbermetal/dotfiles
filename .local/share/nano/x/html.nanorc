@@ -1,0 +1,17 @@
+## HTML and XML.
+
+syntax html "\.(html?|xhtml|xml|svg|xslt?|rng)$"
+header "<\?xml"
+magic "HTML document"
+magic "(XML|SGML) (sub)?document"
+comment "<!--|-->"
+
+color rosy "</?[[:alpha:]][[:alnum:]:._-]*|/>"
+color mauve "<!(DOCTYPE|doctype|\[CDATA\[)[^>]*>"
+color sky "\<[[:alpha:]_:][[:alnum:]:._-]*="
+color mint "\"[^\"<]*\""
+color mint "'[^'<]*'"
+color italic,grey start="<!--" end="-->"
+color italic,grey start="<!\[CDATA\[" end="\]\]>"
+color bold,black,yellow "\<(FIXME|TODO|XXX|NOTE)\>"
+color ,brick "[[:space:]]+$"

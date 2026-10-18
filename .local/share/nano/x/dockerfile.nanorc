@@ -1,0 +1,13 @@
+## Dockerfile and Containerfile.
+
+syntax dockerfile "(^|/)([Dd]ockerfile|[Cc]ontainerfile)|\.dockerfile$"
+comment "#"
+
+icolor lagoon "^(FROM|RUN|CMD|LABEL|EXPOSE|ENV|ADD|COPY|ENTRYPOINT|VOLUME|USER|WORKDIR|ARG|ONBUILD|STOPSIGNAL|HEALTHCHECK|SHELL|MAINTAINER)\>"
+color sky "\$\{[[:alpha:]_][[:alnum:]_]*\}"
+color sky "\$[[:alpha:]_][[:alnum:]_]*"
+color mint "\"([^\"\\]|\\.)*\""
+color mint "'[^']*'"
+color italic,grey "(^|[[:blank:]])#.*"
+color bold,black,yellow "\<(FIXME|TODO|XXX|NOTE)\>"
+color ,brick "[[:space:]]+$"

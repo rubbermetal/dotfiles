@@ -62,7 +62,9 @@ export NCURSES_NO_UTF8_ACS=1
 export MICRO_TRUECOLOR=1
 
 # --- Default editor ---
-if command -v nano >/dev/null 2>&1; then
+if [ -x "$HOME/.local/bin/nano-x" ]; then
+    export EDITOR="$HOME/.local/bin/nano-x"
+elif command -v nano >/dev/null 2>&1; then
     export EDITOR="nano"
 elif command -v nvim >/dev/null 2>&1; then
     export EDITOR="nvim"
