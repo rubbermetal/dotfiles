@@ -1,0 +1,10 @@
+RULES FOR THIS TEST FILE (follow every one; they come from mistakes made before):
+1. Use pytest with plain functions. Call the real functions through their module (for example `ops.set_blocked(...)`). Use only functions that appear in the read-only reference files. Never invent helpers (no db.query, db.execute, db.get_x, db.get_audit ...). For database access in tests use conn.execute(...).
+2. Do NOT define local helpers whose names are the same as functions under test, and do not re-implement the code under test inside the test file. Define only the helpers/fixtures the spec describes.
+3. A sqlite3.Row never equals a tuple. Compare tuple(row), dict(row), or index the Row by column name.
+4. Timestamps: use the db.now() string. Never pass datetime objects to sqlite.
+5. Web tests: form and query values are strings. Without follow_redirects=True a successful POST returns 302 (check the Location header); with follow_redirects=True it returns 200 and you check the flashed text. Never expect 302 after following redirects.
+6. A page that lists options (dropdowns) contains those words even when the data is filtered out: assert on table cells or on distinctive data values, not on option names.
+7. Test exactly the cases in the spec, with exactly the expected values given; do not weaken them and do not invent other expectations. Each test is independent and uses the provided fixtures.
+8. Do not shadow a helper function with a local variable of the same name (for example a loop variable called `page` when a helper `page()` exists).
+9. Reply with the complete file only.

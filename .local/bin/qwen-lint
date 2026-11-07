@@ -1,0 +1,143 @@
+#!/usr/bin/env python3
+"""qwen-lint FILE...  Project-aware lint for code written by the local Qwen model.
+
+Prints one problem per line ("file:line: message") and exits 1 when it found
+any; prints nothing and exits 0 when the file is clean. aider runs it after each
+edit (--lint-cmd) and shows the output to the model so it can fix its own work.
+
+Checks:
+  * syntax errors (py_compile)
+  * pyflakes, filtered to real bugs: undefined names, redefinitions, use before assignment
+  * attributes of project modules that do not exist (invented helpers):
+        from spiderlib import db ... db.get_url(...)   -> "module db has no attribute get_url"
+  * sqlite3 Connection misuse: conn.rowcount / conn.fetchone / conn.fetchall
+  * deprecated datetime.utcnow()
+  * a non-test module without a module docstring as its first statement
+  * with env QWEN_SPEC=<spec file>: tests/functions the spec names but the file does not define
+
+Run from the project root (the directory that contains the project packages).
+"""
+import ast
+import importlib
+import os
+import subprocess
+import sys
+
+ROOT = os.getcwd()
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
+
+CONN_NAMES = {"conn", "connection", "con", "db_conn"}
+CONN_BAD = {
+    "rowcount": "use the cursor returned by conn.execute(...): cur = conn.execute(...); cur.rowcount",
+    "fetchone": "use conn.execute(...).fetchone()",
+    "fetchall": "use conn.execute(...).fetchall()",
+}
+
+
+def is_test_file(path):
+    base = os.path.basename(path)
+    return base.startswith("test_") or base == "conftest.py" or "/tests/" in path.replace("\\", "/")
+
+
+def project_module(name):
+    """Import `name` only if it lives under the project root (never stdlib / site-packages)."""
+    try:
+        mod = importlib.import_module(name)
+    except Exception:
+        return None
+    file = getattr(mod, "__file__", None) or ""
+    if file.startswith(ROOT + os.sep) and "site-packages" not in file:
+        return mod
+    return None
+
+
+def module_aliases(tree):
+    """Map local name -> imported project module object."""
+    aliases = {}
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom) and node.module and node.level == 0:
+            for a in node.names:
+                mod = project_module(f"{node.module}.{a.name}")
+                if mod is not None:
+                    aliases[a.asname or a.name] = mod
+        elif isinstance(node, ast.Import):
+            for a in node.names:
+                mod = project_module(a.name)
+                if mod is not None and a.asname:
+                    aliases[a.asname] = mod
+    return aliases
+
+
+def spec_coverage(path, tree, test):
+    """If QWEN_SPEC points at the spec, every test (or function) it names must exist in the file."""
+    import re
+    spec_path = os.environ.get("QWEN_SPEC")
+    if not spec_path or not os.path.exists(spec_path):
+        return []
+    spec = open(spec_path, encoding="utf-8").read()
+    if test:
+        wanted = re.findall(r"^\s*\d+\.\s+(test_\w+)", spec, flags=re.M)
+    else:
+        wanted = re.findall(r"^\s*\d+\.\s+(_?[a-z]\w*)\(", spec, flags=re.M)
+    defined = {n.name for n in ast.walk(tree) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))}
+    missing = [w for w in dict.fromkeys(wanted) if w not in defined]
+    if not missing:
+        return []
+    kind = "tests" if test else "functions"
+    return [f"{path}:1: the spec asks for {len(wanted)} {kind} but these are MISSING from the file: {', '.join(missing)}. Write them too (keep the ones that exist)."]
+
+
+def check(path):
+    problems = []
+    try:
+        src = open(path, encoding="utf-8").read()
+    except OSError as exc:
+        return [f"{path}:0: cannot read file: {exc}"]
+    try:
+        tree = ast.parse(src, path)
+    except SyntaxError as exc:
+        return [f"{path}:{exc.lineno or 0}: syntax error: {exc.msg}"]
+
+    test = is_test_file(path)
+    if not test and ast.get_docstring(tree) is None:
+        problems.append(f"{path}:1: missing module docstring: the FIRST statement of the file must be a docstring, before any import")
+
+    problems.extend(spec_coverage(path, tree, test))
+
+    aliases = module_aliases(tree)
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Attribute) and isinstance(node.value, ast.Name):
+            name, attr = node.value.id, node.attr
+            if name in aliases and not hasattr(aliases[name], attr):
+                problems.append(f"{path}:{node.lineno}: module '{name}' has no attribute '{attr}' (do not invent helpers; use only what exists in the files you were given, or write it in this file)")
+            if name in CONN_NAMES and attr in CONN_BAD:
+                problems.append(f"{path}:{node.lineno}: a sqlite3 Connection has no .{attr}; {CONN_BAD[attr]}")
+            if name == "datetime" and attr == "utcnow":
+                problems.append(f"{path}:{node.lineno}: datetime.utcnow() is deprecated; use datetime.now(timezone.utc) (or db.now())")
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == "utcnow":
+            if isinstance(node.func.value, ast.Attribute) and node.func.value.attr == "datetime":
+                problems.append(f"{path}:{node.lineno}: datetime.utcnow() is deprecated; use datetime.now(timezone.utc) (or db.now())")
+
+    # pyflakes: keep only messages that point at real bugs (skip unused import / unused variable noise)
+    keep = ("undefined name", "redefinition of unused", "referenced before assignment",
+            "invalid", "duplicate argument", "return outside", "break outside")
+    flakes = subprocess.run([sys.executable, "-m", "pyflakes", path], capture_output=True, text=True)
+    for line in (flakes.stdout + flakes.stderr).splitlines():
+        if line.strip() and any(k in line for k in keep):
+            problems.append(line.strip())
+    return problems
+
+
+def main(argv):
+    found = []
+    for path in argv:
+        if path.endswith(".py"):
+            found.extend(check(path))
+    for line in found:
+        print(line)
+    return 1 if found else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

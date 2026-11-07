@@ -1,0 +1,205 @@
+#!/usr/bin/env python3
+"""qwen-build: have the local Qwen model (via aider) write ONE file from a spec.
+
+Usage:
+  qwen-build [-m 7b|14b] [-r REF]... [-t TESTFILE] [--rules auto|code|tests|none]
+             [--timeout SEC] [--no-lint] [-n] SPEC_FILE TARGET
+
+  SPEC_FILE   plain-text spec (what to write)
+  TARGET      the one file to write, relative to the git root (or cwd)
+  -r MODULE   existing module the target depends on (repeat). Its REAL API (signatures and
+              first docstring lines, a few hundred tokens) goes into the prompt, so the model
+              sees what exists instead of guessing. Keep prompts small: big prompts make
+              Ollama spill the model to the CPU and slow down.
+  -R FILE     attach a whole file read-only (expensive; only when signatures are not enough)
+  -t TESTS    pytest file/dir to run after each edit; ALL failures (short tracebacks) go back to the model.
+              Defaults to TARGET itself when TARGET is a test file.
+  --rules     preamble of hard rules (default auto: tests rules for tests/, else code rules)
+  -n          dry run: show the command and the final prompt, do not call the model
+
+What it adds on top of a bare aider call:
+  * rules preamble + list of the reference files, then your spec, then the full-path line
+    (without it aider may write a bare file name into the repo root)
+  * qwen-lint after every edit (invented helpers, conn.rowcount, docstring position,
+    utcnow, undefined names): aider shows the output to the model so it fixes itself
+  * optional pytest after every edit (-t), with DeprecationWarning as error
+  * aider history files go to a temp dir, not into the repo
+  * a summary at the end: time, lint status, test status, stray files
+
+Exit codes: 0 clean, 1 lint problems remain, 2 target missing or empty, 3 aider failed/timed out,
+            4 tests still failing.
+"""
+import argparse
+import os
+import re
+import shlex
+import subprocess
+import sys
+import tempfile
+import time
+
+SHARE = os.path.expanduser("~/.local/share/qwen-build")
+
+
+def git_root():
+    r = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True)
+    return r.stdout.strip() if r.returncode == 0 else os.getcwd()
+
+
+def is_test_path(p):
+    b = os.path.basename(p)
+    return b.startswith("test_") or b == "conftest.py" or "/tests/" in "/" + p.replace("\\", "/")
+
+
+def skeleton(path):
+    """Compact API listing of a python module: signatures and first docstring lines only."""
+    import ast
+    try:
+        tree = ast.parse(open(path, encoding="utf-8").read(), path)
+    except (OSError, SyntaxError) as exc:
+        return f"# {path}: cannot read ({exc})"
+    first = lambda n: (ast.get_docstring(n) or "").strip().splitlines()[0:1]
+    sig = lambda n: f"{'async ' if isinstance(n, ast.AsyncFunctionDef) else ''}def {n.name}({ast.unparse(n.args)})" + (f" -> {ast.unparse(n.returns)}" if n.returns else "")
+    out = [f"# {path}" + (f" -- {first(tree)[0]}" if first(tree) else "")]
+    consts = [t.id for n in tree.body if isinstance(n, ast.Assign) for t in n.targets if isinstance(t, ast.Name) and not t.id.startswith("_")]
+    if consts:
+        out.append("names: " + ", ".join(consts))
+    for n in tree.body:
+        if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)) and not n.name.startswith("_"):
+            out.append(sig(n) + (f"   # {first(n)[0]}" if first(n) else ""))
+        elif isinstance(n, ast.ClassDef) and not n.name.startswith("_"):
+            out.append(f"class {n.name}:" + (f"   # {first(n)[0]}" if first(n) else ""))
+            for m in n.body:
+                if isinstance(m, (ast.FunctionDef, ast.AsyncFunctionDef)) and (not m.name.startswith("_") or m.name == "__init__"):
+                    out.append("    " + sig(m))
+    return "\n".join(out)
+
+
+def porcelain(root):
+    r = subprocess.run(["git", "status", "--porcelain"], cwd=root, capture_output=True, text=True)
+    return set(l[3:] for l in r.stdout.splitlines()) if r.returncode == 0 else set()
+
+
+def main():
+    ap = argparse.ArgumentParser(add_help=True, description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("-m", "--model", default="14b", choices=["7b", "14b"])
+    ap.add_argument("-r", "--ref", action="append", default=[], help="module whose API (signatures only) is shown in the prompt")
+    ap.add_argument("-R", "--read-full", action="append", default=[], help="file shown to aider in full (read-only); costs many tokens")
+    ap.add_argument("-t", "--tests", default=None)
+    ap.add_argument("--rules", default="auto", choices=["auto", "code", "tests", "none"])
+    ap.add_argument("--timeout", type=int, default=1200)
+    ap.add_argument("--no-lint", action="store_true")
+    ap.add_argument("-n", "--dry-run", action="store_true")
+    ap.add_argument("spec")
+    ap.add_argument("target")
+    a = ap.parse_args()
+
+    orig = os.getcwd()
+    root = git_root()
+    absp = lambda p: p if os.path.isabs(p) else os.path.join(orig, p)
+    rel = lambda p: os.path.relpath(absp(p), root)
+    spec_path = absp(a.spec)
+    os.chdir(root)
+    target = rel(a.target)
+    refs = [rel(r) for r in a.ref]
+    full = [rel(r) for r in a.read_full]
+    spec = open(spec_path, encoding="utf-8").read()
+
+    kind = a.rules
+    if kind == "auto":
+        kind = "tests" if is_test_path(target) else "code"
+    rules = "" if kind == "none" else open(os.path.join(SHARE, f"rules-{kind}.txt"), encoding="utf-8").read()
+
+    parts = [rules.rstrip()]
+    if refs:
+        parts.append("API of the existing modules you may call. These are the ONLY functions, classes and names that exist in them; do not use anything else from these modules:\n\n" + "\n\n".join(skeleton(r) for r in refs))
+    if full:
+        parts.append("Complete reference files are also attached read-only: " + ", ".join(full) + ".")
+    parts.append(spec.rstrip())
+    parts.append(f"IMPORTANT: your reply must contain exactly ONE file, and its file name line must be the full relative path {target} (not only the base name).")
+    message = "\n\n".join(p for p in parts if p) + "\n"
+
+    work = tempfile.mkdtemp(prefix="qwen-build-")
+    msg_file = os.path.join(work, "message.txt")
+    open(msg_file, "w", encoding="utf-8").write(message)
+
+    if os.path.exists(target) and os.path.getsize(target) == 0:
+        open(target, "w").write("# (empty)\n")  # an empty --file makes the model chat instead of writing code
+
+    tests = rel(a.tests) if a.tests is not None else (target if is_test_path(target) and target.endswith(".py") else None)
+
+    cmd = ["aider", "--model", f"ollama/qwen2.5-coder:{a.model}", "--edit-format", "whole", "--yes-always",
+           "--no-auto-commits", "--map-tokens", "0", "--no-pretty", "--no-stream", "--no-gitignore",
+           "--no-show-model-warnings", "--no-analytics", "--no-detect-urls", "--no-check-update",
+           "--model-settings-file", os.path.join(SHARE, "model-settings.yml"),
+           "--chat-history-file", os.path.join(work, "chat.md"), "--input-history-file", os.path.join(work, "input"),
+           "--message-file", msg_file, "--file", target]
+    for r in full:
+        cmd += ["--read", r]
+    if a.no_lint:
+        cmd.append("--no-auto-lint")
+    else:
+        cmd += ["--auto-lint", "--lint-cmd", "python: qwen-lint"]
+    if tests:
+        cmd += ["--auto-test", "--test-cmd", f"bash -c 'set -o pipefail; python3 -m pytest -q --tb=short -W error::DeprecationWarning {shlex.quote(tests)} 2>&1 | head -80'"]
+
+    if a.dry_run:
+        print("cwd:", root)
+        print("command:", " ".join(shlex.quote(c) for c in cmd))
+        print("----- prompt -----")
+        print(message)
+        return 0
+
+    os.environ["QWEN_SPEC"] = spec_path  # qwen-lint checks the file against the spec
+    before = porcelain(root)
+    t0 = time.time()
+    log = os.path.join(work, "aider.log")
+    rc = 0
+    try:
+        with open(log, "w") as lf:
+            r = subprocess.run(cmd, stdout=lf, stderr=subprocess.STDOUT, timeout=a.timeout)
+        rc = r.returncode
+    except subprocess.TimeoutExpired:
+        rc = -1
+    secs = time.time() - t0
+    text = open(log, errors="replace").read()
+
+    tokens = re.findall(r"Tokens: ([\d.k]+) sent, ([\d.k]+) received", text)
+    fixes = text.count("fix lint errors") + text.count("Fix lint errors") + text.count("Fix any errors")
+    print(f"qwen-build: {a.model} {target}  {secs:.0f}s  requests={len(tokens)}  auto-fix rounds={max(0, len(tokens) - 1)}")
+    if rc != 0:
+        print(f"  aider {'TIMED OUT' if rc == -1 else f'exited {rc}'}; log: {log}")
+        return 3
+
+    status = 0
+    if not os.path.exists(target) or os.path.getsize(target) < 20:
+        print(f"  TARGET MISSING OR EMPTY: {target}  (log: {log})")
+        status = 2
+    else:
+        print(f"  wrote {target}: {sum(1 for _ in open(target))} lines")
+        lint = subprocess.run(["qwen-lint", target], capture_output=True, text=True, env=os.environ) if target.endswith(".py") else None
+        if lint is not None:
+            if lint.returncode:
+                print("  LINT PROBLEMS REMAIN:")
+                for line in lint.stdout.splitlines():
+                    print("    " + line)
+                status = max(status, 1)
+            else:
+                print("  lint: clean")
+        if tests:
+            t = subprocess.run(["python3", "-m", "pytest", "-q", "-x", "-W", "error::DeprecationWarning", tests], capture_output=True, text=True)
+            last = (t.stdout.strip().splitlines() or ["?"])[-1]
+            print(f"  tests ({tests}): {last}")
+            if t.returncode:
+                status = 4 if status == 0 else status
+
+    after = porcelain(root)
+    stray = sorted(p for p in after - before if p != target and not p.startswith(".aider") and not p.startswith(target.rstrip("/") + "/"))
+    if stray:
+        print("  WARNING new files besides the target (aider may have written to the wrong path):", ", ".join(stray))
+    print(f"  log: {log}")
+    return status
+
+
+if __name__ == "__main__":
+    sys.exit(main())

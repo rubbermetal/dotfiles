@@ -1,0 +1,10 @@
+RULES FOR THIS FILE (follow every one; they come from mistakes made before):
+1. Python 3.10+, standard library only unless the spec names another library.
+2. The FIRST statement of the file is a module docstring (before any import). Put a short usage example in it.
+3. Use only functions, classes and attributes that appear in the read-only reference files given to you, or in the spec. NEVER invent helper functions or methods (no db.get_x, db.query, db.execute ...). If something you need is missing, write it inside this file.
+4. A sqlite3 Connection has NO .rowcount, .fetchone or .fetchall. Use the cursor that conn.execute(...) returns: cur = conn.execute(...); cur.rowcount; conn.execute(...).fetchone(). Rows are sqlite3.Row: index them by column name. Never assign conn.row_factory.
+5. Time: datetime.now(timezone.utc). Never datetime.utcnow(). Never store datetime objects in sqlite; use the db.now() string helper when the reference files provide it.
+6. Implement exactly the functions in the spec with the exact names and signatures, in the order given, and nothing else. No `if __name__ == "__main__"` block unless the spec asks.
+7. Web form and query-string values are always strings; convert before using them as numbers.
+8. When the spec lists SQL fragments, build WHERE clauses as " WHERE " + " AND ".join(conditions) only when there are conditions; never emit "WHERE" with nothing after it.
+9. Reply with the complete file only.
