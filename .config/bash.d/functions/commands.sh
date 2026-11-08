@@ -12,7 +12,7 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     exit 1
 fi
 
-function help ( ) {
+help() {
 sep=${bg_navy}"------------------------------------------------------"${attrib_restore};
 header=${fg_navy}${bg_gray}${bold};
 content=${fg_forest}${bg_white}${bold};

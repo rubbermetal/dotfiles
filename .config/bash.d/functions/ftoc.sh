@@ -18,7 +18,8 @@ ftoc() {
     local fahrenheit="$1"
 
     # Validate that the input is a number.
-    if ! [[ "$fahrenheit" =~ ^-?[0-9]+(\.[0-9]+)?$ ]]; then
+    local number_re='^-?[0-9]+(\.[0-9]+)?$'
+    if ! [[ "$fahrenheit" =~ $number_re ]]; then
         echo "Error: '$fahrenheit' is not a valid number."
         return 1
     fi

@@ -16,7 +16,8 @@ ctof() {
 
     local celsius="$1"
 
-    if ! [[ "$celsius" =~ ^-?[0-9]+(\.[0-9]+)?$ ]]; then
+    local number_re='^-?[0-9]+(\.[0-9]+)?$'
+    if ! [[ "$celsius" =~ $number_re ]]; then
         echo "Error: '$celsius' is not a valid number."
         return 1
     fi

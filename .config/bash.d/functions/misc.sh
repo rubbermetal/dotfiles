@@ -73,16 +73,3 @@ else
     echo "Hostname changed. Reboot to fully apply changes."
 fi
 }
-# repeat: Repeat a command n times.
-repeat() {
-    if [[ -z "$1" || "$1" -le 0 ]]; then
-        echo "Usage: repeat <n> <command>"
-        return 1
-    fi
-    local max="$1"
-    shift
-    local i
-    for (( i=1; i<=max; i++ )); do
-        eval "$@"
-    done
-}
