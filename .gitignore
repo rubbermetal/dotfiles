@@ -66,6 +66,11 @@
 .DS_Store
 Thumbs.db
 
+# --- Python / test caches ---
+__pycache__/
+*.pyc
+.pytest_cache/
+
 # Per-machine files. They live in $HOME and must not be committed.
 dotfiles-machine.sh
 .bashrc.local

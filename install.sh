@@ -139,6 +139,7 @@ if $UNINSTALL; then
     for f in rules-code.txt rules-tests.txt model-settings.yml; do
         unlink_file "$HOME/.local/share/qwen-build/$f"
     done
+    unlink_file "$HOME/.local/bin/anim"
 
     # Remove Conky autostart if present
     unlink_file "$HOME/.config/autostart/conkyx.desktop"
@@ -266,6 +267,9 @@ link_file "$DOTFILES_DIR/.local/bin/qwen-lint" "$HOME/.local/bin/qwen-lint"
 for f in rules-code.txt rules-tests.txt model-settings.yml; do
     link_file "$DOTFILES_DIR/.local/share/qwen-build/$f" "$HOME/.local/share/qwen-build/$f"
 done
+# anim: animated result lines for mv, cp, rm, chmod, rsync, curl (the aliases/*.sh functions call it).
+# Link only the launcher: it finds its modules in .local/share/anim next to the real file.
+link_file "$DOTFILES_DIR/.local/bin/anim" "$HOME/.local/bin/anim"
 
 # --- SSH config ---
 if [[ ! -f "$HOME/.ssh/config" ]]; then
