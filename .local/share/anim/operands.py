@@ -18,7 +18,9 @@ def parse_operands(cmd, args):
     elif cmd == "curl":
         return _curl(args)
     else:
-        return _empty()
+        from operands_more import parse_more    # imported here: operands_more imports this module
+        result = parse_more(cmd, args)
+        return result if result is not None else _empty()
 
 def _empty():
     return {"sources": [], "dest": None, "mode": None, "url": None, "output": None}

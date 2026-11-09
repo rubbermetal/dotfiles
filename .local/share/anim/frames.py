@@ -19,7 +19,13 @@ ICONS = {
     "unlock": "",
     "sync": "",
     "download": "",
-    "arrow": ""
+    "arrow": "",
+    "link": "\uf0c1",
+    "folder_open": "\uf07c",
+    "user": "\uf007",
+    "users": "\uf0c0",
+    "fire": "\uf06d",
+    "eject": "\uf052"
 }
 GREEN = "\x1b[32m"
 RED = "\x1b[31m"
@@ -95,7 +101,8 @@ def _layout(pieces, ascii_only, budget):
 def build_frames(cmd, info, ok, elapsed, ascii_only=False, width=80):
     """Build the animation frames for a finished command; [] for a command that has none."""
     if cmd not in _COMMANDS:
-        return []
+        from frames_more import build_more      # imported here: frames_more imports this module
+        return build_more(cmd, info, ok, elapsed, ascii_only, width)
     a = ascii_only
     budget = width - 1
     who = _who(info.get("sources") or [])

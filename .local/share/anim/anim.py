@@ -13,7 +13,7 @@ import subprocess
 from operands import parse_operands
 from frames import build_frames, play
 
-ANIMATED = {"mv", "cp", "rm", "chmod", "rsync", "curl"}
+ANIMATED = {"mv", "cp", "rm", "chmod", "rsync", "curl", "ln", "mkdir", "chown", "chgrp", "shred", "wget", "umount"}
 
 def _ascii_only():
     anim_ascii = os.environ.get("ANIM_ASCII", "")

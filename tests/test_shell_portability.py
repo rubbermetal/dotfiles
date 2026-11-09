@@ -152,10 +152,15 @@ def test_full_zsh_startup_has_no_parse_errors_and_skips_only_bash_only_files(hom
     assert names <= BASH_ONLY, f"unexpectedly skipped: {sorted(names - BASH_ONLY)}"
 
 
+ANIMATED_NAMES = ["mv", "cp", "rm", "chmod", "rsync", "curl", "ln", "mkdir", "chown", "chgrp", "shred",
+                  "wget", "umount", "dl", "rmd", "mx", "um"]
+
+
 def test_full_zsh_startup_loads_the_functions_and_the_animated_commands(home):
-    r = zsh_interactive(home, "for c in help ctof roll-dice change_hostname mv rsync nano; do printf '%s=' $c; whence -w $c; done; ctof 100; repeat 2 echo hi")
+    names = ["help", "ctof", "roll-dice", "change_hostname", "nano"] + ANIMATED_NAMES
+    r = zsh_interactive(home, "for c in " + " ".join(names) + "; do printf '%s=' $c; whence -w $c; done; ctof 100; repeat 2 echo hi")
     out = r.stdout
-    for c in ("help", "ctof", "roll-dice", "change_hostname", "mv", "rsync", "nano"):
-        assert f"{c}=" in out and f"{c}: function" in out, (c, out, r.stderr)
+    for c in names:
+        assert f"{c}: function" in out, (c, out, r.stderr)
     assert "212.0000" in out
     assert out.count("hi") == 2                    # zsh's own repeat still works
