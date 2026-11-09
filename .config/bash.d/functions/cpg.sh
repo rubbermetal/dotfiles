@@ -43,7 +43,7 @@ fi
 # Returns:
 #   0 if the copy operation is successful; 1 otherwise.
 ###############################################################################
-cpg() {
+_cpg_run() {
     # Ensure at least two arguments are provided.
     if (( $# < 2 )); then
         echo "Usage: cpg <source1> [source2 ...] <destination>"
@@ -51,7 +51,8 @@ cpg() {
     fi
 
     # The destination is the last argument.
-    local destination="${!#}"
+    local destination
+    for destination in "$@"; do :; done
     # All preceding arguments are considered source files.
     local sources=("${@:1:$#-1}")
 
@@ -75,11 +76,13 @@ cpg() {
     # check for potential overwriting.
     if (( ${#sources[@]} == 1 )) && [[ ! -d "$destination" ]]; then
         if [[ -e "$destination" ]]; then
-            read -rp "File '$destination' already exists. Overwrite? (y/N): " user_response
+            printf '%s' "File '$destination' already exists. Overwrite? (y/N): " >&2
+            read -r user_response
             case "$user_response" in
                 [Yy]* ) ;;
                 * )
                     echo "Aborted."
+                    _anim_skip=1
                     return 1
                     ;;
             esac
@@ -112,3 +115,16 @@ cpg() {
     return 0
 }
 
+
+# cpg: the work above, then one animated result line.
+# Usage:
+#   cpg report.txt ~/docs
+# Turn the animation off for one command with ANIM=0, or for good with ANIM=0 in your environment.
+# _anim_quiet stops the inner mv, cp and mkdir from animating too.
+cpg() {
+    local _rc
+    _anim_quiet _cpg_run "$@"
+    _rc=$?
+    _anim_result cpg "$_rc" "$@"
+    return "$_rc"
+}

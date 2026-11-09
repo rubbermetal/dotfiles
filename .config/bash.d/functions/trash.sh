@@ -11,7 +11,7 @@ fi
 ###############################################################################
 
 # trash: Move file(s) to the trash folder.
-trash() {
+_trash_run() {
     if command -v trash-put &>/dev/null; then
         trash-put "$@"
     elif [[ -d "$HOME/.local/share/Trash/files" ]]; then
@@ -24,4 +24,17 @@ trash() {
         mkdir -p "$HOME/.trash"
         mv "$@" "$HOME/.trash/"
     fi
+}
+
+# trash: the work above, then one animated result line.
+# Usage:
+#   trash old.txt
+# Turn the animation off for one command with ANIM=0, or for good with ANIM=0 in your environment.
+# _anim_quiet stops the inner mv, cp and mkdir from animating too.
+trash() {
+    local _rc
+    _anim_quiet _trash_run "$@"
+    _rc=$?
+    _anim_result trash "$_rc" "$@"
+    return "$_rc"
 }

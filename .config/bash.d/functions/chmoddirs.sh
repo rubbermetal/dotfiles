@@ -33,7 +33,8 @@ fi
 ask() {
     local prompt="$1"
     local response
-    read -r -p "$prompt [y/N] " response
+    printf '%s' "$prompt [y/N] " >&2
+    read -r response
     case "$response" in
         [yY]|[yY][eE][sS])
             return 0
@@ -60,7 +61,7 @@ ask() {
 # The function validates the input, confirms the action (unless skipped), and
 # applies the mode recursively to directories within each specified target.
 ###############################################################################
-chmoddirs() {
+_chmoddirs_run() {
     local confirm=true
 
     # Process options.
@@ -119,6 +120,7 @@ chmoddirs() {
                 echo "Done for $dir."
             else
                 echo "Operation cancelled for $dir."
+                _anim_skip=1
             fi
         else
             if ! find "$dir" -type d -exec chmod "$perm" {} \;; then
@@ -129,4 +131,17 @@ chmoddirs() {
         fi
     done
     return 0
+}
+
+# chmoddirs: the work above, then one animated result line.
+# Usage:
+#   chmoddirs -y 755 ~/web
+# Turn the animation off for one command with ANIM=0, or for good with ANIM=0 in your environment.
+# _anim_quiet stops the inner mv, cp and mkdir from animating too.
+chmoddirs() {
+    local _rc
+    _anim_quiet _chmoddirs_run "$@"
+    _rc=$?
+    _anim_result chmoddirs "$_rc" "$@"
+    return "$_rc"
 }

@@ -32,6 +32,20 @@ def _should_animate(cmd):
             sys.stdout.isatty() and
             os.environ.get("ANIM", "1") != "0")
 
+def _result(args):
+    """Play a result line for a shell function that already ran: --result NAME STATUS [ARGS...]."""
+    try:
+        name, status = args[0], int(args[1])
+    except (IndexError, ValueError):
+        print("usage: anim --result NAME STATUS [ARGS...]", file=sys.stderr)
+        return 2
+    if sys.stdout.isatty() and os.environ.get("ANIM", "1") != "0":
+        from frames_funcs import parse_result, build_result
+        width = shutil.get_terminal_size((80, 24)).columns
+        frames = build_result(name, parse_result(name, args[2:]), status == 0, ascii_only=_ascii_only(), width=width)
+        play(frames, sys.stdout, _delay())
+    return status
+
 def main(argv=None):
     if argv is None:
         argv = sys.argv[1:]
@@ -39,6 +53,9 @@ def main(argv=None):
     if not argv:
         print("usage: anim COMMAND [ARGS...]", file=sys.stderr)
         return 2
+
+    if argv[0] == "--result":
+        return _result(argv[1:])
 
     cmd = argv[0]
     start = time.monotonic()

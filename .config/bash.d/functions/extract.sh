@@ -32,7 +32,7 @@ fi
 # archive is extracted there (if supported by the extraction tool); otherwise,
 # the current directory is used.
 ###############################################################################
-extract() {
+_extract_run() {
     local archive="$1"
     local target_dir="${2:-.}"
 
@@ -131,4 +131,17 @@ extract() {
     esac
 
     echo "Extracted '$archive' to '$target_dir' successfully."
+}
+
+# extract: the work above, then one animated result line.
+# Usage:
+#   extract backup.tgz out
+# Turn the animation off for one command with ANIM=0, or for good with ANIM=0 in your environment.
+# _anim_quiet stops the inner mv, cp and mkdir from animating too.
+extract() {
+    local _rc
+    _anim_quiet _extract_run "$@"
+    _rc=$?
+    _anim_result extract "$_rc" "$@"
+    return "$_rc"
 }

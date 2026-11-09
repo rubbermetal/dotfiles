@@ -32,7 +32,7 @@ fi
 # Usage:
 #   chmodfiles [-y|--yes] <mode> [directory1 directory2 ...]
 ###############################################################################
-chmodfiles() {
+_chmodfiles_run() {
     local confirm=true
 
     # Process optional flags.
@@ -95,12 +95,14 @@ chmodfiles() {
 
         # Prompt for confirmation if not in quiet mode.
         if "$confirm"; then
-            read -r -p "Are you sure you want to change file permissions in '$directory'? [y/N] " response
+            printf '%s' "Are you sure you want to change file permissions in '$directory'? [y/N] " >&2
+            read -r response
             case "$response" in
                 [yY]|[yY][eE][sS])
                     ;;
                 *)
                     echo "Operation cancelled for directory: $directory"
+                    _anim_skip=1
                     continue
                     ;;
             esac
@@ -114,4 +116,17 @@ chmodfiles() {
         echo "Done for directory: $directory"
     done
     return 0
+}
+
+# chmodfiles: the work above, then one animated result line.
+# Usage:
+#   chmodfiles -y 644 ~/web
+# Turn the animation off for one command with ANIM=0, or for good with ANIM=0 in your environment.
+# _anim_quiet stops the inner mv, cp and mkdir from animating too.
+chmodfiles() {
+    local _rc
+    _anim_quiet _chmodfiles_run "$@"
+    _rc=$?
+    _anim_result chmodfiles "$_rc" "$@"
+    return "$_rc"
 }

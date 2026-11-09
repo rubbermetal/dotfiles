@@ -28,7 +28,7 @@ chmodcopy_usage() {
 ###############################################################################
 # chmodcopy: Copy file permissions from a source file to destination file(s)
 ###############################################################################
-chmodcopy() {
+_chmodcopy_run() {
     # Check if at least two arguments are provided.
     if [[ "$#" -lt 2 ]]; then
         chmodcopy_usage
@@ -67,3 +67,16 @@ chmodcopy() {
 
 
 
+
+# chmodcopy: the work above, then one animated result line.
+# Usage:
+#   chmodcopy ref.txt a.txt b.txt
+# Turn the animation off for one command with ANIM=0, or for good with ANIM=0 in your environment.
+# _anim_quiet stops the inner mv, cp and mkdir from animating too.
+chmodcopy() {
+    local _rc
+    _anim_quiet _chmodcopy_run "$@"
+    _rc=$?
+    _anim_result chmodcopy "$_rc" "$@"
+    return "$_rc"
+}

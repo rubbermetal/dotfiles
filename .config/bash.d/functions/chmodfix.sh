@@ -8,7 +8,7 @@ fi
 
 # chmodfix: Recursively fix permissions for code files and directories.
 # Caution: This will remove executable permissions on files.
-chmodfix() {
+_chmodfix_run() {
     local dir_permissions="0775"  # rwx rwx rx
     local file_permissions="0664" # rw- rw- r--
     local directory="${1:-$PWD}"
@@ -29,5 +29,20 @@ chmodfix() {
         sudo find "$directory" -type f -exec chmod "$file_permissions" {} \;
         sudo find "$directory" -type d -exec chmod "$dir_permissions" {} \;
         echo "Done."
+    else
+        _anim_skip=1
     fi
+}
+
+# chmodfix: the work above, then one animated result line.
+# Usage:
+#   chmodfix ~/web
+# Turn the animation off for one command with ANIM=0, or for good with ANIM=0 in your environment.
+# _anim_quiet stops the inner mv, cp and mkdir from animating too.
+chmodfix() {
+    local _rc
+    _anim_quiet _chmodfix_run "$@"
+    _rc=$?
+    _anim_result chmodfix "$_rc" "$@"
+    return "$_rc"
 }
