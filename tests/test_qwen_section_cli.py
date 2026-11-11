@@ -849,3 +849,34 @@ def test_passes_one_is_a_single_run(box):
     r = run(box, "-m", "14b", "--passes", "1", "-s", r"function alpha\(", "spec.txt", "page.html", body="function alpha(a) {\n")
     assert r.returncode == 3
     assert models(box) == ["14b"]
+
+
+# ---- -T: a test command instead of pytest -------------------------------------- #
+
+def test_test_cmd_feeds_its_output_back_and_accepts_the_fix(box):
+    cmd = "grep -q 'return 5' page.html || { echo 'page must hold return 5'; exit 1; }"
+    r = run(box, "-m", "7b", "-T", cmd, "-s", r"function alpha\(", "spec.txt", "page.html", mode="loop",
+            body="function alpha(a) {\n    return 6;\n}\n", FAKE_BODY2=GOOD)
+    assert r.returncode == 0, r.stdout + r.stderr
+    first, second = checks(box).split("----\n")[:2]
+    assert first.startswith("exit 1") and "page must hold return 5" in first
+    assert second.startswith("exit 0")
+    assert "return 5" in page(box)
+
+
+def test_test_cmd_failure_gives_exit_4(box):
+    r = run(box, "-m", "7b", "-T", "echo nope; exit 1", "-s", r"function alpha\(", "spec.txt", "page.html")
+    assert r.returncode == 4
+    assert "nope" in r.stdout
+    assert "return 5" in page(box)
+
+
+def test_test_cmd_runs_in_the_callers_directory(box):
+    r = run(box, "-m", "7b", "-T", "test -f page.html", "-s", r"function alpha\(", "spec.txt", "page.html")
+    assert r.returncode == 0, r.stdout + r.stderr
+
+
+def test_t_and_T_together_are_refused(box):
+    r = run(box, "-t", "x.py", "-T", "true", "-s", r"function alpha\(", "spec.txt", "page.html")
+    assert r.returncode == 2
+    assert not (box / "rec.args").exists()

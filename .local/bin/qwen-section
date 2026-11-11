@@ -23,6 +23,9 @@ Usage:
   -R FILE     whole file attached read-only (expensive); passed to qwen-build
   -t TESTS    pytest file/dir. Run with the new section in place after every attempt;
               failures go back to the model to fix.
+  -T CMD      shell command to run instead of pytest (same role as -t; exit 0 = pass, its
+              output goes back to the model). For code that must not run on this host:
+                -T 'docker run --rm -v "$PWD":/w -w /w IMAGE uv run pytest -q tests/x.py'
   --passes N  runs per model (default 1). The model gets 3 fix rounds per run; with 2 or
               more, a failed run's attempt and its remaining problems seed the next run.
               After the last pass -m auto moves to the 14b. (Measured once: a model that
@@ -298,9 +301,12 @@ def check(state):
         return "rejected", problem
 
     write(target, new_text)
-    if state["tests"]:
-        t = subprocess.run([sys.executable, "-m", "pytest", "-q", "--tb=short", "-W", "error::DeprecationWarning", state["tests"]],
-                           capture_output=True, text=True, cwd=state["cwd"])
+    if state["tests"] or state.get("test_cmd"):
+        if state.get("test_cmd"):
+            t = subprocess.run(state["test_cmd"], shell=True, capture_output=True, text=True, cwd=state["cwd"])
+        else:
+            t = subprocess.run([sys.executable, "-m", "pytest", "-q", "--tb=short", "-W", "error::DeprecationWarning", state["tests"]],
+                               capture_output=True, text=True, cwd=state["cwd"])
         out = (t.stdout + t.stderr).strip().splitlines()
         if t.returncode != 0:                    # keep the summary line even when the output is long
             return "tests", "\n".join(out if len(out) <= 80 else out[:79] + out[-1:])
@@ -387,6 +393,7 @@ def main():
     ap.add_argument("-r", "--ref", action="append", default=[])
     ap.add_argument("-R", "--read-full", action="append", default=[])
     ap.add_argument("-t", "--tests", default=None)
+    ap.add_argument("-T", "--test-cmd", default=None)
     ap.add_argument("--timeout", type=int, default=1200)
     ap.add_argument("--passes", type=int, default=1)
     ap.add_argument("--loose", action="store_true")
@@ -396,6 +403,10 @@ def main():
     ap.add_argument("target")
     a = ap.parse_args()
 
+    if a.tests and a.test_cmd:
+        print("qwen-section: give -t TESTS or -T CMD, not both")
+        return 2
+    tests_label = a.tests or (a.test_cmd if a.test_cmd is None or len(a.test_cmd) <= 40 else a.test_cmd[:37] + "...")
     if sum(x is not None for x in (a.start, a.defname, a.lines)) != 1:
         print("qwen-section: give exactly one of -s START, -d NAME, -l A-B")
         return 2
@@ -452,7 +463,7 @@ def main():
     state = {
         "target": os.path.abspath(a.target), "original": os.path.join(work, "original.txt"),
         "part": os.path.abspath(part), "first": first, "last": last,
-        "tests": a.tests, "cwd": os.getcwd(),
+        "tests": a.tests, "test_cmd": a.test_cmd, "cwd": os.getcwd(),
         "balanced": balanced(body), "loose": a.loose,
         "selector": ({"kind": "def", "name": a.defname} if a.defname is not None else
                      {"kind": "start", "start": a.start, "end": a.end} if a.start is not None else {"kind": "lines"}),
@@ -512,8 +523,8 @@ def main():
                 elif verdict == "ok":
                     new_count = len(read(part).rstrip("\n").split("\n"))
                     print(f"  replaced {count} lines with {new_count}")
-                    if a.tests:
-                        print(f"  tests ({a.tests}): {message}")
+                    if a.tests or a.test_cmd:
+                        print(f"  tests ({tests_label}): {message}")
                 else:
                     attempt = None
                     if rc != 3 and os.path.exists(part) and read(part).strip():
@@ -525,7 +536,7 @@ def main():
                         print(f"  rejected; {a.target} not changed:")
                     else:
                         last_line = message.splitlines()[-1] if message else "?"
-                        print(f"  tests ({a.tests}): {last_line}")
+                        print(f"  tests ({tests_label}): {last_line}")
                         print(f"  tests failed; {a.target} holds the new section:")
                     for line in message.splitlines()[:20]:
                         print("    " + line)
