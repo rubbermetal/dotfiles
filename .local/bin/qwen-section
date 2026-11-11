@@ -3,7 +3,8 @@
 
 Usage:
   qwen-section [-m auto|7b|14b] (-s START [-e END] | -d NAME | -l A-B) [--ext EXT]
-               [-r MODULE]... [-R FILE]... [-t TESTS] [--timeout SEC] [--loose] [--keep] [-n]
+               [-r MODULE]... [-R FILE]... [-t TESTS] [--passes N] [--timeout SEC] [--loose]
+               [--keep] [-n]
                SPEC_FILE TARGET
   qwen-section --batch JOBS_FILE TARGET
 
@@ -22,6 +23,10 @@ Usage:
   -R FILE     whole file attached read-only (expensive); passed to qwen-build
   -t TESTS    pytest file/dir. Run with the new section in place after every attempt;
               failures go back to the model to fix.
+  --passes N  runs per model (default 1). The model gets 3 fix rounds per run; with 2 or
+              more, a failed run's attempt and its remaining problems seed the next run.
+              After the last pass -m auto moves to the 14b. (Measured once: a model that
+              could not see WHY a test failed repeated itself, so 2 did not help there.)
   --loose     skip the structure checks (one block, HTML tags) when the change is meant
               to break them, e.g. the section gains a second function or an unpaired tag
   --batch     several sections of one target, one after another. JOBS_FILE holds, per job,
@@ -81,7 +86,7 @@ import tempfile
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "share", "qwen-build"))
 from csscheck import css_problem  # noqa: E402
 from htmlcheck import inline_scripts, inline_styles, tag_balance  # noqa: E402
-from section import SectionError, brace_counts, extract, find_def, find_section, splice  # noqa: E402
+from section import SectionError, brace_counts, extract, find_def, find_section, hoist_imports, splice  # noqa: E402
 
 TEMPLATE_EXTS = (".html", ".htm", ".j2", ".jinja", ".jinja2")
 
@@ -251,6 +256,11 @@ def check(state):
     original = read(state["original"])
     body, indent = extract(original, first, last)
     new_body = read(state["part"]) if os.path.exists(state["part"]) else ""
+    if state["selector"]["kind"] == "def" and new_body.strip():
+        moved = hoist_imports(new_body)          # imports above the def go inside it; saves the model a round
+        if moved != new_body:
+            new_body = moved
+            write(state["part"], new_body)
 
     problem = None
     new_text = None
@@ -378,6 +388,7 @@ def main():
     ap.add_argument("-R", "--read-full", action="append", default=[])
     ap.add_argument("-t", "--tests", default=None)
     ap.add_argument("--timeout", type=int, default=1200)
+    ap.add_argument("--passes", type=int, default=1)
     ap.add_argument("--loose", action="store_true")
     ap.add_argument("--keep", action="store_true")
     ap.add_argument("-n", "--dry-run", action="store_true")
@@ -468,43 +479,58 @@ def main():
     signal.signal(signal.SIGHUP, stopped)
     try:
         for i, model in enumerate(models):
-            write(part, body)                    # every model starts from the original
-            write(a.target, text)
-            cmd = [build, "-m", model, "--rules", "none", "--no-lint", "--timeout", str(a.timeout), "--test-cmd", check_cmd,
-                   "--expect", os.path.abspath(a.target)]
-            for r in a.ref:
-                cmd += ["-r", r]
-            for r in a.read_full:
-                cmd += ["-R", r]
-            cmd += [full_spec, part]
-            sys.stdout.flush()
-            rc = subprocess.run(cmd).returncode
-            if rc == 3:                          # aider itself failed or timed out
+            attempt, message = None, ""
+            for n in range(max(1, a.passes)):
                 write(a.target, text)
-                verdict, message = "rejected", f"qwen-build failed (exit {rc})"
-            else:
-                verdict, message = check(state)
-
-            if verdict == "same":
-                print("  no change")
-            elif verdict == "ok":
-                new_count = len(read(part).rstrip("\n").split("\n"))
-                print(f"  replaced {count} lines with {new_count}")
-                if a.tests:
-                    print(f"  tests ({a.tests}): {message}")
-            else:
-                if os.path.exists(part) and read(part).strip():
-                    kept = os.path.join(work, f"attempt-{model}{ext}")
-                    shutil.copyfile(part, kept)
-                    print(f"  {model} attempt saved: {kept}")
-                if verdict == "rejected":
-                    print(f"  rejected; {a.target} not changed:")
+                if attempt is None:
+                    write(part, body)            # every model starts from the original
+                    spec_now = full_spec
+                else:                            # second pass: go on from its own attempt
+                    write(part, attempt)
+                    spec_now = os.path.join(work, f"spec-{model}-pass{n + 1}.txt")
+                    write(spec_now, read(full_spec).rstrip() + "\n\nThe file holds your previous attempt at this. It was checked "
+                          "and these problems remain. Fix them and reply with the complete section:\n\n"
+                          + "\n".join(message.splitlines()[:60]) + "\n")
+                    print(f"  {model} pass {n + 1}: continuing from its attempt")
+                cmd = [build, "-m", model, "--rules", "none", "--no-lint", "--timeout", str(a.timeout), "--test-cmd", check_cmd,
+                       "--expect", os.path.abspath(a.target)]
+                for r in a.ref:
+                    cmd += ["-r", r]
+                for r in a.read_full:
+                    cmd += ["-R", r]
+                cmd += [spec_now, part]
+                sys.stdout.flush()
+                rc = subprocess.run(cmd).returncode
+                if rc == 3:                      # aider itself failed or timed out
+                    write(a.target, text)
+                    verdict, message = "rejected", f"qwen-build failed (exit {rc})"
                 else:
-                    last_line = message.splitlines()[-1] if message else "?"
-                    print(f"  tests ({a.tests}): {last_line}")
-                    print(f"  tests failed; {a.target} holds the new section:")
-                for line in message.splitlines()[:20]:
-                    print("    " + line)
+                    verdict, message = check(state)
+
+                if verdict == "same":
+                    print("  no change")
+                elif verdict == "ok":
+                    new_count = len(read(part).rstrip("\n").split("\n"))
+                    print(f"  replaced {count} lines with {new_count}")
+                    if a.tests:
+                        print(f"  tests ({a.tests}): {message}")
+                else:
+                    attempt = None
+                    if rc != 3 and os.path.exists(part) and read(part).strip():
+                        attempt = read(part)
+                        kept = os.path.join(work, f"attempt-{model}{ext}")
+                        write(kept, attempt)
+                        print(f"  {model} attempt saved: {kept}")
+                    if verdict == "rejected":
+                        print(f"  rejected; {a.target} not changed:")
+                    else:
+                        last_line = message.splitlines()[-1] if message else "?"
+                        print(f"  tests ({a.tests}): {last_line}")
+                        print(f"  tests failed; {a.target} holds the new section:")
+                    for line in message.splitlines()[:20]:
+                        print("    " + line)
+                if verdict in ("ok", "same") or attempt is None or attempt.rstrip("\n") == body.rstrip("\n"):
+                    break
             if verdict in ("ok", "same"):
                 break
             if i + 1 < len(models):

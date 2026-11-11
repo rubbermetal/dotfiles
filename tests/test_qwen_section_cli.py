@@ -287,7 +287,7 @@ def test_auto_gives_up_after_the_14b(box):
 
 def test_auto_escalates_on_failing_tests_and_restores_between_models(box):
     (box / "test_five.py").write_text("def test_it():\n    assert 'return 5' in open('page.html').read()\n")
-    r = run(box, "-t", "test_five.py", "-s", r"function alpha\(", "spec.txt", "page.html",
+    r = run(box, "--passes", "1", "-t", "test_five.py", "-s", r"function alpha\(", "spec.txt", "page.html",
             FAKE_MODE_7B="write", FAKE_MODE_14B="same", body="function alpha(a) {\n    return 6;\n}\n")
     assert models(box) == ["7b", "14b"]
     assert r.returncode == 0                 # the 14b made no change: the 7b's text must be gone
@@ -736,9 +736,19 @@ def test_style_block_in_a_template_is_checked(cbox):
 
 # ---- lines put in front of the section --------------------------------------- #
 
-def test_imports_above_a_def_get_a_specific_instruction(pybox):
+def test_imports_above_a_def_are_moved_inside_it(pybox):
     r = run(pybox, "-m", "7b", "-d", "tail", "spec.txt", "mod.py",
             body="from datetime import date, timedelta\nimport math\n\ndef tail():\n    return math.floor(2.5)\n")
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert (pybox / "mod.py").read_text() == PY.replace(
+        "def tail():\n    return 2\n",
+        "def tail():\n    from datetime import date, timedelta\n    import math\n    return math.floor(2.5)\n")
+
+
+def test_imports_above_a_one_line_def_get_a_specific_instruction(pybox):
+    # a body on the def line cannot take the imports, so the model is told what to do
+    r = run(pybox, "-m", "7b", "--passes", "1", "-d", "tail", "spec.txt", "mod.py",
+            body="from datetime import date, timedelta\nimport math\n\ndef tail(): return math.floor(2.5)\n")
     assert r.returncode == 3
     assert "must start with: def tail():" in r.stdout
     assert "INSIDE the function" in r.stdout
@@ -788,3 +798,54 @@ def test_killed_run_restores_the_target_and_removes_the_part(box, sig):
     assert "interrupted" in out
     assert page(box) == PAGE
     assert not (box / "qwen-section-part.js").exists()
+
+
+# ---- hoisting runs before the checks; second pass per model ------------------ #
+
+def test_hoisting_keeps_a_docstring_first(pybox):
+    r = run(pybox, "-m", "7b", "-d", "tail", "spec.txt", "mod.py",
+            body='import math\ndef tail():\n    """Two."""\n    return math.floor(2.5)\n')
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert '    def tail():\n        """Two."""\n        import math\n' not in (pybox / "mod.py").read_text()   # top level, no indent
+    assert 'def tail():\n    """Two."""\n    import math\n    return math.floor(2.5)\n' in (pybox / "mod.py").read_text()
+
+
+def test_second_pass_continues_from_the_attempt_with_the_problems(box):
+    (box / "test_five.py").write_text("def test_it():\n    assert 'return 5' in open('page.html').read()\n")
+    r = run(box, "-m", "7b", "--passes", "2", "-t", "test_five.py", "-s", r"function alpha\(", "spec.txt", "page.html",
+            body="function alpha(a) {\n    return 6;\n}\n")
+    assert r.returncode == 4
+    assert models(box) == ["7b", "7b"]
+    assert "7b pass 2: continuing from its attempt" in r.stdout
+    assert (box / "rec.part").read_text() == "function alpha(a) {\n    return 6;\n}\n"   # pass 2 got the attempt
+    spec = (box / "rec.spec").read_text()
+    assert "your previous attempt" in spec and "test_five.py" in spec
+    assert "Make alpha return 5." in spec
+
+
+def test_auto_runs_one_pass_per_model_by_default(box):
+    r = run(box, "-s", r"function alpha\(", "spec.txt", "page.html", body="function alpha(a) {\n")
+    assert r.returncode == 3
+    assert models(box) == ["7b", "14b"]
+
+
+def test_auto_with_two_passes(box):
+    r = run(box, "--passes", "2", "-s", r"function alpha\(", "spec.txt", "page.html", body="function alpha(a) {\n")
+    assert r.returncode == 3
+    assert models(box) == ["7b", "7b", "14b", "14b"]
+    assert "trying the 14b" in r.stdout
+
+
+def test_no_second_pass_after_an_empty_or_failed_run(box):
+    r = run(box, "--passes", "2", "-s", r"function alpha\(", "spec.txt", "page.html", mode="empty")
+    assert models(box) == ["7b", "14b"]
+    (box / "rec.models").unlink()
+    r = run(box, "--passes", "2", "-s", r"function alpha\(", "spec.txt", "page.html", mode="fail")
+    assert r.returncode == 3
+    assert models(box) == ["7b", "14b"]
+
+
+def test_passes_one_is_a_single_run(box):
+    r = run(box, "-m", "14b", "--passes", "1", "-s", r"function alpha\(", "spec.txt", "page.html", body="function alpha(a) {\n")
+    assert r.returncode == 3
+    assert models(box) == ["14b"]

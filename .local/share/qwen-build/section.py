@@ -141,6 +141,40 @@ def find_def(text, name):
     return first, node.end_lineno
 
 
+def hoist_imports(body):
+    """body with import lines that stand above its one function moved inside that function.
+
+    Models put a needed import above the def; in a section that is outside the block.
+    Only acts when body is: import lines, then exactly one def (decorators allowed) whose
+    body starts on its own line. Anything else is returned unchanged.
+    """
+    try:
+        tree = ast.parse(body)
+    except (SyntaxError, ValueError):
+        return body
+    imports = []
+    rest = list(tree.body)
+    while rest and isinstance(rest[0], (ast.Import, ast.ImportFrom)):
+        imports.append(rest.pop(0))
+    if not imports or len(rest) != 1 or not isinstance(rest[0], (ast.FunctionDef, ast.AsyncFunctionDef)):
+        return body
+    func = rest[0]
+    first_stmt = func.body[0]
+    if first_stmt.lineno == func.lineno:                 # def f(): return 1
+        return body
+    lines = body.split("\n")
+    indent = lines[first_stmt.lineno - 1][:len(lines[first_stmt.lineno - 1]) - len(lines[first_stmt.lineno - 1].lstrip())]
+    is_doc = isinstance(first_stmt, ast.Expr) and isinstance(first_stmt.value, ast.Constant) and isinstance(first_stmt.value.value, str)
+    at = first_stmt.end_lineno if is_doc else first_stmt.lineno - 1      # 0-based index to insert before
+    moved = []
+    for node in imports:
+        moved += [indent + x.strip() for x in lines[node.lineno - 1:node.end_lineno]] if node.lineno == node.end_lineno else \
+                 [indent + x for x in lines[node.lineno - 1:node.end_lineno]]
+    start = min([func.lineno] + [d.lineno for d in func.decorator_list]) - 1
+    out = lines[start:at] + moved + lines[at:]
+    return "\n".join(out).rstrip("\n") + "\n"
+
+
 def extract(text, first, last):
     """(body, indent): lines first..last with their common indentation removed."""
     lines = _lines(text)

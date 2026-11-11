@@ -8,7 +8,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / ".local" / "share" / "qwen-build"))
 
 import section  # noqa: E402
-from section import SectionError, brace_counts, extract, find_def, find_section, splice  # noqa: E402
+from section import SectionError, brace_counts, extract, find_def, find_section, hoist_imports, splice  # noqa: E402
 
 PAGE = (
     "<html>\n"                                  # 1
@@ -338,3 +338,40 @@ def test_find_def_round_trip():
 def test_module_exports_only_the_spec_names():
     public = {n for n in dir(section) if not n.startswith("_")}
     assert {"SectionError", "find_section", "find_def", "brace_counts", "extract", "splice"} <= public
+
+
+# ---- hoist_imports ------------------------------------------------------------ #
+
+def test_hoist_moves_imports_into_the_function():
+    body = "from datetime import date\nimport math\n\ndef f(x):\n    return math.floor(x)\n"
+    assert hoist_imports(body) == "def f(x):\n    from datetime import date\n    import math\n    return math.floor(x)\n"
+
+
+def test_hoist_keeps_decorators_and_the_docstring_first():
+    body = 'import math\n@staticmethod\ndef f(x):\n    """Doc."""\n    return math.floor(x)\n'
+    assert hoist_imports(body) == '@staticmethod\ndef f(x):\n    """Doc."""\n    import math\n    return math.floor(x)\n'
+
+
+def test_hoist_keeps_a_multiline_import_together():
+    body = "from os.path import (\n    join,\n    exists,\n)\ndef f():\n    return join\n"
+    out = hoist_imports(body)
+    assert out.startswith("def f():\n    from os.path import (\n")
+    compile(out, "x", "exec")
+
+
+def test_hoist_uses_the_body_indent():
+    body = "import math\ndef f():\n  return math.pi\n"
+    assert hoist_imports(body) == "def f():\n  import math\n  return math.pi\n"
+
+
+@pytest.mark.parametrize("body", [
+    "def f():\n    return 1\n",                                  # nothing to move
+    "import math\ndef f(): return math.pi\n",                   # body on the def line
+    "import math\ndef f():\n    return 1\ndef g():\n    return 2\n",   # two defs
+    "import math\nX = 1\ndef f():\n    return X\n",           # other code between
+    "import math\nclass C:\n    pass\n",                       # a class, not a def
+    "import math\ndef f(:\n",                                  # does not parse
+    "",
+])
+def test_hoist_leaves_other_shapes_alone(body):
+    assert hoist_imports(body) == body
