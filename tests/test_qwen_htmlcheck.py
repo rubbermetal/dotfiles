@@ -5,7 +5,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / ".local" / "share" / "qwen-build"))
 
-from htmlcheck import inline_scripts, tag_balance  # noqa: E402
+from htmlcheck import inline_scripts, inline_styles, tag_balance  # noqa: E402
 
 
 def test_balanced_document():
@@ -40,3 +40,9 @@ def test_inline_scripts_none():
 
 def test_script_body_is_not_unescaped():
     assert inline_scripts("<script>a = '&amp;' < b;</script>") == ["a = '&amp;' < b;"]
+
+
+def test_inline_styles():
+    text = "<style>a { b: c; }</style><p>x</p><style media='print'>\n.d { e: f }\n</style>"
+    assert inline_styles(text) == ["a { b: c; }", "\n.d { e: f }\n"]
+    assert inline_styles("<p style='color:red'>x</p>") == []

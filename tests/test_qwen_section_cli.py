@@ -38,6 +38,12 @@ FAKE = textwrap.dedent('''\
         r = subprocess.run(cmd, shell=True, capture_output=True, text=True)
         open(rec + ".checks", "a").write("exit %d\\n%s----\\n" % (r.returncode, r.stdout))
         return r.returncode
+    if mode == "hang":                        # writes a bad attempt into place, then never returns
+        open(part, "w").write(os.environ["FAKE_BODY"])
+        check()
+        open(rec + ".hanging", "w").write("x")
+        import time
+        time.sleep(60)
     if mode == "fail":
         sys.exit(3)
     if mode == "empty":
@@ -650,3 +656,135 @@ def test_ext_is_not_guessed_for_non_templates(pybox):
     (pybox / "mod.py").write_text('X = "<script>"\n' + PY)
     run(pybox, "-m", "7b", "-d", "tail", "spec.txt", "mod.py", body="def tail():\n    return 3\n")
     assert part_name(pybox) == "qwen-section-part.py"
+
+
+# ---- CSS -------------------------------------------------------------------- #
+
+SHEET = (
+    ".a {\n"                 # 1
+    "  color: red;\n"        # 2
+    "  margin: 0;\n"         # 3
+    "}\n"                    # 4
+    ".b {\n"                 # 5
+    "  color: blue;\n"       # 6
+    "}\n"                    # 7
+)
+
+
+@pytest.fixture
+def cbox(box):
+    (box / "s.css").write_text(SHEET)
+    (box / "t.html").write_text("<style>\n" + SHEET + "</style>\n" + TPL)
+    return box
+
+
+def css(cbox, args, body, target="s.css"):
+    return run(cbox, "-m", "7b", *args, "spec.txt", target, body=body)
+
+
+def test_css_rule_edit_passes(cbox):
+    r = css(cbox, ["-s", r"^\.a \{"], ".a {\n  color: green;\n  margin: 0;\n}\n")
+    assert r.returncode == 0, r.stdout + r.stderr
+    assert (cbox / "s.css").read_text() == SHEET.replace("red", "green")
+
+
+def test_css_missing_semicolon_is_rejected(cbox):
+    r = css(cbox, ["-s", r"^\.a \{"], ".a {\n  color: green\n  margin: 0;\n}\n")
+    assert r.returncode == 3
+    assert "CSS error: missing ; after: color: green at line 2 of the section" in r.stdout
+    assert (cbox / "s.css").read_text() == SHEET
+
+
+def test_css_missing_colon_is_rejected(cbox):
+    r = css(cbox, ["-s", r"^\.b \{"], ".b {\n  color blue;\n}\n")
+    assert r.returncode == 3
+    assert "not a declaration" in r.stdout
+
+
+def test_css_fragment_is_judged_in_the_whole_file(cbox):
+    # two declaration lines are not a sheet by themselves; the file as a whole is checked
+    r = css(cbox, ["-l", "2-3"], "color: green\nmargin: 0;\n")
+    assert r.returncode == 3
+    assert "CSS error: missing ;" in r.stdout and "of the section" in r.stdout
+    r = css(cbox, ["-l", "2-3"], "color: green;\nmargin: 1px;\n")
+    assert r.returncode == 0, r.stdout + r.stderr
+
+
+def test_css_unclosed_comment_is_rejected(cbox):
+    r = css(cbox, ["-l", "6-6"], "color: blue; /* note\n")
+    assert r.returncode == 3
+    assert "never closed" in r.stdout
+
+
+def test_css_check_is_skipped_for_a_file_that_was_not_sound(cbox):
+    (cbox / "s.css").write_text(SHEET + "$placeholder$\n")
+    r = css(cbox, ["-l", "2-3"], "color: green\nmargin: 0;\n")
+    assert r.returncode == 0, r.stdout + r.stderr
+
+
+def test_style_block_in_a_template_is_checked(cbox):
+    r = css(cbox, ["-s", r"^\.a \{"], ".a {\n  color: green\n  margin: 0;\n}\n", target="t.html")
+    assert r.returncode == 3
+    assert "CSS error" in r.stdout
+    assert part_name(cbox) == "qwen-section-part.css"
+    r = css(cbox, ["-l", "3-4"], "color: green\nmargin: 0;\n", target="t.html")       # a fragment
+    assert r.returncode == 3
+    assert "CSS error in the <style> block" in r.stdout
+    r = css(cbox, ["-l", "3-4"], "color: green;\nmargin: 0;\n", target="t.html")
+    assert r.returncode == 0, r.stdout + r.stderr
+
+
+# ---- lines put in front of the section --------------------------------------- #
+
+def test_imports_above_a_def_get_a_specific_instruction(pybox):
+    r = run(pybox, "-m", "7b", "-d", "tail", "spec.txt", "mod.py",
+            body="from datetime import date, timedelta\nimport math\n\ndef tail():\n    return math.floor(2.5)\n")
+    assert r.returncode == 3
+    assert "must start with: def tail():" in r.stdout
+    assert "INSIDE the function" in r.stdout
+    assert "        from datetime import date, timedelta" in r.stdout and "        import math" in r.stdout
+    assert (pybox / "mod.py").read_text() == PY
+
+
+def test_imports_inside_the_def_are_accepted(pybox):
+    r = run(pybox, "-m", "7b", "-d", "tail", "spec.txt", "mod.py",
+            body="def tail():\n    import math\n    return math.floor(2.5)\n")
+    assert r.returncode == 0, r.stdout + r.stderr
+
+
+def test_other_lines_above_a_def_are_named(pybox):
+    r = run(pybox, "-m", "7b", "-d", "tail", "spec.txt", "mod.py", body="LIMIT = 3\n\ndef tail():\n    return LIMIT\n")
+    assert r.returncode == 3
+    assert "1 line before the section's first line" in r.stdout
+    assert "must start with: def tail():" in r.stdout
+
+
+def test_python_note_tells_the_model_where_imports_go(pybox):
+    run(pybox, "-m", "7b", "-d", "tail", "spec.txt", "mod.py", body="def tail():\n    return 3\n")
+    assert "INSIDE the function body" in (pybox / "rec.spec").read_text()
+    run(pybox, "-m", "7b", "-s", r"function alpha\(", "spec.txt", "page.html")
+    assert "INSIDE the function body" not in (pybox / "rec.spec").read_text()
+
+
+# ---- a killed run cleans up --------------------------------------------------- #
+
+@pytest.mark.parametrize("sig", ["SIGTERM", "SIGINT"])
+def test_killed_run_restores_the_target_and_removes_the_part(box, sig):
+    import signal
+    import time
+    (box / "test_never.py").write_text("def test_it():\n    assert False\n")
+    env = dict(os.environ, QWEN_BUILD=str(box / "fake-qwen-build"), FAKE_RECORD=str(box / "rec"),
+               FAKE_MODE="hang", FAKE_BODY=GOOD)
+    p = subprocess.Popen([sys.executable, str(SCRIPT), "-m", "7b", "-t", "test_never.py", "-s", r"function alpha\(",
+                          "spec.txt", "page.html"], cwd=box, env=env, stdout=subprocess.PIPE, text=True)
+    for _ in range(200):
+        if (box / "rec.hanging").exists():
+            break
+        time.sleep(0.05)
+    assert "return 5" in page(box)             # the failing attempt is in place while the model "works"
+    p.send_signal(getattr(signal, sig))
+    out, _ = p.communicate(timeout=20)
+    assert p.returncode == 130
+    assert "interrupted" in out
+    assert page(box) == PAGE
+    assert not (box / "qwen-section-part.js").exists()

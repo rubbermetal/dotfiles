@@ -53,7 +53,10 @@ model gets the problems back to fix:
   * the section is still found at the same place as ONE block (-s, -d): first line kept,
     name not changed, nothing added after the block
   * an .html/.j2 target: the Jinja template still parses, every inline <script> that
-    passed node --check still does, and the open/close tag counts are unchanged
+    passed node --check still does, every <style> block is still sound CSS, and the
+    open/close tag counts are unchanged
+  * CSS (a .css target, a .css part, a <style> block): no unclosed comment, string or
+    bracket, no missing ; or :, no stray text
   * the -t tests pass
 Every check only applies when the original passed it, so a file that was already odd
 is not blamed on the model.
@@ -62,19 +65,22 @@ for review.
 
 Exit codes: 0 done (or no change), 2 bad arguments or section not found,
             3 the model run failed or its result was rejected (target untouched),
-            4 tests failed after the change (target holds the new text).
+            4 tests failed after the change (target holds the new text),
+            130 interrupted or killed (target restored, part file removed).
 """
 import argparse
 import json
 import os
 import shlex
 import shutil
+import signal
 import subprocess
 import sys
 import tempfile
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "share", "qwen-build"))
-from htmlcheck import inline_scripts, tag_balance  # noqa: E402
+from csscheck import css_problem  # noqa: E402
+from htmlcheck import inline_scripts, inline_styles, tag_balance  # noqa: E402
 from section import SectionError, brace_counts, extract, find_def, find_section, splice  # noqa: E402
 
 TEMPLATE_EXTS = (".html", ".htm", ".j2", ".jinja", ".jinja2")
@@ -174,7 +180,16 @@ def structure_problem(state, original, new_text, new_body):
         return (f"After your change the section can no longer be found ({exc}). It must still begin with {what}, "
                 "exactly once. Do not rename it and do not repeat it.")
     if got[0] != want[0]:
-        return (f"The section must still begin with its original first line; it now starts with: {first_line}")
+        must = original.split("\n")[first - 1].strip()
+        lead = [x.strip() for x in new_body.split("\n")[:max(got[0] - first, 0)] if x.strip()]
+        if lead and all(x.startswith(("import ", "from ")) for x in lead):
+            return (f"Your reply starts with import lines, but it must start with: {must}\n"
+                    "Import lines are not allowed above it. Move these lines INSIDE the function, as the first lines of its body:\n"
+                    + "\n".join("    " + x for x in lead))
+        if lead:
+            return (f"Your reply has {len(lead)} line{'s' if len(lead) != 1 else ''} before the section's first line. "
+                    f"Remove them: the reply must start with: {must}")
+        return f"The section must still begin with its original first line ({must}); it now starts with: {first_line}"
     if got[1] < want[1]:
         extra = got[1] - first + 2
         if sel["kind"] == "start" and sel["end"] is not None:
@@ -204,6 +219,13 @@ def structure_problem(state, original, new_text, new_body):
                     err = node_check(new)
                     if err is not None:
                         return "JavaScript syntax error in the <script> block after your change (node --check):\n" + err
+        old_styles, new_styles = inline_styles(original), inline_styles(new_text)
+        if len(old_styles) == len(new_styles) == len(state["styles_ok"]):
+            for ok, old, new in zip(state["styles_ok"], old_styles, new_styles):
+                if ok and new != old:
+                    err = css_problem(new)
+                    if err is not None:
+                        return f"CSS error in the <style> block after your change: {err[0]} (line {err[1]} of that block)"
     return None
 
 
@@ -251,6 +273,14 @@ def check(state):
             err = node_check(new_body)
             if err is not None:
                 problem = "JavaScript syntax error (node --check):\n" + err
+        if problem is None and state["css_ok"]:
+            err = css_problem(new_body)
+            if err is not None:
+                problem = f"CSS error: {err[0]} at line {err[1]} of the section"
+        if problem is None and state["cssfile_ok"]:
+            err = css_problem(new_text)
+            if err is not None:
+                problem = f"CSS error: {err[0]} at {where(err[1], first, len(new_body.rstrip(chr(10)).split(chr(10))), target)}"
         if problem is None and not state["loose"]:
             problem = structure_problem(state, original, new_text, new_body)
     if problem is not None:
@@ -402,6 +432,9 @@ def main():
             "program: other code around it exists and must keep working. Rewrite this section as asked below. "
             "Keep every function name, signature and line you are not asked to change. Do not add imports, "
             "wrappers or example code. Reply with the complete section.")
+    if ext == ".py":
+        note += (" The first line of your reply must be the first line of the section as it is now. If you need a module that "
+                 "is not imported yet, import it INSIDE the function body (first lines of the body), never above the def.")
     full_spec = os.path.join(work, "spec.txt")
     write(full_spec, note + "\n\n" + read(a.spec).rstrip() + "\n")
     write(os.path.join(work, "original.txt"), text)
@@ -415,6 +448,9 @@ def main():
         "template": a.target.endswith(TEMPLATE_EXTS),
         "jinja_ok": a.target.endswith(TEMPLATE_EXTS) and jinja_error(text) is None,
         "scripts_ok": scripts_ok(text) if a.target.endswith(TEMPLATE_EXTS) else [],
+        "styles_ok": [css_problem(x) is None for x in inline_styles(text)] if a.target.endswith(TEMPLATE_EXTS) else [],
+        "css_ok": ext == ".css" and css_problem(body) is None,
+        "cssfile_ok": a.target.endswith(".css") and css_problem(text) is None,
         "py_ok": a.target.endswith(".py") and compiles(text, a.target) is None,
         "js_ok": ext in (".js", ".mjs") and shutil.which("node") is not None and node_check(body) is None,
     }
@@ -425,6 +461,11 @@ def main():
     build = os.environ.get("QWEN_BUILD", "qwen-build")
     models = ["7b", "14b"] if a.model == "auto" else [a.model]
     verdict = "rejected"
+
+    def stopped(signum, frame):                  # let the cleanup below run when the run is killed
+        raise KeyboardInterrupt
+    signal.signal(signal.SIGTERM, stopped)
+    signal.signal(signal.SIGHUP, stopped)
     try:
         for i, model in enumerate(models):
             write(part, body)                    # every model starts from the original
@@ -468,6 +509,12 @@ def main():
                 break
             if i + 1 < len(models):
                 print(f"  trying the {models[i + 1]}")
+    except KeyboardInterrupt:
+        write(a.target, text)                    # a half-judged attempt must not stay in the target
+        print(f"\nqwen-section: interrupted; {a.target} restored")
+        if os.path.exists(part):
+            os.remove(part)
+        return 130
     finally:
         if not a.keep and os.path.exists(part):
             os.remove(part)
