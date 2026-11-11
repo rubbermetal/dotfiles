@@ -136,6 +136,7 @@ if $UNINSTALL; then
     unlink_file "$HOME/.local/share/console-palette.sh"
     unlink_file "$HOME/.local/bin/qwen-build"
     unlink_file "$HOME/.local/bin/qwen-lint"
+    unlink_file "$HOME/.local/bin/qwen-section"
     for f in rules-code.txt rules-tests.txt model-settings.yml; do
         unlink_file "$HOME/.local/share/qwen-build/$f"
     done
@@ -261,9 +262,12 @@ link_file "$DOTFILES_DIR/Scripts" "$HOME/Scripts"
 link_file "$DOTFILES_DIR/.local/bin/nano-x" "$HOME/.local/bin/nano-x"
 link_file "$DOTFILES_DIR/.local/share/nano/x" "$HOME/.local/share/nano/x"
 link_file "$DOTFILES_DIR/.local/share/console-palette.sh" "$HOME/.local/share/console-palette.sh"
-# Local-model coding helpers (qwen-build wraps aider + Ollama; qwen-lint checks its output)
+# Local-model coding helpers (qwen-build wraps aider + Ollama; qwen-lint checks its output;
+# qwen-section has the model rewrite one section of a big file)
 link_file "$DOTFILES_DIR/.local/bin/qwen-build" "$HOME/.local/bin/qwen-build"
 link_file "$DOTFILES_DIR/.local/bin/qwen-lint" "$HOME/.local/bin/qwen-lint"
+# qwen-section finds section.py beside the real file (.local/share/qwen-build), so only the launcher is linked.
+link_file "$DOTFILES_DIR/.local/bin/qwen-section" "$HOME/.local/bin/qwen-section"
 for f in rules-code.txt rules-tests.txt model-settings.yml; do
     link_file "$DOTFILES_DIR/.local/share/qwen-build/$f" "$HOME/.local/share/qwen-build/$f"
 done
