@@ -2,8 +2,8 @@
 """qwen-build: have the local Qwen model (via aider) write ONE file from a spec.
 
 Usage:
-  qwen-build [-m 7b|14b] [-r REF]... [-t TESTFILE] [--rules auto|code|tests|none]
-             [--timeout SEC] [--no-lint] [-n] SPEC_FILE TARGET
+  qwen-build [-m 7b|14b] [-r REF]... [-t TESTFILE | --test-cmd CMD] [--rules auto|code|tests|none]
+             [--timeout SEC] [--no-lint] [--expect PATH]... [-n] SPEC_FILE TARGET
 
   SPEC_FILE   plain-text spec (what to write)
   TARGET      the one file to write, relative to the git root (or cwd)
@@ -14,6 +14,10 @@ Usage:
   -R FILE     attach a whole file read-only (expensive; only when signatures are not enough)
   -t TESTS    pytest file/dir to run after each edit; ALL failures (short tracebacks) go back to the model.
               Defaults to TARGET itself when TARGET is a test file.
+  --expect P  another path this run is meant to change (repeat); no stray-file warning for it
+  --test-cmd  shell command to run after each edit instead of pytest; when it exits non-zero
+              its output goes back to the model (qwen-section uses this to check a section
+              inside its real file). The caller judges the final result itself.
   --rules     preamble of hard rules (default auto: tests rules for tests/, else code rules)
   -n          dry run: show the command and the final prompt, do not call the model
 
@@ -24,6 +28,8 @@ What it adds on top of a bare aider call:
     utcnow, undefined names): aider shows the output to the model so it fixes itself
   * optional pytest after every edit (-t), with DeprecationWarning as error
   * aider history files go to a temp dir, not into the repo
+  * aider cannot pull other repo files into the chat (it does that for any file name it sees
+    in the prompt or the reply); only TARGET and the -R files are visible to it
   * a summary at the end: time, lint status, test status, stray files
 
 Exit codes: 0 clean, 1 lint problems remain, 2 target missing or empty, 3 aider failed/timed out,
@@ -86,6 +92,8 @@ def main():
     ap.add_argument("-r", "--ref", action="append", default=[], help="module whose API (signatures only) is shown in the prompt")
     ap.add_argument("-R", "--read-full", action="append", default=[], help="file shown to aider in full (read-only); costs many tokens")
     ap.add_argument("-t", "--tests", default=None)
+    ap.add_argument("--test-cmd", default=None, help="shell command run after each edit instead of pytest")
+    ap.add_argument("--expect", action="append", default=[], help="another path this run is meant to change (no stray-file warning for it)")
     ap.add_argument("--rules", default="auto", choices=["auto", "code", "tests", "none"])
     ap.add_argument("--timeout", type=int, default=1200)
     ap.add_argument("--no-lint", action="store_true")
@@ -127,6 +135,8 @@ def main():
         open(target, "w").write("# (empty)\n")  # an empty --file makes the model chat instead of writing code
 
     tests = rel(a.tests) if a.tests is not None else (target if is_test_path(target) and target.endswith(".py") else None)
+    if a.test_cmd:
+        tests = None  # the custom command replaces pytest, during the run and in the summary
 
     cmd = ["aider", "--model", f"ollama/qwen2.5-coder:{a.model}", "--edit-format", "whole", "--yes-always",
            "--no-auto-commits", "--map-tokens", "0", "--no-pretty", "--no-stream", "--no-gitignore",
@@ -134,13 +144,22 @@ def main():
            "--model-settings-file", os.path.join(SHARE, "model-settings.yml"),
            "--chat-history-file", os.path.join(work, "chat.md"), "--input-history-file", os.path.join(work, "input"),
            "--message-file", msg_file, "--file", target]
+    # aider adds any repo file whose name appears in the prompt or in the model's reply to the
+    # chat (with --yes-always, without asking). A spec that names another file would pull that
+    # whole file in and overflow the model's context. Hide everything but the files we pass.
+    ignore_file = os.path.join(work, "aiderignore")
+    with open(ignore_file, "w", encoding="utf-8") as f:
+        f.write("*\n" + "".join(f"!/{p}\n" for p in [target] + full))
+    cmd += ["--aiderignore", ignore_file]
     for r in full:
         cmd += ["--read", r]
     if a.no_lint:
         cmd.append("--no-auto-lint")
     else:
         cmd += ["--auto-lint", "--lint-cmd", "python: qwen-lint"]
-    if tests:
+    if a.test_cmd:
+        cmd += ["--auto-test", "--test-cmd", a.test_cmd]
+    elif tests:
         cmd += ["--auto-test", "--test-cmd", f"bash -c 'set -o pipefail; python3 -m pytest -q --tb=short -W error::DeprecationWarning {shlex.quote(tests)} 2>&1 | head -80'"]
 
     if a.dry_run:
@@ -177,7 +196,7 @@ def main():
         status = 2
     else:
         print(f"  wrote {target}: {sum(1 for _ in open(target))} lines")
-        lint = subprocess.run(["qwen-lint", target], capture_output=True, text=True, env=os.environ) if target.endswith(".py") else None
+        lint = subprocess.run(["qwen-lint", target], capture_output=True, text=True, env=os.environ) if target.endswith(".py") and not a.no_lint else None
         if lint is not None:
             if lint.returncode:
                 print("  LINT PROBLEMS REMAIN:")
@@ -194,7 +213,9 @@ def main():
                 status = 4 if status == 0 else status
 
     after = porcelain(root)
-    stray = sorted(p for p in after - before if p != target and not p.startswith(".aider") and not p.startswith(target.rstrip("/") + "/"))
+    expected = {rel(p) for p in a.expect}
+    stray = sorted(p for p in after - before if p != target and p not in expected and not p.startswith(".aider")
+                   and "__pycache__" not in p and not p.startswith(target.rstrip("/") + "/"))
     if stray:
         print("  WARNING new files besides the target (aider may have written to the wrong path):", ", ".join(stray))
     print(f"  log: {log}")

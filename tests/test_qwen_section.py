@@ -8,7 +8,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / ".local" / "share" / "qwen-build"))
 
 import section  # noqa: E402
-from section import SectionError, extract, find_section, splice  # noqa: E402
+from section import SectionError, brace_counts, extract, find_def, find_section, splice  # noqa: E402
 
 PAGE = (
     "<html>\n"                                  # 1
@@ -206,6 +206,135 @@ def test_splice_empty_body_is_an_error():
         splice("a\nb\n", 1, 1, "\n\n", "")
 
 
+# ---- braces inside strings and comments ------------------------------------ #
+
+def test_brace_counts_plain():
+    assert brace_counts("a { b { } }") == (2, 2)
+    assert brace_counts("") == (0, 0)
+
+
+@pytest.mark.parametrize("text", [
+    "x = '}';",
+    'x = "{{{";',
+    "x = `}\n}`;",
+    "// } } }",
+    "/* {\n { */",
+    "x = 'it\\'s }';",
+    'x = "a \\" }";',
+])
+def test_brace_counts_ignores_strings_and_comments(text):
+    assert brace_counts(text) == (0, 0)
+
+
+def test_quote_ends_at_the_line_end():
+    # an apostrophe in prose must not hide the braces of later lines
+    assert brace_counts("don't\n{ }\n") == (1, 1)
+    assert brace_counts("x = 'abc\\\n{ }\n") == (1, 1)
+
+
+def test_comment_markers_inside_strings_are_text():
+    assert brace_counts("u = 'http://x'; f() { }") == (1, 1)
+    assert brace_counts('u = "/* x"; f() { }') == (1, 1)
+
+
+def test_find_ignores_a_closing_brace_in_a_string():
+    text = "function f() {\n    const s = '}';\n    return s; // }\n}\nafter();\n"
+    assert find_section(text, r"function f") == (1, 4)
+
+
+def test_find_ignores_an_opening_brace_in_a_comment():
+    text = "function f() {\n    /* { */\n    return `${a} {`;\n}\nafter();\n"
+    assert find_section(text, r"function f") == (1, 4)
+
+
+def test_find_else_on_the_closing_line_keeps_going():
+    text = "if (a) {\n  x;\n} else {\n  y;\n}\nz;\n"
+    assert find_section(text, r"^if") == (1, 5)
+
+
+# ---- find_def (Python) ----------------------------------------------------- #
+
+PY = (
+    "import os\n"                       # 1
+    "\n"                                # 2
+    "\n"                                # 3
+    "@decorator\n"                      # 4
+    "@other(1)\n"                       # 5
+    "def build(\n"                      # 6
+    "    a,\n"                          # 7
+    "    b=2,\n"                        # 8
+    "):\n"                              # 9
+    "    x = {\n"                       # 10
+    "        'k': 1,\n"                 # 11
+    "    }\n"                           # 12
+    "\n"                                # 13
+    "    return x\n"                    # 14
+    "\n"                                # 15
+    "\n"                                # 16
+    "class Reader:\n"                   # 17
+    "    def parse(self):\n"            # 18
+    "        return 1\n"                # 19
+    "\n"                                # 20
+    "    async def load(self):\n"       # 21
+    "        def inner():\n"            # 22
+    "            return 2\n"            # 23
+    "        return inner\n"            # 24
+    "\n"                                # 25
+    "\n"                                # 26
+    "class Writer:\n"                   # 27
+    "    def parse(self):\n"            # 28
+    "        return 3\n"                # 29
+)
+
+
+def test_find_def_function_with_decorators_and_multiline_signature():
+    assert find_def(PY, "build") == (4, 14)
+
+
+def test_find_def_class():
+    assert find_def(PY, "Reader") == (17, 24)
+    assert find_def(PY, "Writer") == (27, 29)
+
+
+def test_find_def_method_by_dotted_name():
+    assert find_def(PY, "Reader.parse") == (18, 19)
+    assert find_def(PY, "Writer.parse") == (28, 29)
+
+
+def test_find_def_async_and_nested():
+    assert find_def(PY, "load") == (21, 24)
+    assert find_def(PY, "inner") == (22, 23)
+    assert find_def(PY, "Reader.load.inner") == (22, 23)
+
+
+def test_find_def_ambiguous_bare_name():
+    with pytest.raises(SectionError) as e:
+        find_def(PY, "parse")
+    assert "2 defs match" in str(e.value)
+    assert "Reader.parse" in str(e.value) and "Writer.parse" in str(e.value)
+
+
+def test_find_def_missing():
+    with pytest.raises(SectionError) as e:
+        find_def(PY, "nope")
+    assert "no def or class named" in str(e.value)
+    with pytest.raises(SectionError):
+        find_def(PY, "Reader.nope")
+
+
+def test_find_def_unparsable_file():
+    with pytest.raises(SectionError) as e:
+        find_def("def f(:\n", "f")
+    assert "cannot parse" in str(e.value)
+
+
+def test_find_def_round_trip():
+    first, last = find_def(PY, "Reader.parse")
+    body, indent = extract(PY, first, last)
+    assert (body, indent) == ("def parse(self):\n    return 1\n", "    ")
+    assert splice(PY, first, last, body, indent) == PY
+
+
 def test_module_exports_only_the_spec_names():
     public = {n for n in dir(section) if not n.startswith("_")}
-    assert {"SectionError", "find_section", "extract", "splice"} <= public
+    assert {"SectionError", "find_section", "find_def", "brace_counts", "extract", "splice"} <= public

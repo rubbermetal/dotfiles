@@ -2,41 +2,92 @@
 """qwen-section: have the local Qwen model rewrite ONE section of a big file.
 
 Usage:
-  qwen-section [-m 7b|14b] (-s START [-e END] | -l A-B) [--ext EXT] [-t TESTS]
-               [--timeout SEC] [--keep] [-n] SPEC_FILE TARGET
+  qwen-section [-m auto|7b|14b] (-s START [-e END] | -d NAME | -l A-B) [--ext EXT]
+               [-r MODULE]... [-R FILE]... [-t TESTS] [--timeout SEC] [--loose] [--keep] [-n]
+               SPEC_FILE TARGET
+  qwen-section --batch JOBS_FILE TARGET
 
   -s START    regular expression matching exactly one line: the first line of the section.
-              Without -e the section runs to the end of the { } block that starts there.
+              Without -e the section runs to the end of the { } block that starts there
+              (braces inside strings and comments are ignored).
   -e END      regular expression: the first line after START that matches is the last line
-  -l A-B      line numbers instead of patterns (1-based, inclusive)
-  --ext EXT   extension for the part file the model edits (js for a script block inside
-              an .html template); default: the target's own extension
-  -t TESTS    pytest file/dir to run after the section is put back
+  -d NAME     a Python function or class by name, decorators included: build, Reader,
+              Reader.parse (dotted when the bare name is not unique)
+  -l A-B      line numbers (1-based, inclusive)
+  -m MODEL    auto (default): try the 7b, and when its result is rejected or the tests
+              fail, start again from the original with the 14b
+  --ext EXT   extension for the part file the model edits. Default: the target's own, but
+              js / css when the section lies inside a <script> / <style> block of a template
+  -r MODULE   module whose real API (signatures) the model should see; passed to qwen-build
+  -R FILE     whole file attached read-only (expensive); passed to qwen-build
+  -t TESTS    pytest file/dir. Run with the new section in place after every attempt;
+              failures go back to the model to fix.
+  --loose     skip the structure checks (one block, HTML tags) when the change is meant
+              to break them, e.g. the section gains a second function or an unpaired tag
+  --batch     several sections of one target, one after another. JOBS_FILE holds, per job,
+              a line "== OPTIONS" (the options above, without SPEC_FILE and TARGET) followed
+              by that job's spec text. Each job finds its section in the file as the jobs
+              before it left it, so prefer -s/-d over -l. Stops at the first job that fails.
   --keep      keep the part file (qwen-section-part.EXT beside the target)
   -n          dry run: show which lines would be handed over, call nothing
 
 Examples:
   qwen-section -s 'function syncSideAxis\\(' --ext js spec.txt templates/index.html
+  qwen-section -d Reader.parse -r suite/db.py -t tests/test_reader.py spec.txt suite/reader.py
   qwen-section -s '<!-- BEGIN nav -->' -e '<!-- END nav -->' spec.txt page.html
-  qwen-section -l 120-180 -t tests/test_x.py spec.txt suite/app/routes.py
-  qwen-section -n -s 'def build\\(' spec.txt routes.py
+  qwen-section -l 120-180 spec.txt suite/app/routes.py
+  qwen-section -n -d build spec.txt routes.py
+  qwen-section --batch jobs.txt templates/index.html
+
+  jobs.txt:
+      == -s 'function syncSideAxis\\(' --ext js
+      Add the property afterFit: ... after the grid line.
+      == -m 14b -s 'function buildInputs\\('
+      Use the class names from the list below ...
 
 The model only ever sees the section (dedented, in a small file), so the size of the
-target does not matter. The target is rewritten only when the model run succeeded and
-the result passed the checks (not empty, braces still balanced).
+target does not matter. After every attempt the section is checked in place and the
+model gets the problems back to fix:
+  * not empty; { } still balanced (when they were)
+  * a Python target still compiles (when it did); a .js part passes node --check (when it did)
+  * the section is still found at the same place as ONE block (-s, -d): first line kept,
+    name not changed, nothing added after the block
+  * an .html/.j2 target: the Jinja template still parses, every inline <script> that
+    passed node --check still does, and the open/close tag counts are unchanged
+  * the -t tests pass
+Every check only applies when the original passed it, so a file that was already odd
+is not blamed on the model.
+A rejected section never stays in the target; a section that only fails the tests does,
+for review.
 
 Exit codes: 0 done (or no change), 2 bad arguments or section not found,
             3 the model run failed or its result was rejected (target untouched),
             4 tests failed after the change (target holds the new text).
 """
 import argparse
+import json
 import os
+import shlex
+import shutil
 import subprocess
 import sys
 import tempfile
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "share", "qwen-build"))
-from section import SectionError, extract, find_section, splice  # noqa: E402
+from htmlcheck import inline_scripts, tag_balance  # noqa: E402
+from section import SectionError, brace_counts, extract, find_def, find_section, splice  # noqa: E402
+
+TEMPLATE_EXTS = (".html", ".htm", ".j2", ".jinja", ".jinja2")
+
+
+def read(path):
+    with open(path, encoding="utf-8") as f:
+        return f.read()
+
+
+def write(path, text):
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(text)
 
 
 def parse_lines(value):
@@ -46,23 +97,269 @@ def parse_lines(value):
     return int(pieces[0]), int(pieces[1])
 
 
+def balanced(text):
+    opens, closes = brace_counts(text)
+    return opens == closes
+
+
+def compiles(text, name):
+    """None when text is valid Python, else the SyntaxError."""
+    try:
+        compile(text, name, "exec")
+    except SyntaxError as exc:
+        return exc
+    except ValueError as exc:                    # e.g. null bytes
+        return SyntaxError(str(exc))
+    return None
+
+
+def node_check(body):
+    """None when node accepts body as a script, else its error text."""
+    fd, tmp = tempfile.mkstemp(suffix=".js", prefix="qwen-section-")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            f.write(body)
+        r = subprocess.run(["node", "--check", tmp], capture_output=True, text=True)
+    finally:
+        os.remove(tmp)
+    if r.returncode == 0:
+        return None
+    lines = [line.replace(tmp, "section") for line in r.stderr.strip().splitlines()]
+    return "\n".join(lines[:8])
+
+
+def jinja_error(text):
+    """None when text parses as a Jinja template (or jinja2 is missing), else (message, line)."""
+    try:
+        import jinja2
+    except ImportError:
+        return None
+    try:
+        jinja2.Environment().parse(text)
+    except jinja2.TemplateSyntaxError as exc:
+        return exc.message, exc.lineno
+    return None
+
+
+def scripts_ok(text):
+    """For each inline script of text: does node accept it? [] without node."""
+    if shutil.which("node") is None:
+        return []
+    return [node_check(body) is None for body in inline_scripts(text)]
+
+
+def where(line, first, new_count, target):
+    """Words for a line number of the whole file, as the model should read it."""
+    if line and first <= line <= first + new_count - 1:
+        return f"line {line - first + 1} of the section"
+    return f"line {line} of {os.path.basename(target)} (after the section was put back)"
+
+
+def structure_problem(state, original, new_text, new_body):
+    """Problem text when the edit broke the file's structure, else None."""
+    first, target = state["first"], state["target"]
+    new_count = len(new_body.rstrip("\n").split("\n"))
+    want = (first, first + new_count - 1)
+    first_line = new_text.split("\n")[first - 1].strip()
+    sel = state["selector"]
+    try:
+        if sel["kind"] == "def":
+            got = find_def(new_text, sel["name"])
+        elif sel["kind"] == "start":
+            got = find_section(new_text, sel["start"], sel["end"])
+        else:
+            got = want
+    except SectionError as exc:
+        what = f"the def or class {sel['name']!r}" if sel["kind"] == "def" else f"a line matching {sel['start']!r}"
+        return (f"After your change the section can no longer be found ({exc}). It must still begin with {what}, "
+                "exactly once. Do not rename it and do not repeat it.")
+    if got[0] != want[0]:
+        return (f"The section must still begin with its original first line; it now starts with: {first_line}")
+    if got[1] < want[1]:
+        extra = got[1] - first + 2
+        if sel["kind"] == "start" and sel["end"] is not None:
+            return f"The line matching {sel['end']!r} must be the LAST line of the section; remove everything after it (from line {extra} of your reply)."
+        return (f"The section must stay ONE block. The block ends at line {extra - 1} of your reply; remove the code after it "
+                f"(from line {extra}). Put helper code inside the block.")
+    if got[1] > want[1]:
+        return "The block that starts on the first line no longer ends inside the section: its end is missing."
+
+    if state["template"]:
+        if state["jinja_ok"]:
+            err = jinja_error(new_text)
+            if err is not None:
+                return f"Jinja template syntax error: {err[0]} at {where(err[1], first, new_count, target)}"
+        before, after = tag_balance(original), tag_balance(new_text)
+        if before != after:
+            changes = []
+            for tag in sorted(set(before) | set(after)):
+                d = after.get(tag, 0) - before.get(tag, 0)
+                if d:
+                    changes.append(f"<{tag}>: {abs(d)} more {'opening' if d > 0 else 'closing'} tag{'s' if abs(d) > 1 else ''} than before")
+            return "HTML tags are no longer paired as before. " + "; ".join(changes) + ". Every tag you open must be closed, and keep the closing tags that were there."
+        old_scripts, new_scripts = inline_scripts(original), inline_scripts(new_text)
+        if len(old_scripts) == len(new_scripts) == len(state["scripts_ok"]):
+            for ok, old, new in zip(state["scripts_ok"], old_scripts, new_scripts):
+                if ok and new != old:
+                    err = node_check(new)
+                    if err is not None:
+                        return "JavaScript syntax error in the <script> block after your change (node --check):\n" + err
+    return None
+
+
+def enclosing_ext(text, first, last):
+    """".js" / ".css" when lines first..last lie inside a <script> / <style> element, else None."""
+    lines = text.split("\n")
+    before = "\n".join(lines[:first - 1]).lower()
+    inside = "\n".join(lines[first - 1:last]).lower()
+    for tag, ext in (("script", ".js"), ("style", ".css")):
+        opened = before.rfind("<" + tag)
+        if opened != -1 and before.find("</" + tag, opened) == -1 and "<" + tag not in inside and "</" + tag not in inside:
+            return ext
+    return None
+
+
+def check(state):
+    """Judge the part file and put it in place. Returns (verdict, message).
+
+    verdict: "ok", "same" (nothing changed), "rejected" (target holds the original text),
+    "tests" (target holds the new text, tests fail).
+    """
+    target, first, last = state["target"], state["first"], state["last"]
+    original = read(state["original"])
+    body, indent = extract(original, first, last)
+    new_body = read(state["part"]) if os.path.exists(state["part"]) else ""
+
+    problem = None
+    new_text = None
+    if new_body.strip() == "":
+        problem = "The file is empty. Reply with the complete section."
+    elif new_body.rstrip("\n") == body.rstrip("\n"):
+        write(target, original)
+        return "same", ""
+    elif state["balanced"] and not balanced(new_body):
+        opens, closes = brace_counts(new_body)
+        problem = f"Unbalanced braces: {opens} of {{ but {closes} of }}. Every {{ needs its }}."
+    if problem is None:
+        new_text = splice(original, first, last, new_body, indent)
+        if state["py_ok"]:
+            exc = compiles(new_text, target)
+            if exc is not None:
+                at = where(exc.lineno, first, len(new_body.rstrip("\n").split("\n")), target)
+                problem = f"Python syntax error: {exc.msg} at {at}" + (f"\n    {exc.text.rstrip()}" if exc.text else "")
+        if problem is None and state["js_ok"]:
+            err = node_check(new_body)
+            if err is not None:
+                problem = "JavaScript syntax error (node --check):\n" + err
+        if problem is None and not state["loose"]:
+            problem = structure_problem(state, original, new_text, new_body)
+    if problem is not None:
+        write(target, original)
+        return "rejected", problem
+
+    write(target, new_text)
+    if state["tests"]:
+        t = subprocess.run([sys.executable, "-m", "pytest", "-q", "--tb=short", "-W", "error::DeprecationWarning", state["tests"]],
+                           capture_output=True, text=True, cwd=state["cwd"])
+        out = (t.stdout + t.stderr).strip().splitlines()
+        if t.returncode != 0:                    # keep the summary line even when the output is long
+            return "tests", "\n".join(out if len(out) <= 80 else out[:79] + out[-1:])
+        return "ok", out[-1] if out else ""
+    return "ok", ""
+
+
+def check_command(state_file):
+    """Entry for qwen-build's --test-cmd: output and a non-zero exit go back to the model."""
+    verdict, message = check(json.loads(read(state_file)))
+    if verdict in ("ok", "same"):
+        return 0
+    print(message)
+    return 1
+
+
+def parse_jobs(text):
+    """[(option list, spec text)] from a jobs file; raises SectionError on a malformed one."""
+    jobs = []
+    for n, line in enumerate(text.split("\n"), 1):
+        if line.startswith("=="):
+            try:
+                opts = shlex.split(line[2:])
+            except ValueError as exc:
+                raise SectionError(f"jobs file line {n}: {exc}")
+            if not opts:
+                raise SectionError(f"jobs file line {n}: no options after ==")
+            jobs.append((opts, []))
+        elif jobs:
+            jobs[-1][1].append(line)
+        elif line.strip() and not line.startswith("#"):
+            raise SectionError(f"jobs file line {n}: text before the first == line")
+    if not jobs:
+        raise SectionError("jobs file holds no == line")
+    out = []
+    for i, (opts, lines) in enumerate(jobs, 1):
+        spec = "\n".join(lines).strip()
+        if not spec:
+            raise SectionError(f"job {i} ({' '.join(opts)}) has no spec text")
+        out.append((opts, spec + "\n"))
+    return out
+
+
+def batch(jobs_file, target):
+    if not os.path.isfile(jobs_file):
+        print("qwen-section: no such jobs file " + jobs_file)
+        return 2
+    try:
+        jobs = parse_jobs(read(jobs_file))
+    except SectionError as exc:
+        print("qwen-section: " + str(exc))
+        return 2
+    work = tempfile.mkdtemp(prefix="qwen-section-batch-")
+    for i, (opts, spec) in enumerate(jobs, 1):
+        spec_file = os.path.join(work, f"job-{i}.txt")
+        write(spec_file, spec)
+        print(f"== job {i}/{len(jobs)}: {' '.join(shlex.quote(o) for o in opts)}")
+        sys.stdout.flush()
+        rc = subprocess.run([sys.executable, os.path.realpath(__file__), *opts, spec_file, target]).returncode
+        if rc != 0:
+            left = len(jobs) - i
+            print(f"qwen-section: job {i} failed (exit {rc}); {left} job{'s' if left != 1 else ''} not run")
+            return rc
+    print(f"qwen-section: {len(jobs)} jobs done")
+    return 0
+
+
 def main():
+    if len(sys.argv) == 3 and sys.argv[1] == "--check":
+        return check_command(sys.argv[2])
+    if len(sys.argv) >= 2 and sys.argv[1] == "--batch":
+        if len(sys.argv) != 4:
+            print("qwen-section: usage: qwen-section --batch JOBS_FILE TARGET")
+            return 2
+        return batch(sys.argv[2], sys.argv[3])
+
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("-m", "--model", default="14b", choices=["7b", "14b"])
+    ap.add_argument("-m", "--model", default="auto", choices=["auto", "7b", "14b"])
     ap.add_argument("-s", "--start", default=None)
     ap.add_argument("-e", "--end", default=None)
+    ap.add_argument("-d", "--def", dest="defname", default=None)
     ap.add_argument("-l", "--lines", default=None)
     ap.add_argument("--ext", default=None)
+    ap.add_argument("-r", "--ref", action="append", default=[])
+    ap.add_argument("-R", "--read-full", action="append", default=[])
     ap.add_argument("-t", "--tests", default=None)
     ap.add_argument("--timeout", type=int, default=1200)
+    ap.add_argument("--loose", action="store_true")
     ap.add_argument("--keep", action="store_true")
     ap.add_argument("-n", "--dry-run", action="store_true")
     ap.add_argument("spec")
     ap.add_argument("target")
     a = ap.parse_args()
 
-    if (a.start is None) == (a.lines is None):
-        print("qwen-section: give -s START or -l A-B (one of them)")
+    if sum(x is not None for x in (a.start, a.defname, a.lines)) != 1:
+        print("qwen-section: give exactly one of -s START, -d NAME, -l A-B")
+        return 2
+    if a.end is not None and a.start is None:
+        print("qwen-section: -e END needs -s START")
         return 2
     if not os.path.isfile(a.target):
         print("qwen-section: no such file " + a.target)
@@ -70,11 +367,15 @@ def main():
     if not a.dry_run and not os.path.isfile(a.spec):
         print("qwen-section: no such spec file " + a.spec)
         return 2
-    with open(a.target, encoding="utf-8") as f:
-        text = f.read()
+    text = read(a.target)
 
     try:
-        first, last = parse_lines(a.lines) if a.lines is not None else find_section(text, a.start, a.end)
+        if a.lines is not None:
+            first, last = parse_lines(a.lines)
+        elif a.defname is not None:
+            first, last = find_def(text, a.defname)
+        else:
+            first, last = find_section(text, a.start, a.end)
         body, indent = extract(text, first, last)
     except SectionError as exc:
         print("qwen-section: " + str(exc))
@@ -86,62 +387,92 @@ def main():
         print(body, end="")
         return 0
 
-    ext = "." + a.ext.lstrip(".") if a.ext else os.path.splitext(a.target)[1]
+    if a.ext:
+        ext = "." + a.ext.lstrip(".")
+    else:
+        ext = (enclosing_ext(text, first, last) if a.target.endswith(TEMPLATE_EXTS) else None) or os.path.splitext(a.target)[1]
     part = os.path.join(os.path.dirname(a.target), "qwen-section-part" + ext)
     if os.path.exists(part):
         print(f"qwen-section: {part} already exists (left by --keep or another run); remove it first")
         return 2
-    with open(a.spec, encoding="utf-8") as f:
-        user_spec = f.read().rstrip()
-    note = (f"The file {part} is ONE SECTION cut out of {a.target} (lines {first}-{last}). It is not a whole "
+
+    work = tempfile.mkdtemp(prefix="qwen-section-")
+    # Never name the target here: aider adds every repo file it sees named to the chat.
+    note = (f"The file {part} is ONE SECTION cut out of a much larger file (its lines {first}-{last}). It is not a whole "
             "program: other code around it exists and must keep working. Rewrite this section as asked below. "
             "Keep every function name, signature and line you are not asked to change. Do not add imports, "
             "wrappers or example code. Reply with the complete section.")
-    work = tempfile.mkdtemp(prefix="qwen-section-")
     full_spec = os.path.join(work, "spec.txt")
-    with open(full_spec, "w", encoding="utf-8") as f:
-        f.write(note + "\n\n" + user_spec + "\n")
-    with open(part, "w", encoding="utf-8") as f:
-        f.write(body)
+    write(full_spec, note + "\n\n" + read(a.spec).rstrip() + "\n")
+    write(os.path.join(work, "original.txt"), text)
+    state = {
+        "target": os.path.abspath(a.target), "original": os.path.join(work, "original.txt"),
+        "part": os.path.abspath(part), "first": first, "last": last,
+        "tests": a.tests, "cwd": os.getcwd(),
+        "balanced": balanced(body), "loose": a.loose,
+        "selector": ({"kind": "def", "name": a.defname} if a.defname is not None else
+                     {"kind": "start", "start": a.start, "end": a.end} if a.start is not None else {"kind": "lines"}),
+        "template": a.target.endswith(TEMPLATE_EXTS),
+        "jinja_ok": a.target.endswith(TEMPLATE_EXTS) and jinja_error(text) is None,
+        "scripts_ok": scripts_ok(text) if a.target.endswith(TEMPLATE_EXTS) else [],
+        "py_ok": a.target.endswith(".py") and compiles(text, a.target) is None,
+        "js_ok": ext in (".js", ".mjs") and shutil.which("node") is not None and node_check(body) is None,
+    }
+    state_file = os.path.join(work, "state.json")
+    write(state_file, json.dumps(state))
+    check_cmd = " ".join(shlex.quote(x) for x in (sys.executable, os.path.realpath(__file__), "--check", state_file))
 
     build = os.environ.get("QWEN_BUILD", "qwen-build")
-    cmd = [build, "-m", a.model, "--rules", "none", "--no-lint", "--timeout", str(a.timeout), full_spec, part]
-    sys.stdout.flush()
+    models = ["7b", "14b"] if a.model == "auto" else [a.model]
+    verdict = "rejected"
     try:
-        rc = subprocess.run(cmd).returncode
-        new_body = ""
-        if os.path.exists(part):
-            with open(part, encoding="utf-8") as f:
-                new_body = f.read()
+        for i, model in enumerate(models):
+            write(part, body)                    # every model starts from the original
+            write(a.target, text)
+            cmd = [build, "-m", model, "--rules", "none", "--no-lint", "--timeout", str(a.timeout), "--test-cmd", check_cmd,
+                   "--expect", os.path.abspath(a.target)]
+            for r in a.ref:
+                cmd += ["-r", r]
+            for r in a.read_full:
+                cmd += ["-R", r]
+            cmd += [full_spec, part]
+            sys.stdout.flush()
+            rc = subprocess.run(cmd).returncode
+            if rc == 3:                          # aider itself failed or timed out
+                write(a.target, text)
+                verdict, message = "rejected", f"qwen-build failed (exit {rc})"
+            else:
+                verdict, message = check(state)
+
+            if verdict == "same":
+                print("  no change")
+            elif verdict == "ok":
+                new_count = len(read(part).rstrip("\n").split("\n"))
+                print(f"  replaced {count} lines with {new_count}")
+                if a.tests:
+                    print(f"  tests ({a.tests}): {message}")
+            else:
+                if os.path.exists(part) and read(part).strip():
+                    kept = os.path.join(work, f"attempt-{model}{ext}")
+                    shutil.copyfile(part, kept)
+                    print(f"  {model} attempt saved: {kept}")
+                if verdict == "rejected":
+                    print(f"  rejected; {a.target} not changed:")
+                else:
+                    last_line = message.splitlines()[-1] if message else "?"
+                    print(f"  tests ({a.tests}): {last_line}")
+                    print(f"  tests failed; {a.target} holds the new section:")
+                for line in message.splitlines()[:20]:
+                    print("    " + line)
+            if verdict in ("ok", "same"):
+                break
+            if i + 1 < len(models):
+                print(f"  trying the {models[i + 1]}")
     finally:
         if not a.keep and os.path.exists(part):
             os.remove(part)
 
-    if rc != 0:
-        print(f"  qwen-build failed (exit {rc}); {a.target} not changed")
-        return 3
-    if new_body.strip() == "":
-        print(f"  empty result; {a.target} not changed")
-        return 3
-    if new_body.rstrip("\n") == body.rstrip("\n"):
-        print("  no change")
-        return 0
-    if body.count("{") == body.count("}") and new_body.count("{") != new_body.count("}"):
-        print(f"  rejected: unbalanced braces in the new section; {a.target} not changed")
-        return 3
-
-    with open(a.target, "w", encoding="utf-8") as f:
-        f.write(splice(text, first, last, new_body, indent))
-    new_count = len(new_body.rstrip("\n").split("\n"))
-    print(f"  replaced {count} lines with {new_count}")
-
-    if a.tests:
-        t = subprocess.run([sys.executable, "-m", "pytest", "-q", a.tests], capture_output=True, text=True)
-        out_lines = t.stdout.strip().splitlines()
-        print(f"  tests ({a.tests}): {out_lines[-1] if out_lines else '?'}")
-        if t.returncode != 0:
-            return 4
-    return 0
+    return {"ok": 0, "same": 0, "rejected": 3, "tests": 4}[verdict]
 
 
 if __name__ == "__main__":
