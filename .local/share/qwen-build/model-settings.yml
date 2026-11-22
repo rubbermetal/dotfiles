@@ -14,3 +14,10 @@
     temperature: 0.1
     num_ctx: 16384
     num_predict: 4608
+# Ternary Bonsai 2 27B via llama-server (OpenAI-compatible, ~/models/bonsai/run-server.sh). The context
+# size is fixed by the server (-c 8192), so there is no num_ctx here; max_tokens keeps a runaway short.
+- name: openai/bonsai
+  edit_format: whole
+  extra_params:
+    temperature: 0.1
+    max_tokens: 4608

@@ -2,7 +2,7 @@
 """qwen-build: have the local Qwen model (via aider) write ONE file from a spec.
 
 Usage:
-  qwen-build [-m 7b|14b] [-r REF]... [-t TESTFILE | --test-cmd CMD] [--rules auto|code|tests|none]
+  qwen-build [-m 7b|14b|bonsai] [-r REF]... [-t TESTFILE | --test-cmd CMD] [--rules auto|code|tests|none]
              [--timeout SEC] [--no-lint] [--expect PATH]... [-n] SPEC_FILE TARGET
 
   SPEC_FILE   plain-text spec (what to write)
@@ -47,6 +47,33 @@ import time
 SHARE = os.path.expanduser("~/.local/share/qwen-build")
 
 
+BONSAI_MODEL = "openai/bonsai"
+BONSAI_URL = "http://127.0.0.1:8081"
+BONSAI_KEY_FILE = os.path.expanduser("~/models/bonsai/api-key")
+
+
+def bonsai_setup():
+    """Point aider at the local llama-server. Returns a problem text, or None when ready.
+
+    The server holds BOTH GPUs while it runs, so Ollama's Qwen cannot share them: stop it first
+    (ollama stop <model>), and stop the server when you go back to Qwen.
+    """
+    import urllib.request
+    try:
+        key = open(BONSAI_KEY_FILE, encoding="utf-8").read().strip()
+    except OSError:
+        return f"no API key file at {BONSAI_KEY_FILE}"
+    try:
+        urllib.request.urlopen(BONSAI_URL + "/health", timeout=5).read()
+    except Exception as exc:
+        return (f"the Bonsai server is not answering at {BONSAI_URL} ({exc}). Start it in another terminal with\n"
+                "  ~/models/bonsai/run-server.sh\n"
+                "after `ollama stop <model>` for any model Ollama still holds on the GPUs (see `ollama ps`).")
+    os.environ["OPENAI_API_BASE"] = BONSAI_URL + "/v1"
+    os.environ["OPENAI_API_KEY"] = key
+    return None
+
+
 def git_root():
     r = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True)
     return r.stdout.strip() if r.returncode == 0 else os.getcwd()
@@ -88,7 +115,8 @@ def porcelain(root):
 
 def main():
     ap = argparse.ArgumentParser(add_help=True, description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("-m", "--model", default="14b", choices=["7b", "14b"])
+    ap.add_argument("-m", "--model", default="14b", choices=["7b", "14b", "bonsai"],
+                    help="7b/14b = Qwen 2.5 Coder via Ollama; bonsai = Ternary Bonsai 2 27B via llama-server on 127.0.0.1:8081")
     ap.add_argument("-r", "--ref", action="append", default=[], help="module whose API (signatures only) is shown in the prompt")
     ap.add_argument("-R", "--read-full", action="append", default=[], help="file shown to aider in full (read-only); costs many tokens")
     ap.add_argument("-t", "--tests", default=None)
@@ -138,7 +166,8 @@ def main():
     if a.test_cmd:
         tests = None  # the custom command replaces pytest, during the run and in the summary
 
-    cmd = ["aider", "--model", f"ollama/qwen2.5-coder:{a.model}", "--edit-format", "whole", "--yes-always",
+    model_arg = BONSAI_MODEL if a.model == "bonsai" else f"ollama/qwen2.5-coder:{a.model}"
+    cmd = ["aider", "--model", model_arg, "--edit-format", "whole", "--yes-always",
            "--no-auto-commits", "--map-tokens", "0", "--no-pretty", "--no-stream", "--no-gitignore",
            "--no-show-model-warnings", "--no-analytics", "--no-detect-urls", "--no-check-update",
            "--model-settings-file", os.path.join(SHARE, "model-settings.yml"),
@@ -170,6 +199,11 @@ def main():
         return 0
 
     os.environ["QWEN_SPEC"] = spec_path  # qwen-lint checks the file against the spec
+    if a.model == "bonsai":
+        problem = bonsai_setup()  # sets OPENAI_API_BASE / OPENAI_API_KEY for aider only; never prints the key
+        if problem:
+            print("qwen-build: " + problem)
+            return 3
     before = porcelain(root)
     t0 = time.time()
     log = os.path.join(work, "aider.log")
