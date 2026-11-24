@@ -303,10 +303,10 @@ def check(state):
     write(target, new_text)
     if state["tests"] or state.get("test_cmd"):
         if state.get("test_cmd"):
-            t = subprocess.run(state["test_cmd"], shell=True, capture_output=True, text=True, cwd=state["cwd"])
+            t = subprocess.run(state["test_cmd"], shell=True, capture_output=True, text=True, errors="replace", cwd=state["cwd"])
         else:
             t = subprocess.run([sys.executable, "-m", "pytest", "-q", "--tb=short", "-W", "error::DeprecationWarning", state["tests"]],
-                               capture_output=True, text=True, cwd=state["cwd"])
+                               capture_output=True, text=True, errors="replace", cwd=state["cwd"])
         out = (t.stdout + t.stderr).strip().splitlines()
         if t.returncode != 0:                    # keep the summary line even when the output is long
             return "tests", "\n".join(out if len(out) <= 80 else out[:79] + out[-1:])
@@ -384,7 +384,7 @@ def main():
         return batch(sys.argv[2], sys.argv[3])
 
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("-m", "--model", default="auto", choices=["auto", "7b", "14b"])
+    ap.add_argument("-m", "--model", default="auto", choices=["auto", "7b", "14b", "bonsai"])
     ap.add_argument("-s", "--start", default=None)
     ap.add_argument("-e", "--end", default=None)
     ap.add_argument("-d", "--def", dest="defname", default=None)
